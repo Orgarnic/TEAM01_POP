@@ -22,7 +22,7 @@ namespace Cohesion_Project
       private void Pop_Purchase_Load(object sender, EventArgs e)
       {
          DgvInit();
-         orders = srv_Order.SelectOrder();
+         orders = srv_Order.SelectOrderList();
          dgvOrder.DataSource = orders;
       }
       private void DgvInit()
