@@ -5,6 +5,8 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Cohesion_DTO;
+
 
 namespace Cohesion_Project
 {
@@ -19,5 +21,10 @@ namespace Cohesion_Project
       {
          this.Close();
       }
-   }
+
+        private void Pop_Ship_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
 }
