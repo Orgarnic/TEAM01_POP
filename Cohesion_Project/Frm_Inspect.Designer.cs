@@ -148,14 +148,11 @@ namespace Cohesion_Project
          // 
          // Btn_Close
          // 
-         this.Btn_Close.BackColor = System.Drawing.Color.DimGray;
          this.Btn_Close.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-         this.Btn_Close.Location = new System.Drawing.Point(1315, 832);
          // 
          // button1
          // 
          this.button1.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
-         this.button1.Location = new System.Drawing.Point(1156, 832);
          this.button1.Text = "입력";
          // 
          // textBox9
@@ -558,7 +555,7 @@ namespace Cohesion_Project
          this.textBox8.Location = new System.Drawing.Point(123, 237);
          this.textBox8.Multiline = true;
          this.textBox8.Name = "textBox8";
-         this.textBox8.Size = new System.Drawing.Size(1418, 150);
+         this.textBox8.Size = new System.Drawing.Size(1310, 90);
          this.textBox8.TabIndex = 40;
          // 
          // label20
