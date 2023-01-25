@@ -41,9 +41,25 @@ namespace Cohesion_Project
             DgvUtil.AddTextCol(dgvOrderList, "고객사 코드", "CUSTOMER_CODE", 100, readOnly: true, visible:false);                    //7
             DgvUtil.AddTextCol(dgvOrderList, "주문 코드", "PRODUCT_CODE", 100, readOnly: true, visible: false);                      //8
 
+
             srcList = sv.SelectOrderListToShip();
             dgvOrderList.DataSource = srcList;
             dgvOrderList.CellDoubleClick += DgvOrderList_CellDoubleClick;
+            dgvOrderList.CellFormatting += DgvOrderList_CellFormatting;
+        }
+
+        private void DgvOrderList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex<0)
+            {
+                return;
+            }
+            if (e.ColumnIndex == 4)
+            {
+                //string.Format("{0:#,##0}", Convert.ToInt32(dgvOrderList.Rows[e.RowIndex].Cells[4].Value));
+                dgvOrderList.Columns[e.ColumnIndex].DefaultCellStyle.Format = "#,##0";
+
+            }
         }
 
         private void DgvOrderList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
