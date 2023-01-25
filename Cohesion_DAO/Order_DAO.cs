@@ -97,17 +97,22 @@ namespace Cohesion_DAO
       {
          try
          {
-            string sql = @"SELECT SALES_ORDER_ID,
-                                      ORDER_DATE,
-                                      C.KEY_1 CUSTOMER_NAME,
-                                      PRODUCT_CODE,
-                                      ORDER_QTY,
-                                      CONFIRM_FLAG,
-                                      SHIP_FLAG
-                               FROM   SALES_ORDER_MST S 
-                               INNER JOIN CODE_DATA_MST C ON S.CUSTOMER_CODE = C.KEY_1 
-                               INNER JOIN CODE_TABLE_MST T ON C.CODE_TABLE_NAME = T.CODE_TABLE_NAME
-                               WHERE  SHIP_FLAG IS NULL
+            string sql = @"SELECT   SALES_ORDER_ID
+                                  , ORDER_DATE
+                                  , C.KEY_1 CUSTOMER_CODE
+						          , C.DATA_1 CUSTOMER_NAME
+                                  , S.PRODUCT_CODE PRODUCT_CODE
+						          , P.PRODUCT_NAME PRODUCT_NAME
+						          , S.CUSTOMER_CODE CUSTOMER_CODE
+                                  , ORDER_QTY
+                                  , CONFIRM_FLAG
+                                  , SHIP_FLAG
+                           FROM   SALES_ORDER_MST S 
+                           INNER JOIN CODE_DATA_MST C ON S.CUSTOMER_CODE = C.KEY_1 
+                           INNER JOIN CODE_TABLE_MST T ON C.CODE_TABLE_NAME = T.CODE_TABLE_NAME
+                           INNER JOIN PRODUCT_MST P ON P.PRODUCT_CODE = S.PRODUCT_CODE
+						
+                           WHERE  SHIP_FLAG IS NULL
                                       AND CONFIRM_FLAG IS NOT NULL ";
             SqlCommand cmd = new SqlCommand(sql, conn);
             conn.Open();
