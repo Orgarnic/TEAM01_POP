@@ -133,6 +133,7 @@ namespace Cohesion_Project
          this.Controls.Add(this.textBox1);
          this.Name = "Pop_Purchase";
          this.Text = "납품서 선택";
+         this.Load += new System.EventHandler(this.Pop_Purchase_Load);
          this.panel2.ResumeLayout(false);
          ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
          this.ResumeLayout(false);

@@ -305,7 +305,7 @@ namespace Cohesion_Project
          this.textBox8.Location = new System.Drawing.Point(122, 267);
          this.textBox8.Multiline = true;
          this.textBox8.Name = "textBox8";
-         this.textBox8.Size = new System.Drawing.Size(1311, 56);
+         this.textBox8.Size = new System.Drawing.Size(1311, 61);
          this.textBox8.TabIndex = 38;
          // 
          // label20

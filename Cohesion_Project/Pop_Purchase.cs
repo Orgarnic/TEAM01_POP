@@ -14,7 +14,10 @@ namespace Cohesion_Project
       {
          InitializeComponent();
       }
+      private void Pop_Purchase_Load(object sender, EventArgs e)
+      {
 
+      }
       private void Btn_Close_Click(object sender, EventArgs e)
       {
          this.Close();
