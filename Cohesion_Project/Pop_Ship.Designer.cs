@@ -33,7 +33,7 @@ namespace Cohesion_Project
             this.panel2 = new System.Windows.Forms.Panel();
             this.dgvOrderList = new System.Windows.Forms.DataGridView();
             this.btnSearch = new System.Windows.Forms.Button();
-            this.btnConfirm = new System.Windows.Forms.Button();
+            this.btnSelect = new System.Windows.Forms.Button();
             this.Btn_Close = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvOrderList)).BeginInit();
@@ -45,7 +45,7 @@ namespace Cohesion_Project
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.txtSearch.Location = new System.Drawing.Point(6, 9);
+            this.txtSearch.Location = new System.Drawing.Point(6, 8);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(837, 29);
             this.txtSearch.TabIndex = 60;
@@ -54,9 +54,9 @@ namespace Cohesion_Project
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.dgvOrderList);
-            this.panel2.Location = new System.Drawing.Point(6, 46);
+            this.panel2.Location = new System.Drawing.Point(6, 43);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(898, 494);
+            this.panel2.Size = new System.Drawing.Size(898, 463);
             this.panel2.TabIndex = 62;
             // 
             // dgvOrderList
@@ -66,7 +66,7 @@ namespace Cohesion_Project
             this.dgvOrderList.Location = new System.Drawing.Point(0, 0);
             this.dgvOrderList.Name = "dgvOrderList";
             this.dgvOrderList.RowTemplate.Height = 23;
-            this.dgvOrderList.Size = new System.Drawing.Size(896, 492);
+            this.dgvOrderList.Size = new System.Drawing.Size(896, 461);
             this.dgvOrderList.TabIndex = 4;
             // 
             // btnSearch
@@ -78,31 +78,32 @@ namespace Cohesion_Project
             this.btnSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.btnSearch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.btnSearch.Image = global::Cohesion_Project.Properties.Resources.Search;
-            this.btnSearch.Location = new System.Drawing.Point(849, 9);
+            this.btnSearch.Location = new System.Drawing.Point(849, 8);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(55, 31);
+            this.btnSearch.Size = new System.Drawing.Size(55, 29);
             this.btnSearch.TabIndex = 61;
             this.btnSearch.Text = "검색";
             this.btnSearch.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnSearch.UseVisualStyleBackColor = false;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
-            // btnConfirm
+            // btnSelect
             // 
-            this.btnConfirm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnConfirm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(56)))), ((int)(((byte)(67)))));
-            this.btnConfirm.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.btnConfirm.FlatAppearance.BorderSize = 0;
-            this.btnConfirm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnConfirm.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnConfirm.ForeColor = System.Drawing.Color.White;
-            this.btnConfirm.Location = new System.Drawing.Point(595, 546);
-            this.btnConfirm.Margin = new System.Windows.Forms.Padding(0);
-            this.btnConfirm.Name = "btnConfirm";
-            this.btnConfirm.Size = new System.Drawing.Size(150, 43);
-            this.btnConfirm.TabIndex = 64;
-            this.btnConfirm.Text = "선택";
-            this.btnConfirm.UseVisualStyleBackColor = false;
+            this.btnSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSelect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(56)))), ((int)(((byte)(67)))));
+            this.btnSelect.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnSelect.FlatAppearance.BorderSize = 0;
+            this.btnSelect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSelect.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btnSelect.ForeColor = System.Drawing.Color.White;
+            this.btnSelect.Location = new System.Drawing.Point(595, 512);
+            this.btnSelect.Margin = new System.Windows.Forms.Padding(0);
+            this.btnSelect.Name = "btnSelect";
+            this.btnSelect.Size = new System.Drawing.Size(150, 40);
+            this.btnSelect.TabIndex = 64;
+            this.btnSelect.Text = "선택";
+            this.btnSelect.UseVisualStyleBackColor = false;
+            this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
             // 
             // Btn_Close
             // 
@@ -113,10 +114,10 @@ namespace Cohesion_Project
             this.Btn_Close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Btn_Close.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.Btn_Close.ForeColor = System.Drawing.Color.White;
-            this.Btn_Close.Location = new System.Drawing.Point(754, 546);
+            this.Btn_Close.Location = new System.Drawing.Point(754, 512);
             this.Btn_Close.Margin = new System.Windows.Forms.Padding(0);
             this.Btn_Close.Name = "Btn_Close";
-            this.Btn_Close.Size = new System.Drawing.Size(150, 43);
+            this.Btn_Close.Size = new System.Drawing.Size(150, 40);
             this.Btn_Close.TabIndex = 63;
             this.Btn_Close.Text = "닫기";
             this.Btn_Close.UseVisualStyleBackColor = false;
@@ -124,9 +125,9 @@ namespace Cohesion_Project
             // 
             // Pop_Ship
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.ClientSize = new System.Drawing.Size(911, 595);
-            this.Controls.Add(this.btnConfirm);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.ClientSize = new System.Drawing.Size(911, 558);
+            this.Controls.Add(this.btnSelect);
             this.Controls.Add(this.Btn_Close);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.btnSearch);
@@ -147,7 +148,7 @@ namespace Cohesion_Project
       protected System.Windows.Forms.TextBox txtSearch;
       private System.Windows.Forms.Panel panel2;
       private System.Windows.Forms.DataGridView dgvOrderList;
-      protected System.Windows.Forms.Button btnConfirm;
+      protected System.Windows.Forms.Button btnSelect;
       protected System.Windows.Forms.Button Btn_Close;
    }
 }
