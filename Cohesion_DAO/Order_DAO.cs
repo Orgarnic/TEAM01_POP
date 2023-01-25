@@ -44,23 +44,24 @@ namespace Cohesion_DAO
                            	   ,W.UPDATE_TIME
                            	   ,W.UPDATE_USER_ID
                                   FROM WORK_ORDER_MST W INNER JOIN CODE_DATA_MST C ON W.CUSTOMER_CODE = C.KEY_1
-                                  INNER JOIN PRODUCT_MST P ON W.PRODUCT_CODE = P.PRODUCT_CODE ";
-                cmd.CommandText = sql.ToString();
-                cmd.Connection = conn;
-                conn.Open();
-                list = Helper.DataReaderMapToList<WORK_ORDER_MST_DTO>(cmd.ExecuteReader());
-            }
-            catch (Exception err)
-            {
-                Debug.WriteLine(err.StackTrace);
-                Debug.WriteLine(err.Message);
-            }
-            finally
-            {
-                conn.Close();
-            }
-            return list;
-        }
+                                  INNER JOIN PRODUCT_MST P ON W.PRODUCT_CODE = P.PRODUCT_CODE 
+                                  WHERE ORDER_STATUS <> 'CLOSE'";
+            cmd.CommandText = sql.ToString();
+            cmd.Connection = conn;
+            conn.Open();
+            list = Helper.DataReaderMapToList<WORK_ORDER_MST_DTO>(cmd.ExecuteReader());
+         }
+         catch (Exception err)
+         {
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+         }
+         finally
+         {
+            conn.Close();
+         }
+         return list;
+      }
 
         public List<SalesOrder_DTO> SelectOrderListToShip()
         {
