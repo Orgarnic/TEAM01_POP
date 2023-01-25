@@ -22,7 +22,7 @@ namespace Cohesion_Project
       private void Pop_Purchase_Load(object sender, EventArgs e)
       {
          DgvInit();
-         orders = srv_Order.SelectOrder();
+         orders = srv_Order.SelectOrderList();
          dgvOrder.DataSource = orders;
       }
       private void DgvInit()
@@ -50,10 +50,20 @@ namespace Cohesion_Project
       }
       private void btnOk_Click(object sender, EventArgs e)
       {
+         if (dgvOrder.SelectedRows.Count < 1) return;
          if (!MboxUtil.MboxInfo_("해당 작업지시서를 선택하시겠습니까 ?")) return;
          order = DgvUtil.DgvToDto<WORK_ORDER_MST_DTO>(dgvOrder);
          this.DialogResult = DialogResult.OK;
          this.Close();
+      }
+      private void Pop_Purchase_KeyPress(object sender, KeyPressEventArgs e)
+      {
+         if (e.KeyChar == 13)
+            btnOk.PerformClick();
+      }
+      private void dgvOrder_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+      {
+         btnOk.PerformClick();
       }
    }
 }
