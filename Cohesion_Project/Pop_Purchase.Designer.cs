@@ -69,6 +69,7 @@ namespace Cohesion_Project
          this.dgvOrder.RowTemplate.Height = 23;
          this.dgvOrder.Size = new System.Drawing.Size(990, 458);
          this.dgvOrder.TabIndex = 4;
+         this.dgvOrder.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvOrder_CellDoubleClick);
          // 
          // btnSearch
          // 
@@ -133,9 +134,11 @@ namespace Cohesion_Project
          this.Controls.Add(this.panel2);
          this.Controls.Add(this.btnSearch);
          this.Controls.Add(this.txtSearch);
+         this.KeyPreview = true;
          this.Name = "Pop_Purchase";
          this.Text = "납품서 선택";
          this.Load += new System.EventHandler(this.Pop_Purchase_Load);
+         this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Pop_Purchase_KeyPress);
          this.panel2.ResumeLayout(false);
          ((System.ComponentModel.ISupportInitialize)(this.dgvOrder)).EndInit();
          this.ResumeLayout(false);

@@ -44,7 +44,8 @@ namespace Cohesion_DAO
                            	   ,W.UPDATE_TIME
                            	   ,W.UPDATE_USER_ID
                                   FROM WORK_ORDER_MST W INNER JOIN CODE_DATA_MST C ON W.CUSTOMER_CODE = C.KEY_1
-                                  INNER JOIN PRODUCT_MST P ON W.PRODUCT_CODE = P.PRODUCT_CODE ";
+                                  INNER JOIN PRODUCT_MST P ON W.PRODUCT_CODE = P.PRODUCT_CODE 
+                                  WHERE ORDER_STATUS <> 'CLOSE'";
             cmd.CommandText = sql.ToString();
             cmd.Connection = conn;
             conn.Open();
