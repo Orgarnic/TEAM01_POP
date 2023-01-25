@@ -43,6 +43,12 @@ namespace Cohesion_Project
 
             srcList = sv.SelectOrderListToShip();
             dgvOrderList.DataSource = srcList;
+            dgvOrderList.CellDoubleClick += DgvOrderList_CellDoubleClick;
+        }
+
+        private void DgvOrderList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            btnSelect.PerformClick();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -60,8 +66,15 @@ namespace Cohesion_Project
 
         private void btnSelect_Click(object sender, EventArgs e)
         {
-            SelectOrder = (SalesOrder_DTO)dgvOrderList.Rows[dgvOrderList.CurrentRow.Index].DataBoundItem;
-            this.DialogResult = DialogResult.OK;
+            if (MboxUtil.MboxInfo_("해당 주문을 출고처리 하시겠습니까?"))
+            {
+                SelectOrder = (SalesOrder_DTO)dgvOrderList.Rows[dgvOrderList.CurrentRow.Index].DataBoundItem;
+                this.DialogResult = DialogResult.OK;
+            }
+            else
+            {
+                return;
+            }
         }
     }
 }
