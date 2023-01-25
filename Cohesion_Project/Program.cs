@@ -16,7 +16,7 @@ namespace Cohesion_Project
       {
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
-         Application.Run(new Pop_Purchase());
+         Application.Run(new Pop_Ship());
       }
    }
 }
