@@ -15,7 +15,11 @@ namespace Cohesion_Project
          InitializeComponent();
       }
 
-      private void Frm_WORK_ORDER_Load(object sender, EventArgs e)
+      private void Frm_Order_Load(object sender, EventArgs e)
+      {
+
+      }
+      private void btnOrder_Click(object sender, EventArgs e)
       {
 
       }

@@ -33,7 +33,7 @@ namespace Cohesion_Project
          this.panel2 = new System.Windows.Forms.Panel();
          this.dgvOrder = new System.Windows.Forms.DataGridView();
          this.btnSearch = new System.Windows.Forms.Button();
-         this.button2 = new System.Windows.Forms.Button();
+         this.btnOk = new System.Windows.Forms.Button();
          this.Btn_Close = new System.Windows.Forms.Button();
          this.panel2.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.dgvOrder)).BeginInit();
@@ -44,20 +44,20 @@ namespace Cohesion_Project
          this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
          this.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-         this.txtSearch.Enabled = false;
-         this.txtSearch.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+         this.txtSearch.Font = new System.Drawing.Font("나눔고딕", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
          this.txtSearch.Location = new System.Drawing.Point(6, 8);
          this.txtSearch.Name = "txtSearch";
-         this.txtSearch.Size = new System.Drawing.Size(837, 29);
+         this.txtSearch.Size = new System.Drawing.Size(919, 32);
          this.txtSearch.TabIndex = 60;
+         this.txtSearch.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
          // 
          // panel2
          // 
          this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
          this.panel2.Controls.Add(this.dgvOrder);
-         this.panel2.Location = new System.Drawing.Point(6, 43);
+         this.panel2.Location = new System.Drawing.Point(6, 46);
          this.panel2.Name = "panel2";
-         this.panel2.Size = new System.Drawing.Size(898, 463);
+         this.panel2.Size = new System.Drawing.Size(992, 460);
          this.panel2.TabIndex = 62;
          // 
          // dgvOrder
@@ -67,7 +67,7 @@ namespace Cohesion_Project
          this.dgvOrder.Location = new System.Drawing.Point(0, 0);
          this.dgvOrder.Name = "dgvOrder";
          this.dgvOrder.RowTemplate.Height = 23;
-         this.dgvOrder.Size = new System.Drawing.Size(896, 461);
+         this.dgvOrder.Size = new System.Drawing.Size(990, 458);
          this.dgvOrder.TabIndex = 4;
          // 
          // btnSearch
@@ -79,31 +79,32 @@ namespace Cohesion_Project
          this.btnSearch.Font = new System.Drawing.Font("나눔고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
          this.btnSearch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
          this.btnSearch.Image = global::Cohesion_Project.Properties.Resources.Search;
-         this.btnSearch.Location = new System.Drawing.Point(849, 8);
+         this.btnSearch.Location = new System.Drawing.Point(931, 8);
          this.btnSearch.Name = "btnSearch";
-         this.btnSearch.Size = new System.Drawing.Size(55, 29);
+         this.btnSearch.Size = new System.Drawing.Size(67, 32);
          this.btnSearch.TabIndex = 61;
          this.btnSearch.Text = "검색";
          this.btnSearch.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
          this.btnSearch.UseVisualStyleBackColor = false;
          this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
          // 
-         // button2
+         // btnOk
          // 
-         this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-         this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(56)))), ((int)(((byte)(67)))));
-         this.button2.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-         this.button2.FlatAppearance.BorderSize = 0;
-         this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-         this.button2.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-         this.button2.ForeColor = System.Drawing.Color.White;
-         this.button2.Location = new System.Drawing.Point(595, 512);
-         this.button2.Margin = new System.Windows.Forms.Padding(0);
-         this.button2.Name = "button2";
-         this.button2.Size = new System.Drawing.Size(150, 40);
-         this.button2.TabIndex = 64;
-         this.button2.Text = "선택";
-         this.button2.UseVisualStyleBackColor = false;
+         this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+         this.btnOk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(56)))), ((int)(((byte)(67)))));
+         this.btnOk.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+         this.btnOk.FlatAppearance.BorderSize = 0;
+         this.btnOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+         this.btnOk.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+         this.btnOk.ForeColor = System.Drawing.Color.White;
+         this.btnOk.Location = new System.Drawing.Point(689, 511);
+         this.btnOk.Margin = new System.Windows.Forms.Padding(0);
+         this.btnOk.Name = "btnOk";
+         this.btnOk.Size = new System.Drawing.Size(150, 40);
+         this.btnOk.TabIndex = 64;
+         this.btnOk.Text = "선택";
+         this.btnOk.UseVisualStyleBackColor = false;
+         this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
          // 
          // Btn_Close
          // 
@@ -114,7 +115,7 @@ namespace Cohesion_Project
          this.Btn_Close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
          this.Btn_Close.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
          this.Btn_Close.ForeColor = System.Drawing.Color.White;
-         this.Btn_Close.Location = new System.Drawing.Point(754, 512);
+         this.Btn_Close.Location = new System.Drawing.Point(848, 511);
          this.Btn_Close.Margin = new System.Windows.Forms.Padding(0);
          this.Btn_Close.Name = "Btn_Close";
          this.Btn_Close.Size = new System.Drawing.Size(150, 40);
@@ -126,8 +127,8 @@ namespace Cohesion_Project
          // Pop_Purchase
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
-         this.ClientSize = new System.Drawing.Size(911, 558);
-         this.Controls.Add(this.button2);
+         this.ClientSize = new System.Drawing.Size(1005, 560);
+         this.Controls.Add(this.btnOk);
          this.Controls.Add(this.Btn_Close);
          this.Controls.Add(this.panel2);
          this.Controls.Add(this.btnSearch);
@@ -148,7 +149,7 @@ namespace Cohesion_Project
       protected System.Windows.Forms.TextBox txtSearch;
       private System.Windows.Forms.Panel panel2;
       private System.Windows.Forms.DataGridView dgvOrder;
-      protected System.Windows.Forms.Button button2;
+      protected System.Windows.Forms.Button btnOk;
       protected System.Windows.Forms.Button Btn_Close;
    }
 }

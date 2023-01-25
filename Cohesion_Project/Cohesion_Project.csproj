@@ -172,6 +172,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Service\Srv_Order.cs" />
     <Compile Include="Service\Srv_Ship.cs" />
     <Compile Include="Uc\Cc_TabControl.cs">
       <SubType>Component</SubType>

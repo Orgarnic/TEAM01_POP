@@ -76,7 +76,7 @@ namespace Cohesion_Project
          this.label2 = new System.Windows.Forms.Label();
          this.label27 = new System.Windows.Forms.Label();
          this.panel1 = new System.Windows.Forms.Panel();
-         this.button2 = new System.Windows.Forms.Button();
+         this.btnOrder = new System.Windows.Forms.Button();
          this.textBox9 = new System.Windows.Forms.TextBox();
          this.label1 = new System.Windows.Forms.Label();
          this.label22 = new System.Windows.Forms.Label();
@@ -698,7 +698,7 @@ namespace Cohesion_Project
             | System.Windows.Forms.AnchorStyles.Right)));
          this.panel1.BackColor = System.Drawing.Color.White;
          this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-         this.panel1.Controls.Add(this.button2);
+         this.panel1.Controls.Add(this.btnOrder);
          this.panel1.Controls.Add(this.textBox9);
          this.panel1.Controls.Add(this.label1);
          this.panel1.Controls.Add(this.label22);
@@ -707,21 +707,22 @@ namespace Cohesion_Project
          this.panel1.Size = new System.Drawing.Size(1454, 96);
          this.panel1.TabIndex = 30;
          // 
-         // button2
+         // btnOrder
          // 
-         this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(34)))), ((int)(((byte)(41)))));
-         this.button2.FlatAppearance.BorderSize = 0;
-         this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-         this.button2.Font = new System.Drawing.Font("나눔고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-         this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-         this.button2.Image = global::Cohesion_Project.Properties.Resources.Search;
-         this.button2.Location = new System.Drawing.Point(396, 49);
-         this.button2.Name = "button2";
-         this.button2.Size = new System.Drawing.Size(55, 29);
-         this.button2.TabIndex = 23;
-         this.button2.Text = "조회";
-         this.button2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-         this.button2.UseVisualStyleBackColor = false;
+         this.btnOrder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(34)))), ((int)(((byte)(41)))));
+         this.btnOrder.FlatAppearance.BorderSize = 0;
+         this.btnOrder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+         this.btnOrder.Font = new System.Drawing.Font("나눔고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+         this.btnOrder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+         this.btnOrder.Image = global::Cohesion_Project.Properties.Resources.Search;
+         this.btnOrder.Location = new System.Drawing.Point(396, 49);
+         this.btnOrder.Name = "btnOrder";
+         this.btnOrder.Size = new System.Drawing.Size(55, 29);
+         this.btnOrder.TabIndex = 23;
+         this.btnOrder.Text = "조회";
+         this.btnOrder.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+         this.btnOrder.UseVisualStyleBackColor = false;
+         this.btnOrder.Click += new System.EventHandler(this.btnOrder_Click);
          // 
          // textBox9
          // 
@@ -770,7 +771,7 @@ namespace Cohesion_Project
          this.Controls.Add(this.panel1);
          this.Name = "Frm_Order";
          this.Text = "LOT 생성";
-         this.Load += new System.EventHandler(this.Frm_WORK_ORDER_Load);
+         this.Load += new System.EventHandler(this.Frm_Order_Load);
          this.tableLayoutPanel1.ResumeLayout(false);
          this.panel3.ResumeLayout(false);
          this.panel3.PerformLayout();
@@ -818,7 +819,7 @@ namespace Cohesion_Project
       protected System.Windows.Forms.Label label21;
       protected System.Windows.Forms.TextBox textBox6;
       protected System.Windows.Forms.Label label19;
-      private System.Windows.Forms.Button button2;
+      private System.Windows.Forms.Button btnOrder;
       protected System.Windows.Forms.TextBox textBox9;
       protected System.Windows.Forms.Label label22;
       protected System.Windows.Forms.TextBox textBox12;
