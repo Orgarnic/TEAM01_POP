@@ -78,10 +78,20 @@ namespace Cohesion_DAO
             cmd2.Parameters.AddWithValue("@TRAN_USER_ID", his.TRAN_USER_ID);
             cmd2.Parameters.AddWithValue("@TRAN_COMMENT", his.TRAN_COMMENT);
             cmd2.Parameters.AddWithValue("@HIST_SEQ", his.HIST_SEQ);
-            cmd2.Parameters.AddWithValue("@WORK_DATE", his.WORK_DATE);
+            //cmd2.Parameters.AddWithValue("@WORK_DATE", his.WORK_DATE);
             cmd2.Transaction = trans;
             cmd2.CommandText = sql;
             cmd2.ExecuteNonQuery();
+
+            sql = @"UPDATE WORK_ORDER_MST
+                    SET ORDER_STATUS = 'PROC', UPDATE_TIME = GETDATE(), UPDATE_USER_ID = @UPDATE_USER_ID
+                    WHERE WORK_ORDER_ID = @WORK_ORDER_ID";
+            SqlCommand cmd3 = new SqlCommand(sql, conn);
+            cmd3.Parameters.AddWithValue("@UPDATE_USER_ID", dto.LAST_TRAN_USER_ID);
+            cmd3.Parameters.AddWithValue("@WORK_ORDER_ID", dto.WORK_ORDER_ID);
+            cmd3.Transaction = trans;
+            cmd3.ExecuteNonQuery();
+
             trans.Commit();
             return true;
          }
