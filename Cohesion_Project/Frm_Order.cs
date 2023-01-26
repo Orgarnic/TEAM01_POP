@@ -28,41 +28,78 @@ namespace Cohesion_Project
       {
          Pop_Purchase pop = new Pop_Purchase();
          DialogResult dia = pop.ShowDialog();
-         if(dia == DialogResult.OK)
-         {
-            txtOrder.Text = pop.order.WORK_ORDER_ID;
-            txtCustomerCode.Text = pop.order.CUSTOMER_CODE;
-            txtCustomerName.Text = pop.order.CUSTOMER_NAME;
-            lblOrderStatus.Text = pop.order.ORDER_STATUS;
-            lblOrderQty.Text = pop.order.ORDER_QTY.ToString();
-            lblProductQty.Text = pop.order.PRODUCT_QTY.ToString();
-            lblDefectQty.Text = pop.order.DEFECT_QTY.ToString();
-            txtProductCode.Text = pop.order.PRODUCT_CODE;
-            txtProductName.Text = pop.order.PRODUCT_NAME;
-            txtTotalQty.Text = (pop.order.PRODUCT_QTY - pop.order.DEFECT_QTY).ToString();
+         if (dia == DialogResult.OK)
             order = pop.order;
-         }
-         if (order.ORDER_STATUS.Equals("OPEN"))
+         operation = srvOrder.SelectOperation(order.PRODUCT_CODE);
+         if (operation == null)
          {
-            string lot = "LOT_" + order.WORK_ORDER_ID.Replace("WO_","");
-            txtLotId.Text = lot;
-            lblDesc.Text = "생성된 LOT에 주석을 적어주세요.";
-            lblDesc.Visible = true;
-            operation = srvOrder.SelectOperation(order.PRODUCT_CODE);
-            if(operation == null)
-            {
-               MboxUtil.MboxWarn("해당 제품은 공정이 등록되지 않은 제품입니다.");
-               txtOperationCode.Text = txtOperationName.Text = string.Empty;
-               lblDesc.Visible = false;
-               return;
-            }
-            txtOperationCode.Text = operation.OPERATION_CODE;
-            txtOperationName.Text = operation.OPERATION_NAME;
+            MboxUtil.MboxWarn("해당 제품은 공정이 등록되지 않은 제품입니다.");
+            CommonUtil.ResetControls(txtOperationCode, txtOperationName, txtCustomerCode, txtCustomerName, txtOrder);
+            CommonUtil.ResetControls(txtLotId, lblOrderStatus, lblProductQty, lblOrderQty, lblDefectQty, txtProductCode, txtProductName);
+            lblDesc.Visible = false;
+            return;
          }
-         else if (order.ORDER_STATUS.Equals("PROC"))
-         {
+         txtLotId.Text = srvOrder.SPGetLot(order.WORK_ORDER_ID);
+         lblDesc.Text = "생성된 LOT에 주석을 적어주세요.";
+         lblDesc.Visible = true;
 
+         txtOperationCode.Text = operation.OPERATION_CODE;
+         txtOperationName.Text = operation.OPERATION_NAME;
+
+         txtOrder.Text = order.WORK_ORDER_ID;
+         txtCustomerCode.Text = order.CUSTOMER_CODE;
+         txtCustomerName.Text = order.CUSTOMER_NAME;
+         lblOrderStatus.Text = order.ORDER_STATUS;
+         lblProductQty.Text = Convert.ToInt32(order.PRODUCT_QTY).ToString();
+         lblOrderQty.Text = Convert.ToInt32(order.ORDER_QTY).ToString();
+         lblDefectQty.Text = Convert.ToInt32(order.DEFECT_QTY).ToString();
+         txtProductCode.Text = order.PRODUCT_CODE;
+         txtProductName.Text = order.PRODUCT_NAME;
+      }
+      private void txtTotalQty_KeyPress(object sender, KeyPressEventArgs e)
+      {
+         if (!char.IsDigit(e.KeyChar) && e.KeyChar != 8)
+            e.Handled = true;
+      }
+      private void btnCreate_Click(object sender, EventArgs e)
+      {
+         if (string.IsNullOrWhiteSpace(txtLotId.Text))
+         {
+            MboxUtil.MboxWarn("작업지시서를 선택해 주십시오.");
+            return;
          }
+         if (string.IsNullOrWhiteSpace(txtTotalQty.Text))
+         {
+            MboxUtil.MboxWarn("생산수량은 필수 입력입니다.");
+            return;
+         }
+         LOT_STS_DTO dto = new LOT_STS_DTO
+         {
+            LOT_ID = txtLotId.Text,
+            LOT_DESC = txtLotDesc.Text,
+            PRODUCT_CODE = txtProductCode.Text,
+            OPERATION_CODE = txtOperationCode.Text,
+            LOT_QTY = Convert.ToInt32(lblProductQty.Text),
+            CREATE_QTY = Convert.ToInt32(txtTotalQty.Text),
+            OPER_IN_QTY = Convert.ToInt32(lblProductQty.Text),
+            CREATE_TIME = DateTime.Now,
+            OPER_IN_TIME = DateTime.Now,
+            WORK_ORDER_ID = txtOrder.Text,
+            LAST_TRAN_CODE = "Create",
+            LAST_TRAN_TIME = DateTime.Now,
+            LAST_TRAN_USER_ID = "TEST",
+            LAST_TRAN_COMMENT = txtOrderDesc.Text,
+            LAST_HIST_SEQ = 0
+         };
+         bool result = srvOrder.CreateLot(dto);
+         if (!result)
+         {
+            MboxUtil.MboxError("오류가 발생했습니다.");
+            return;
+         }
+         MboxUtil.MboxInfo("LOT가 생성되었습니다.");
+         CommonUtil.ResetControls(txtOperationCode, txtOperationName, txtCustomerCode, txtCustomerName, txtOrder);
+         CommonUtil.ResetControls(txtLotId, lblOrderStatus, lblProductQty, lblOrderQty, lblDefectQty, txtProductCode, txtProductName);
       }
 
       private void Btn_Close_Click(object sender, EventArgs e)

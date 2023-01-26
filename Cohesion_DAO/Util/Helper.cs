@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using Cohesion_DTO;
 
 namespace Cohesion_DAO
 {
@@ -234,6 +235,8 @@ namespace Cohesion_DAO
             {
                if (sqltemp.Contains(property.Name, StringComparer.OrdinalIgnoreCase))
                   cmd.Parameters.AddWithValue($"@{property.Name}", property.GetValue(temp));
+              /* else
+                  cmd.Parameters.AddWithValue($"@{property.Name}", DBNull.Value);*/
             }
          }
          catch (Exception e)
@@ -243,6 +246,44 @@ namespace Cohesion_DAO
             return null;
          }
          return cmd;
+      }
+      public static LOT_HIS_DTO LotStsToLotHis(LOT_STS_DTO dto)
+      {
+         LOT_HIS_DTO his = new LOT_HIS_DTO
+         {
+            LOT_ID = dto.LOT_ID,
+            LOT_DESC = dto.LOT_DESC,
+            PRODUCT_CODE = dto.PRODUCT_CODE,
+            OPERATION_CODE = dto.OPERATION_CODE,
+            STORE_CODE = dto.STORE_CODE,
+            LOT_QTY = dto.LOT_QTY,
+            CREATE_QTY = dto.CREATE_QTY,
+            OPER_IN_QTY = dto.OPER_IN_QTY,
+            START_FLAG = dto.START_FLAG,
+            START_QTY = dto.START_QTY,
+            START_TIME = dto.START_TIME,
+            START_EQUIPMENT_CODE = dto.START_EQUIPMENT_CODE,
+            END_FLAG = dto.END_FLAG,
+            END_TIME = dto.END_TIME,
+            END_EQUIPMENT_CODE = dto.END_EQUIPMENT_CODE,
+            SHIP_FLAG = dto.SHIP_FLAG,
+            SHIP_CODE = dto.SHIP_CODE,
+            SHIP_TIME = dto.SHIP_TIME,
+            PRODUCTION_TIME = dto.PRODUCTION_TIME,
+            CREATE_TIME = dto.CREATE_TIME,
+            OPER_IN_TIME = dto.OPER_IN_TIME,
+            WORK_ORDER_ID = dto.WORK_ORDER_ID,
+            LOT_DELETE_FLAG = dto.LOT_DELETE_FLAG,
+            LOT_DELETE_CODE = dto.LOT_DELETE_CODE,
+            LOT_DELETE_TIME = dto.LOT_DELETE_TIME,
+            TRAN_CODE = dto.LAST_TRAN_CODE,
+            TRAN_TIME = dto.LAST_TRAN_TIME,
+            TRAN_USER_ID = dto.LAST_TRAN_USER_ID,
+            TRAN_COMMENT = dto.LAST_TRAN_COMMENT,
+            HIST_SEQ = dto.LAST_HIST_SEQ,
+            WORK_DATE = null
+         };
+         return his;
       }
    }
 }

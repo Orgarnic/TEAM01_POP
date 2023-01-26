@@ -20,6 +20,84 @@ namespace Cohesion_DAO
          conn = new SqlConnection(DB);
       }
 
+      public bool CreateLot(LOT_STS_DTO dto)
+      {
+         conn.Open();
+         SqlTransaction trans = conn.BeginTransaction();
+         try
+         {
+            string sql = @"INSERT INTO LOT_STS
+                           (LOT_ID, LOT_DESC, PRODUCT_CODE, OPERATION_CODE
+                           ,LOT_QTY, CREATE_QTY, OPER_IN_QTY, CREATE_TIME, OPER_IN_TIME, WORK_ORDER_ID
+                           ,LAST_TRAN_CODE, LAST_TRAN_TIME, LAST_TRAN_USER_ID, LAST_TRAN_COMMENT, LAST_HIST_SEQ)
+                           VALUES 
+                           (@LOT_ID, @LOT_DESC, @PRODUCT_CODE, @OPERATION_CODE, @LOT_QTY, @CREATE_QTY, @OPER_IN_QTY, @CREATE_TIME, @OPER_IN_TIME, @WORK_ORDER_ID, 
+                            @LAST_TRAN_CODE, @LAST_TRAN_TIME, @LAST_TRAN_USER_ID, @LAST_TRAN_COMMENT, @LAST_HIST_SEQ)";
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@LOT_ID", dto.LOT_ID);
+            cmd.Parameters.AddWithValue("@LOT_DESC", dto.LOT_DESC);
+            cmd.Parameters.AddWithValue("@PRODUCT_CODE", dto.PRODUCT_CODE);
+            cmd.Parameters.AddWithValue("@OPERATION_CODE", dto.OPERATION_CODE);
+            cmd.Parameters.AddWithValue("@LOT_QTY", dto.LOT_QTY);
+            cmd.Parameters.AddWithValue("@CREATE_QTY", dto.CREATE_QTY);
+            cmd.Parameters.AddWithValue("@OPER_IN_QTY", dto.OPER_IN_QTY);
+            cmd.Parameters.AddWithValue("@CREATE_TIME", dto.CREATE_TIME);
+            cmd.Parameters.AddWithValue("@OPER_IN_TIME", dto.OPER_IN_TIME);
+            cmd.Parameters.AddWithValue("@WORK_ORDER_ID", dto.WORK_ORDER_ID);
+            cmd.Parameters.AddWithValue("@LAST_TRAN_CODE", dto.LAST_TRAN_CODE);
+            cmd.Parameters.AddWithValue("@LAST_TRAN_TIME", dto.LAST_TRAN_TIME);
+            cmd.Parameters.AddWithValue("@LAST_TRAN_USER_ID", dto.LAST_TRAN_USER_ID);
+            cmd.Parameters.AddWithValue("@LAST_TRAN_COMMENT", dto.LAST_TRAN_COMMENT);
+            cmd.Parameters.AddWithValue("@LAST_HIST_SEQ", dto.LAST_HIST_SEQ);
+
+            cmd.Transaction = trans;
+            cmd.ExecuteNonQuery();
+            cmd.Parameters.Clear();
+            LOT_HIS_DTO his = Helper.LotStsToLotHis(dto);
+            sql = @"INSERT INTO LOT_HIS
+                    (LOT_ID, LOT_DESC, PRODUCT_CODE, OPERATION_CODE, LOT_QTY, CREATE_QTY, OPER_IN_QTY, CREATE_TIME,
+                    OPER_IN_TIME, WORK_ORDER_ID, TRAN_CODE, TRAN_TIME, TRAN_USER_ID, TRAN_COMMENT,
+                    HIST_SEQ)
+                    VALUES 
+                    (@LOT_ID, @LOT_DESC, @PRODUCT_CODE, @OPERATION_CODE, @LOT_QTY, @CREATE_QTY, @OPER_IN_QTY, @CREATE_TIME,
+                    @OPER_IN_TIME, @WORK_ORDER_ID, @TRAN_CODE, @TRAN_TIME, @TRAN_USER_ID, @TRAN_COMMENT,
+                    @HIST_SEQ)";
+            SqlCommand cmd2 = new SqlCommand(sql, conn);
+            cmd2.Parameters.AddWithValue("@LOT_ID", his.LOT_ID);
+            cmd2.Parameters.AddWithValue("@LOT_DESC", his.LOT_DESC);
+            cmd2.Parameters.AddWithValue("@PRODUCT_CODE", his.PRODUCT_CODE);
+            cmd2.Parameters.AddWithValue("@OPERATION_CODE", his.OPERATION_CODE);
+            cmd2.Parameters.AddWithValue("@LOT_QTY", his.LOT_QTY);
+            cmd2.Parameters.AddWithValue("@CREATE_QTY", his.CREATE_QTY);
+            cmd2.Parameters.AddWithValue("@OPER_IN_QTY", his.OPER_IN_QTY);
+            cmd2.Parameters.AddWithValue("@CREATE_TIME", his.CREATE_TIME);
+            cmd2.Parameters.AddWithValue("@OPER_IN_TIME", his.OPER_IN_TIME);
+            cmd2.Parameters.AddWithValue("@WORK_ORDER_ID", his.WORK_ORDER_ID);
+            cmd2.Parameters.AddWithValue("@TRAN_CODE", his.TRAN_CODE);
+            cmd2.Parameters.AddWithValue("@TRAN_TIME", his.TRAN_TIME);
+            cmd2.Parameters.AddWithValue("@TRAN_USER_ID", his.TRAN_USER_ID);
+            cmd2.Parameters.AddWithValue("@TRAN_COMMENT", his.TRAN_COMMENT);
+            cmd2.Parameters.AddWithValue("@HIST_SEQ", his.HIST_SEQ);
+            cmd2.Parameters.AddWithValue("@WORK_DATE", his.WORK_DATE);
+            cmd2.Transaction = trans;
+            cmd2.CommandText = sql;
+            cmd2.ExecuteNonQuery();
+            trans.Commit();
+            return true;
+         }
+         catch (Exception err)
+         {
+            trans.Rollback();
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return false;
+         }
+         finally
+         {
+            conn.Close();
+         }
+      }
+
       public List<WORK_ORDER_MST_DTO> SelectOrderList()
       {
          List<WORK_ORDER_MST_DTO> list = null;
@@ -125,7 +203,32 @@ namespace Cohesion_DAO
             conn.Close();
          }
       }
-
+      public string SPGetLot(string orderId)
+      {
+         string lot = null;
+         try
+         {
+            SqlCommand cmd = new SqlCommand();
+            string sql = @"SP_GetLot";
+            cmd.Parameters.AddWithValue("@ORDERID", orderId);
+            cmd.CommandText = sql.ToString();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Connection = conn;
+            conn.Open();
+            lot = cmd.ExecuteScalar().ToString();
+         }
+         catch (Exception err)
+         {
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return null;
+         }
+         finally
+         {
+            conn.Close();
+         }
+         return lot;
+      }
 
       public void Dispose()
       {
