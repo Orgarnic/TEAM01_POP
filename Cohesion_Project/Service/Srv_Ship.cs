@@ -17,12 +17,19 @@ namespace Cohesion_Project.Service
             dao.Dispose();
             return list;
         }
-        public List<LOTState_DTO> SelectProductListInStore(string productCode)
+        public List<LOT_STS_DTO> SelectProductListInStore(string productCode)
         {
             Ship_DAO dao = new Ship_DAO();
             var list = dao.SelectProductInStore(productCode);
             dao.Dispose();
             return list;
+        }
+        public bool InsertShipInfo(SalesOrder_DTO orderInfo, Dictionary<string, decimal> lotNumList)
+        {
+            Ship_DAO dao = new Ship_DAO();
+            var result = dao.InsertShipInfo(orderInfo, lotNumList);
+            dao.Dispose();
+            return result;
         }
     }
 }

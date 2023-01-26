@@ -14,6 +14,8 @@ namespace Cohesion_Project
     {
         SalesOrder_DTO OrderInfo = new SalesOrder_DTO();
         Srv_Ship svShip = new Srv_Ship();
+        Dictionary<string, decimal> lotNumList = new Dictionary<string, decimal>();
+
         public Frm_Ship()
         {
             InitializeComponent();
@@ -34,15 +36,25 @@ namespace Cohesion_Project
 
         private void DgvStockProduct_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
+            
             if (e.RowIndex<0)
             {
                 return;
             }
-            int totQty = (txtTotalQty.Text =="")? 0 : int.Parse(txtTotalQty.Text);
+            Decimal totQty = (txtTotalQty.Text =="")? 0 : Convert.ToDecimal(txtTotalQty.Text);
             if ((Boolean)dgvStockProduct.Rows[e.RowIndex].Cells[0].Value == true)
             {
-                totQty += Convert.ToInt32(dgvStockProduct.Rows[e.RowIndex].Cells["LOT_QTY"].Value);
+                totQty += Convert.ToDecimal(dgvStockProduct.Rows[e.RowIndex].Cells[3].Value);
                 txtTotalQty.Text = totQty.ToString();
+                txtLot.Text = dgvStockProduct.Rows[e.RowIndex].Cells[2].Value.ToString();
+                lotNumList[txtLot.Text] = Convert.ToDecimal(dgvStockProduct.Rows[e.RowIndex].Cells[3].Value);
+            }
+            if ((Boolean)dgvStockProduct.Rows[e.RowIndex].Cells[0].Value == false)
+            {
+                totQty -= Convert.ToInt32(dgvStockProduct.Rows[e.RowIndex].Cells[3].Value);
+                txtTotalQty.Text = totQty.ToString();
+                txtLot.Text = dgvStockProduct.Rows[e.RowIndex].Cells[2].Value.ToString();
+                lotNumList.Remove(txtLot.Text);
             }
         }
 
@@ -68,5 +80,23 @@ namespace Cohesion_Project
             dgvStockProduct.DataSource = list;
         }
 
+        private void btnShip_Click(object sender, EventArgs e)
+        {
+            
+            if (Convert.ToDecimal(txtQty.Text.Replace(",", "")) > Convert.ToDecimal(txtTotalQty.Text))
+            {
+                MboxUtil.MboxError("출고량이 주문수량보다 작습니다.");
+                return;
+            }
+            bool result = svShip.InsertShipInfo(OrderInfo, lotNumList);
+            if (result)
+            {
+                MboxUtil.MboxInfo("해당 주문의 출고가 완료되었습니다.");
+            }
+            else
+            {
+                MboxUtil.MboxError("출고 처리 중 오류가 발생했습니다.");
+            }
+        }
     }
 }

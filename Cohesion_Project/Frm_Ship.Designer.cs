@@ -138,6 +138,7 @@ namespace Cohesion_Project
             this.button1.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
             this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(56)))), ((int)(((byte)(67)))));
             this.button1.Text = "출하";
+            this.button1.Click += new System.EventHandler(this.btnShip_Click);
             // 
             // txtQty
             // 
