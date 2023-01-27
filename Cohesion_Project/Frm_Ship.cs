@@ -46,15 +46,15 @@ namespace Cohesion_Project
             {
                 totQty += Convert.ToDecimal(dgvStockProduct.Rows[e.RowIndex].Cells[3].Value);
                 txtTotalQty.Text = totQty.ToString();
-                txtLot.Text = dgvStockProduct.Rows[e.RowIndex].Cells[2].Value.ToString();
-                lotNumList[txtLot.Text] = Convert.ToDecimal(dgvStockProduct.Rows[e.RowIndex].Cells[3].Value);
+                lstLot.Items.Add(dgvStockProduct.Rows[e.RowIndex].Cells[2].Value);
+                lotNumList[dgvStockProduct.Rows[e.RowIndex].Cells[2].Value.ToString()] = Convert.ToDecimal(dgvStockProduct.Rows[e.RowIndex].Cells[3].Value);
             }
             if ((Boolean)dgvStockProduct.Rows[e.RowIndex].Cells[0].Value == false)
             {
                 totQty -= Convert.ToInt32(dgvStockProduct.Rows[e.RowIndex].Cells[3].Value);
                 txtTotalQty.Text = totQty.ToString();
-                txtLot.Text = dgvStockProduct.Rows[e.RowIndex].Cells[2].Value.ToString();
-                lotNumList.Remove(txtLot.Text);
+                lstLot.Items.Remove(dgvStockProduct.Rows[e.RowIndex].Cells[2].Value);
+                lotNumList.Remove(dgvStockProduct.Rows[e.RowIndex].Cells[2].Value.ToString());
             }
         }
 
