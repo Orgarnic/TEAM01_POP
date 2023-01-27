@@ -41,7 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LOTState_DTO.cs" />
     <Compile Include="LOT_DEFECT_HIS_DTO.cs" />
     <Compile Include="LOT_END_HIS_DTO.cs" />
     <Compile Include="LOT_HIS_DTO.cs" />

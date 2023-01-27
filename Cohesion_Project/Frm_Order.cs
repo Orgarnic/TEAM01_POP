@@ -85,7 +85,7 @@ namespace Cohesion_Project
             CREATE_TIME = DateTime.Now,
             OPER_IN_TIME = DateTime.Now,
             WORK_ORDER_ID = txtOrder.Text,
-            LAST_TRAN_CODE = "Create",
+            LAST_TRAN_CODE = "CREATE",
             LAST_TRAN_TIME = DateTime.Now,
             LAST_TRAN_USER_ID = "TEST",
             LAST_TRAN_COMMENT = txtOrderDesc.Text,
