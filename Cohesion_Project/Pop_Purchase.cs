@@ -28,10 +28,10 @@ namespace Cohesion_Project
       private void DgvInit()
       {
          DgvUtil.DgvInit(dgvOrder);
-         DgvUtil.AddTextCol(dgvOrder, "작업 지시 코드", "WORK_ORDER_ID", width: 140, readOnly: true, frozen: true);
-         DgvUtil.AddTextCol(dgvOrder, "작업 일자", "ORDER_DATE", width: 140, readOnly: true, frozen: true);
-         DgvUtil.AddTextCol(dgvOrder, "고객 코드", "CUSTOMER_CODE", width: 140, readOnly: true, frozen: true);
-         DgvUtil.AddTextCol(dgvOrder, "품번 코드", "PRODUCT_CODE", width: 140, readOnly: true, frozen: true);
+         DgvUtil.AddTextCol(dgvOrder, "작업 지시 코드", "WORK_ORDER_ID", width: 200, readOnly: true, frozen: true);
+         DgvUtil.AddTextCol(dgvOrder, "작업 일자", "ORDER_DATE", width: 150, readOnly: true, frozen: true);
+         DgvUtil.AddTextCol(dgvOrder, "고객 코드", "CUSTOMER_CODE", width: 150, readOnly: true, frozen: true);
+         DgvUtil.AddTextCol(dgvOrder, "품번 코드", "PRODUCT_CODE", width: 150, readOnly: true, frozen: true);
          DgvUtil.AddTextCol(dgvOrder, "고객 사", "CUSTOMER_NAME", width: 140, readOnly: true);
          DgvUtil.AddTextCol(dgvOrder, "품번 명", "PRODUCT_NAME", width: 140, readOnly: true);
          DgvUtil.AddTextCol(dgvOrder, "계획 수량", "ORDER_QTY", width: 140, readOnly: true);

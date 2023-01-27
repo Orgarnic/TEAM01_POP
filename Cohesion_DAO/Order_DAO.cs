@@ -83,14 +83,14 @@ namespace Cohesion_DAO
             cmd2.CommandText = sql;
             cmd2.ExecuteNonQuery();
 
-            sql = @"UPDATE WORK_ORDER_MST
+/*            sql = @"UPDATE WORK_ORDER_MST
                     SET ORDER_STATUS = 'PROC', UPDATE_TIME = GETDATE(), UPDATE_USER_ID = @UPDATE_USER_ID
                     WHERE WORK_ORDER_ID = @WORK_ORDER_ID";
             SqlCommand cmd3 = new SqlCommand(sql, conn);
             cmd3.Parameters.AddWithValue("@UPDATE_USER_ID", dto.LAST_TRAN_USER_ID);
             cmd3.Parameters.AddWithValue("@WORK_ORDER_ID", dto.WORK_ORDER_ID);
             cmd3.Transaction = trans;
-            cmd3.ExecuteNonQuery();
+            cmd3.ExecuteNonQuery();*/
 
             trans.Commit();
             return true;
@@ -218,19 +218,25 @@ namespace Cohesion_DAO
             conn.Close();
          }
       }
-      public string SPGetLot(string orderId)
+      public string SPGetLot(string orderId, out int total)
       {
          string lot = null;
+         total = 0;
          try
          {
             SqlCommand cmd = new SqlCommand();
             string sql = @"SP_GetLot";
             cmd.Parameters.AddWithValue("@ORDERID", orderId);
+            SqlParameter param = new SqlParameter("@TOTAL", SqlDbType.Int);
+            param.Direction = ParameterDirection.Output;
+            cmd.Parameters.Add(param);
             cmd.CommandText = sql.ToString();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Connection = conn;
             conn.Open();
             lot = cmd.ExecuteScalar().ToString();
+            conn.Close();
+            total = Convert.ToInt32(param.Value);
          }
          catch (Exception err)
          {

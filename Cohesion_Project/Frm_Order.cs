@@ -28,6 +28,7 @@ namespace Cohesion_Project
       {
          Pop_Purchase pop = new Pop_Purchase();
          DialogResult dia = pop.ShowDialog();
+         int total = 0;
          if (dia == DialogResult.OK)
             order = pop.order;
          operation = srvOrder.SelectOperation(order.PRODUCT_CODE);
@@ -39,7 +40,7 @@ namespace Cohesion_Project
             lblDesc.Visible = false;
             return;
          }
-         txtLotId.Text = srvOrder.SPGetLot(order.WORK_ORDER_ID);
+         txtLotId.Text = srvOrder.SPGetLot(order.WORK_ORDER_ID, out total);
          lblDesc.Text = "생성된 LOT에 주석을 적어주세요.";
          lblDesc.Visible = true;
 
@@ -55,6 +56,7 @@ namespace Cohesion_Project
          lblDefectQty.Text = Convert.ToInt32(order.DEFECT_QTY).ToString();
          txtProductCode.Text = order.PRODUCT_CODE;
          txtProductName.Text = order.PRODUCT_NAME;
+         txtTotal.Text = total.ToString();
       }
       private void txtTotalQty_KeyPress(object sender, KeyPressEventArgs e)
       {

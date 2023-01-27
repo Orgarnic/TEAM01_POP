@@ -81,6 +81,8 @@ namespace Cohesion_Project
          this.txtOrder = new System.Windows.Forms.TextBox();
          this.label1 = new System.Windows.Forms.Label();
          this.label22 = new System.Windows.Forms.Label();
+         this.txtTotal = new System.Windows.Forms.TextBox();
+         this.label4 = new System.Windows.Forms.Label();
          this.tableLayoutPanel1.SuspendLayout();
          this.panel3.SuspendLayout();
          this.panel2.SuspendLayout();
@@ -274,6 +276,8 @@ namespace Cohesion_Project
             | System.Windows.Forms.AnchorStyles.Right)));
          this.panel3.BackColor = System.Drawing.Color.White;
          this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+         this.panel3.Controls.Add(this.txtTotal);
+         this.panel3.Controls.Add(this.label4);
          this.panel3.Controls.Add(this.lblDesc);
          this.panel3.Controls.Add(this.txtOrderDesc);
          this.panel3.Controls.Add(this.label20);
@@ -773,6 +777,28 @@ namespace Cohesion_Project
          this.label22.Text = "◾ 작업지시서";
          this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
          // 
+         // txtTotal
+         // 
+         this.txtTotal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+         this.txtTotal.Enabled = false;
+         this.txtTotal.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+         this.txtTotal.Location = new System.Drawing.Point(1168, 156);
+         this.txtTotal.Name = "txtTotal";
+         this.txtTotal.Size = new System.Drawing.Size(265, 29);
+         this.txtTotal.TabIndex = 41;
+         // 
+         // label4
+         // 
+         this.label4.BackColor = System.Drawing.Color.Transparent;
+         this.label4.Font = new System.Drawing.Font("나눔고딕", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+         this.label4.ForeColor = System.Drawing.Color.Black;
+         this.label4.Location = new System.Drawing.Point(1059, 155);
+         this.label4.Name = "label4";
+         this.label4.Size = new System.Drawing.Size(138, 30);
+         this.label4.TabIndex = 40;
+         this.label4.Text = "◾ 총 지시 수량";
+         this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+         // 
          // Frm_Order
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -851,5 +877,7 @@ namespace Cohesion_Project
       protected System.Windows.Forms.Label label30;
       protected System.Windows.Forms.Label label31;
       protected System.Windows.Forms.Label lblDesc;
+      protected System.Windows.Forms.TextBox txtTotal;
+      protected System.Windows.Forms.Label label4;
    }
 }

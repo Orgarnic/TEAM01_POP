@@ -36,10 +36,11 @@ namespace Cohesion_Project
          return temp;
       }
 
-      public string SPGetLot(string orderId)
+      public string SPGetLot(string orderId, out int total)
       {
+         total = 0;
          Order_DAO dao = new Order_DAO();
-         string temp = dao.SPGetLot(orderId);
+         string temp = dao.SPGetLot(orderId, out total);
          dao.Dispose();
 
          return temp;

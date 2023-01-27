@@ -280,7 +280,7 @@ namespace Cohesion_DAO
             TRAN_TIME = dto.LAST_TRAN_TIME,
             TRAN_USER_ID = dto.LAST_TRAN_USER_ID,
             TRAN_COMMENT = dto.LAST_TRAN_COMMENT,
-            HIST_SEQ = dto.LAST_HIST_SEQ,
+            HIST_SEQ = dto.LAST_HIST_SEQ == 0 ? 1 : dto.LAST_HIST_SEQ + 1,
             WORK_DATE = null
          };
          return his;
