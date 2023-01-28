@@ -18,5 +18,31 @@ namespace Cohesion_Project
 
          return list;
       }
+
+      public List<PRODUCT_OPERATION_REL_DTO> SelectOperations()
+      {
+         Work_DAO dao = new Work_DAO();
+         List<PRODUCT_OPERATION_REL_DTO> list = dao.SelectOperations();
+         dao.Dispose();
+
+         return list;
+      }
+      public List<EQUIPMENT_OPERATION_REL_DTO> SelectEquipments()
+      {
+         Work_DAO dao = new Work_DAO();
+         List<EQUIPMENT_OPERATION_REL_DTO> list = dao.SelectEquipments();
+         dao.Dispose();
+
+         return list;
+      }
+
+      public bool StartWork(LOT_STS_DTO dto)
+      {
+         Work_DAO dao = new Work_DAO();
+         bool temp = dao.StartWork(dto);
+         dao.Dispose();
+
+         return temp;
+      }
    }
 }

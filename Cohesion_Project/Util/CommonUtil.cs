@@ -17,6 +17,8 @@ namespace Cohesion_Project
          {
             if(control is TextBox txt)
                txt.Text = string.Empty;
+            if (control is Label lbl)
+               lbl.Text = string.Empty;
             if (control is ComboBox cbo)
                cbo.SelectedIndex = 0;
             if (control is DateTimePicker dtp)

@@ -57,11 +57,11 @@ namespace Cohesion_DAO
             sql = @"INSERT INTO LOT_HIS
                     (LOT_ID, LOT_DESC, PRODUCT_CODE, OPERATION_CODE, LOT_QTY, CREATE_QTY, OPER_IN_QTY, CREATE_TIME,
                     OPER_IN_TIME, WORK_ORDER_ID, TRAN_CODE, TRAN_TIME, TRAN_USER_ID, TRAN_COMMENT,
-                    HIST_SEQ)
+                    HIST_SEQ, WORK_DATE)
                     VALUES 
                     (@LOT_ID, @LOT_DESC, @PRODUCT_CODE, @OPERATION_CODE, @LOT_QTY, @CREATE_QTY, @OPER_IN_QTY, @CREATE_TIME,
                     @OPER_IN_TIME, @WORK_ORDER_ID, @TRAN_CODE, @TRAN_TIME, @TRAN_USER_ID, @TRAN_COMMENT,
-                    @HIST_SEQ)";
+                    @HIST_SEQ, @WORK_DATE)";
             SqlCommand cmd2 = new SqlCommand(sql, conn);
             cmd2.Parameters.AddWithValue("@LOT_ID", his.LOT_ID);
             cmd2.Parameters.AddWithValue("@LOT_DESC", his.LOT_DESC);
@@ -78,7 +78,7 @@ namespace Cohesion_DAO
             cmd2.Parameters.AddWithValue("@TRAN_USER_ID", his.TRAN_USER_ID);
             cmd2.Parameters.AddWithValue("@TRAN_COMMENT", his.TRAN_COMMENT);
             cmd2.Parameters.AddWithValue("@HIST_SEQ", his.HIST_SEQ);
-            //cmd2.Parameters.AddWithValue("@WORK_DATE", his.WORK_DATE);
+            cmd2.Parameters.AddWithValue("@WORK_DATE", his.WORK_DATE);
             cmd2.Transaction = trans;
             cmd2.CommandText = sql;
             cmd2.ExecuteNonQuery();

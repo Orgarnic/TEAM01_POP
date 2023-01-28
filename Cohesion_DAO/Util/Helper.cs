@@ -247,6 +247,7 @@ namespace Cohesion_DAO
          }
          return cmd;
       }
+
       public static LOT_HIS_DTO LotStsToLotHis(LOT_STS_DTO dto)
       {
          LOT_HIS_DTO his = new LOT_HIS_DTO
@@ -281,9 +282,57 @@ namespace Cohesion_DAO
             TRAN_USER_ID = dto.LAST_TRAN_USER_ID,
             TRAN_COMMENT = dto.LAST_TRAN_COMMENT,
             HIST_SEQ = dto.LAST_HIST_SEQ == 0 ? 1 : dto.LAST_HIST_SEQ + 1,
-            WORK_DATE = null
+            WORK_DATE = DateTime.Now.ToString("yyyyMMdd"),
+            OLD_PRODUCT_CODE = dto.PRODUCT_CODE,
+            OLD_OPERATION_CODE = dto.OPERATION_CODE,
+            OLD_STORE_CODE = dto.STORE_CODE,
+            OLD_LOT_QTY = dto.LOT_QTY
+
          };
          return his;
+      }
+      
+      public static SqlCommand LotHisCmd(LOT_STS_DTO dto)
+      {
+         LOT_HIS_DTO his = LotStsToLotHis(dto);
+         SqlCommand cmd = new SqlCommand();
+         cmd.Parameters.AddWithValue("@LOT_ID", string.IsNullOrWhiteSpace(his.LOT_ID) ? (object)DBNull.Value : his.LOT_ID);
+         cmd.Parameters.AddWithValue("@HIST_SEQ", his.HIST_SEQ);
+         cmd.Parameters.AddWithValue("@TRAN_TIME", his.TRAN_TIME == new DateTime() ? (object)DBNull.Value : his.TRAN_TIME);
+         cmd.Parameters.AddWithValue("@TRAN_CODE", string.IsNullOrWhiteSpace(his.TRAN_CODE) ? (object)DBNull.Value : his.TRAN_CODE);
+         cmd.Parameters.AddWithValue("@LOT_DESC", string.IsNullOrWhiteSpace(his.LOT_DESC) ? (object)DBNull.Value : his.LOT_DESC);
+         cmd.Parameters.AddWithValue("@PRODUCT_CODE", string.IsNullOrWhiteSpace(his.PRODUCT_CODE) ? (object)DBNull.Value : his.PRODUCT_CODE);
+         cmd.Parameters.AddWithValue("@OPERATION_CODE", string.IsNullOrWhiteSpace(his.OPERATION_CODE) ? (object)DBNull.Value : his.OPERATION_CODE);
+         cmd.Parameters.AddWithValue("@STORE_CODE", string.IsNullOrWhiteSpace(his.STORE_CODE) ? (object)DBNull.Value : his.STORE_CODE);
+         cmd.Parameters.AddWithValue("@LOT_QTY", his.LOT_QTY);
+         cmd.Parameters.AddWithValue("@CREATE_QTY", his.CREATE_QTY);
+         cmd.Parameters.AddWithValue("@OPER_IN_QTY", his.OPER_IN_QTY);
+         cmd.Parameters.AddWithValue("@START_FLAG", his.START_FLAG == '\0' ? (object)DBNull.Value : his.START_FLAG);
+         cmd.Parameters.AddWithValue("@START_QTY", his.START_QTY);
+         cmd.Parameters.AddWithValue("@START_TIME", his.START_TIME == new DateTime() ? (object)DBNull.Value : his.START_TIME);
+         cmd.Parameters.AddWithValue("@START_EQUIPMENT_CODE", string.IsNullOrWhiteSpace(his.START_EQUIPMENT_CODE) ? (object)DBNull.Value : his.START_EQUIPMENT_CODE);
+         cmd.Parameters.AddWithValue("@END_FLAG", his.END_FLAG == '\0' ? (object)DBNull.Value : his.END_FLAG);
+         cmd.Parameters.AddWithValue("@END_TIME", his.END_TIME == new DateTime() ? (object)DBNull.Value : his.END_TIME);
+         cmd.Parameters.AddWithValue("@END_EQUIPMENT_CODE", string.IsNullOrWhiteSpace(his.END_EQUIPMENT_CODE) ? (object)DBNull.Value : his.END_EQUIPMENT_CODE);
+         cmd.Parameters.AddWithValue("@SHIP_FLAG", his.SHIP_FLAG == '\0' ? (object)DBNull.Value : his.SHIP_FLAG);
+         cmd.Parameters.AddWithValue("@SHIP_CODE", string.IsNullOrWhiteSpace(his.SHIP_CODE) ? (object)DBNull.Value : his.SHIP_CODE);
+         cmd.Parameters.AddWithValue("@SHIP_TIME", his.SHIP_TIME == new DateTime() ? (object)DBNull.Value : his.SHIP_TIME);
+         cmd.Parameters.AddWithValue("@PRODUCTION_TIME", his.PRODUCTION_TIME == new DateTime() ? (object)DBNull.Value : his.PRODUCTION_TIME);
+         cmd.Parameters.AddWithValue("@CREATE_TIME", his.CREATE_TIME == new DateTime() ? (object)DBNull.Value : his.CREATE_TIME);
+         cmd.Parameters.AddWithValue("@OPER_IN_TIME", his.OPER_IN_TIME == new DateTime() ? (object)DBNull.Value : his.OPER_IN_TIME);
+         cmd.Parameters.AddWithValue("@WORK_ORDER_ID", string.IsNullOrWhiteSpace(his.WORK_ORDER_ID) ? (object)DBNull.Value : his.WORK_ORDER_ID);
+         cmd.Parameters.AddWithValue("@LOT_DELETE_FLAG", his.LOT_DELETE_FLAG == '\0' ? (object)DBNull.Value : his.LOT_DELETE_FLAG);
+         cmd.Parameters.AddWithValue("@LOT_DELETE_CODE", string.IsNullOrWhiteSpace(his.LOT_DELETE_CODE) ? (object)DBNull.Value : his.LOT_DELETE_CODE);
+         cmd.Parameters.AddWithValue("@LOT_DELETE_TIME", his.LOT_DELETE_TIME == new DateTime() ? (object)DBNull.Value : his.LOT_DELETE_TIME);
+         cmd.Parameters.AddWithValue("@WORK_DATE", string.IsNullOrWhiteSpace(his.WORK_DATE) ? (object)DBNull.Value : his.WORK_DATE);
+         cmd.Parameters.AddWithValue("@TRAN_USER_ID", string.IsNullOrWhiteSpace(his.TRAN_USER_ID) ? (object)DBNull.Value : his.TRAN_USER_ID);
+         cmd.Parameters.AddWithValue("@TRAN_COMMENT", string.IsNullOrWhiteSpace(his.TRAN_COMMENT) ? (object)DBNull.Value : his.TRAN_COMMENT);
+         cmd.Parameters.AddWithValue("@OLD_PRODUCT_CODE", string.IsNullOrWhiteSpace(his.OLD_PRODUCT_CODE) ? (object)DBNull.Value : his.OLD_PRODUCT_CODE);
+         cmd.Parameters.AddWithValue("@OLD_OPERATION_CODE", string.IsNullOrWhiteSpace(his.OLD_OPERATION_CODE) ? (object)DBNull.Value : his.OLD_OPERATION_CODE);
+         cmd.Parameters.AddWithValue("@OLD_STORE_CODE", string.IsNullOrWhiteSpace(his.OLD_STORE_CODE) ? (object)DBNull.Value : his.OLD_STORE_CODE);
+         cmd.Parameters.AddWithValue("@OLD_LOT_QTY", his.OLD_LOT_QTY);
+
+         return cmd;
       }
    }
 }
