@@ -51,6 +51,7 @@
     <Compile Include="Ship_DAO.cs" />
     <Compile Include="Util\Helper.cs" />
     <Compile Include="Util\LoggingUtility.cs" />
+    <Compile Include="Work_DAO.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cohesion_DTO\Cohesion_DTO.csproj">
