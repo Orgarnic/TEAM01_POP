@@ -9,16 +9,16 @@ using Cohesion_DTO;
 
 namespace Cohesion_Project
 {
-   public partial class Frm_WorkStart : Frm_BaseNone
+   public partial class Frm_BedFlag : Frm_BaseNone
    {
       private WORK_ORDER_MST_DTO order = null;
       private List<PRODUCT_OPERATION_REL_DTO> operations = null;
-      private List<EQUIPMENT_OPERATION_REL_DTO> Equipments = null;
       private List<LOT_STS_DTO> Lots = null;
       private LOT_STS_DTO Lot = null;
       private Srv_Work srvWork = new Srv_Work();
+      private Srv_Flag srvFlag = new Srv_Flag();
 
-      public Frm_WorkStart()
+      public Frm_BedFlag()
       {
          InitializeComponent();
       }
@@ -26,7 +26,6 @@ namespace Cohesion_Project
       private void Frm_WORK_ORDER_Load(object sender, EventArgs e)
       {
          operations = srvWork.SelectOperations();
-         Equipments = srvWork.SelectEquipments();
       }
 
       private void btnOrder_Click(object sender, EventArgs e)
@@ -36,11 +35,9 @@ namespace Cohesion_Project
 
          if (dia == DialogResult.OK)
          {
-            cboEquipment.Items.Clear();
-            cboEquipment.Text = string.Empty;
             order = pop.order;
             txtOrder.Text = order.WORK_ORDER_ID;
-            Lots = srvWork.SelectOrderLot(txtOrder.Text);
+            Lots = srvFlag.SelectOrderLot(txtOrder.Text);
             if (Lots != null && Lots.Count > 0)
             {
                cboLotId.Items.Clear();
@@ -59,8 +56,6 @@ namespace Cohesion_Project
       }
       private void cboLotId_SelectedIndexChanged(object sender, EventArgs e)
       {
-         cboEquipment.Items.Clear();
-         cboEquipment.Text = string.Empty;
          if (cboLotId.SelectedIndex < 1)
          {
             CommonUtil.ResetControls(txtLotDesc, txtOperationCode, txtOperationName, txtProductCode, txtProductName, txtCustomerCode
@@ -117,15 +112,6 @@ namespace Cohesion_Project
             }
             else
                MboxUtil.MboxError("공정 진행정보를 불러오는데 오류가 발생했습니다.");
-
-            var temp = Equipments.FindAll((q) => q.OPERATION_CODE.Equals(operation.OPERATION_CODE));
-            if (temp.Count > 0)
-            {
-               cboEquipment.Items.Add("선택");
-               foreach (var item in temp)
-                  cboEquipment.Items.Add(item.EQUIPMENT_CODE);
-               cboEquipment.SelectedIndex = 0;
-            }
          }
          else
          {
@@ -133,13 +119,6 @@ namespace Cohesion_Project
             MboxUtil.MboxError("LOT 이력을 불러오는데 오류가 발생했습니다.");
             return;
          }
-      }
-
-      private void cboEquipment_SelectedIndexChanged(object sender, EventArgs e)
-      {
-         if (cboEquipment.SelectedIndex < 1)
-            return;
-         txtEquipment.Text = (Equipments.Find((q) => q.EQUIPMENT_CODE.Equals(cboEquipment.Text))).EQUIPMENT_NAME;
       }
 
       private void btnStart_Click(object sender, EventArgs e)
@@ -158,7 +137,6 @@ namespace Cohesion_Project
          Lot.START_FLAG = 'Y';
          Lot.START_QTY = Convert.ToInt32(txtTotal.Text);
          Lot.START_TIME = DateTime.Now;
-         Lot.START_EQUIPMENT_CODE = cboEquipment.Text;
          Lot.LAST_TRAN_CODE = "START";
          Lot.LAST_TRAN_TIME = DateTime.Now;
          Lot.LAST_TRAN_USER_ID = "TEST";
@@ -176,8 +154,6 @@ namespace Cohesion_Project
          , txtCustomerName, txtTotal, lblOrderStatus, lblOrderQty, lblProductQty, lblProductQty, lblDefectQty, txtOperationName, txtDesc);
          cboLotId.Items.Clear();
          cboLotId.Text = string.Empty;
-         cboEquipment.Items.Clear();
-         cboEquipment.Text = string.Empty;
          flwOperation.Controls.Clear();
       }
    }

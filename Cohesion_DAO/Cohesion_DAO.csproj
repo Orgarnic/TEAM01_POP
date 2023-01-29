@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Flag_DAO.cs" />
     <Compile Include="Order_DAO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ship_DAO.cs" />

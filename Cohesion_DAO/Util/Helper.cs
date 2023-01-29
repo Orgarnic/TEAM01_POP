@@ -63,7 +63,10 @@ namespace Cohesion_DAO
                      if (!object.Equals(dr[prop.Name], DBNull.Value))
                      {
                         //DataReader의 해당컬럼타입과 property의 타입이 일치해야한다.
-                        prop.SetValue(obj, dr[prop.Name], null);
+                        if(prop.PropertyType == typeof(char))
+                           prop.SetValue(obj, Convert.ToChar(dr[prop.Name]), null);
+                        else
+                           prop.SetValue(obj, dr[prop.Name], null);
                      }
                   }
                }

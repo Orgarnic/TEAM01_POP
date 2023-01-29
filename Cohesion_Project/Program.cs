@@ -16,7 +16,7 @@ namespace Cohesion_Project
       {
          Application.EnableVisualStyles();
          Application.SetCompatibleTextRenderingDefault(false);
-         Application.Run(new Frm_WorkStart());
+         Application.Run(new Frm_BedFlag());
       }
    }
 }

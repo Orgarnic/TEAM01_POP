@@ -30,11 +30,12 @@ namespace Cohesion_DAO
                            LOT_ID, LOT_DESC, L.PRODUCT_CODE, L.OPERATION_CODE, O.OPERATION_NAME OPERATION_NAME, STORE_CODE, LOT_QTY, CREATE_QTY,
                            OPER_IN_QTY, START_FLAG, START_QTY, START_TIME, START_EQUIPMENT_CODE, END_FLAG,
                            END_TIME, END_EQUIPMENT_CODE, SHIP_FLAG, SHIP_CODE, SHIP_TIME, PRODUCTION_TIME,
-                           L.CREATE_TIME, OPER_IN_TIME, WORK_ORDER_ID, LOT_DELETE_FLAG, LOT_DELETE_CODE, LOT_DELETE_TIME,
+                           L.CREATE_TIME, OPER_IN_TIME, L.WORK_ORDER_ID, LOT_DELETE_FLAG, LOT_DELETE_CODE, LOT_DELETE_TIME,
                            LAST_TRAN_CODE, LAST_TRAN_TIME, LAST_TRAN_USER_ID, LAST_TRAN_COMMENT, LAST_HIST_SEQ
                            FROM 
                            LOT_STS L INNER JOIN PRODUCT_OPERATION_REL P ON L.PRODUCT_CODE = P.PRODUCT_CODE AND L.OPERATION_CODE = P.OPERATION_CODE
-                           		  INNER JOIN OPERATION_MST O ON L.OPERATION_CODE = O.OPERATION_CODE
+                           		    INNER JOIN OPERATION_MST O ON L.OPERATION_CODE = O.OPERATION_CODE
+                                     INNER JOIN WORK_ORDER_MST W ON W.WORK_ORDER_ID = L.WORK_ORDER_ID
                            WHERE 
                            (LAST_TRAN_CODE = 'END' AND 
                            P.FLOW_SEQ < 
@@ -43,6 +44,8 @@ namespace Cohesion_DAO
                            FROM PRODUCT_OPERATION_REL
                            WHERE PRODUCT_CODE = L.PRODUCT_CODE AND OPERATION_CODE = L.OPERATION_CODE)) OR
                            LAST_TRAN_CODE = 'CREATE'
+                           AND LOT_DELETE_FLAG IS NULL
+						         AND W.ORDER_STATUS <> 'CLOSE'
                            AND L.WORK_ORDER_ID = @WORK_ORDER_ID";
             cmd.Parameters.AddWithValue("@WORK_ORDER_ID", orderId);
             cmd.CommandText = sql.ToString();

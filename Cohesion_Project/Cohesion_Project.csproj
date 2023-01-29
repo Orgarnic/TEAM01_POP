@@ -135,6 +135,12 @@
     <Compile Include="Frm_Purchase.Designer.cs">
       <DependentUpon>Frm_Purchase.cs</DependentUpon>
     </Compile>
+    <Compile Include="Frm_BedFlag.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm_BedFlag.Designer.cs">
+      <DependentUpon>Frm_BedFlag.cs</DependentUpon>
+    </Compile>
     <Compile Include="Frm_WorkStart.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -172,6 +178,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Service\Srv_Flag.cs" />
     <Compile Include="Service\Srv_Order.cs" />
     <Compile Include="Service\Srv_Ship.cs" />
     <Compile Include="Service\Srv_Work.cs" />
@@ -229,6 +236,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Frm_Main.resx">
       <DependentUpon>Frm_Main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm_BedFlag.resx">
+      <DependentUpon>Frm_BedFlag.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Frm_WorkStart.resx">
       <DependentUpon>Frm_WorkStart.cs</DependentUpon>
