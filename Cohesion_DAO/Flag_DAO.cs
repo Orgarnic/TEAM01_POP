@@ -19,7 +19,7 @@ namespace Cohesion_DAO
       {
          conn = new SqlConnection(DB);
       }
-      public List<LOT_STS_DTO> SelectOrderLot(string orderId)
+      public List<LOT_STS_DTO> SelectOrderLotBed(string orderId)
       {
          List<LOT_STS_DTO> list = null;
          try
@@ -57,6 +57,176 @@ namespace Cohesion_DAO
             conn.Close();
          }
          return list;
+      }
+      public List<CODE_DATA_MST_DTO> SelectBedCodes()
+      {
+         List<CODE_DATA_MST_DTO> list = null;
+         try
+         {
+            SqlCommand cmd = new SqlCommand();
+            string sql = @"SELECT CODE_TABLE_NAME, KEY_1, KEY_2, KEY_3, DATA_1, DATA_2, DATA_3, DATA_4, DATA_5, DISPLAY_SEQ, CREATE_TIME, CREATE_USER_ID, UPDATE_TIME, UPDATE_USER_ID
+                           FROM CODE_DATA_MST
+                           WHERE CODE_TABLE_NAME = 'CM_DEFECT_CODE' ";
+            cmd.CommandText = sql.ToString();
+            cmd.Connection = conn;
+            conn.Open();
+            list = Helper.DataReaderMapToList<CODE_DATA_MST_DTO>(cmd.ExecuteReader());
+         }
+         catch (Exception err)
+         {
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return null;
+         }
+         finally
+         {
+            conn.Close();
+         }
+         return list;
+      }
+      public bool BedRegCheck(string operation)
+      {
+         try
+         {
+            SqlCommand cmd = new SqlCommand();
+            string sql = @"SELECT COUNT(*)
+                           FROM OPERATION_MST
+                           WHERE OPERATION_CODE = @OPERATION_CODE AND CHECK_DEFECT_FLAG = 'Y'";
+            cmd.Parameters.AddWithValue("@OPERATION_CODE", operation);
+            cmd.CommandText = sql.ToString();
+            cmd.Connection = conn;
+            conn.Open();
+            int temp = Convert.ToInt32(cmd.ExecuteScalar());
+
+            return temp > 0;
+         }
+         catch (Exception err)
+         {
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return false;
+         }
+         finally
+         {
+            conn.Close();
+         }
+      }
+      public bool InsertBedReg(LOT_STS_DTO dto, List<LOT_DEFECT_HIS_DTO> defects)
+      {
+         conn.Open();
+         SqlTransaction trans = conn.BeginTransaction();
+         try
+         {
+            string sql = @"UPDATE LOT_STS
+                           SET 
+                           LOT_QTY = @LOT_QTY,
+                           LAST_TRAN_CODE = @LAST_TRAN_CODE,
+                           LAST_TRAN_TIME = @LAST_TRAN_TIME,
+                           LAST_TRAN_USER_ID = @LAST_TRAN_USER_ID,
+                           LAST_TRAN_COMMENT = @LAST_TRAN_COMMENT, 
+                           LAST_HIST_SEQ = @LAST_HIST_SEQ
+                           WHERE 
+                           LOT_ID = @LOT_ID";
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@LOT_ID", dto.LOT_ID);
+            cmd.Parameters.AddWithValue("@LOT_QTY", dto.LOT_QTY);
+            cmd.Parameters.AddWithValue("@LAST_TRAN_CODE", dto.LAST_TRAN_CODE);
+            cmd.Parameters.AddWithValue("@LAST_TRAN_TIME", dto.LAST_TRAN_TIME);
+            cmd.Parameters.AddWithValue("@LAST_TRAN_USER_ID", dto.LAST_TRAN_USER_ID);
+            cmd.Parameters.AddWithValue("@LAST_TRAN_COMMENT", dto.LAST_TRAN_COMMENT);
+            cmd.Parameters.AddWithValue("@LAST_HIST_SEQ", dto.LAST_HIST_SEQ);
+
+            cmd.Transaction = trans;
+            cmd.ExecuteNonQuery();
+            sql = @"INSERT INTO LOT_HIS
+                    (
+                    LOT_ID, HIST_SEQ, TRAN_TIME, TRAN_CODE, LOT_DESC,
+                    PRODUCT_CODE, OPERATION_CODE, STORE_CODE, LOT_QTY,
+                    CREATE_QTY, OPER_IN_QTY, START_FLAG, START_QTY, 
+                    START_TIME, START_EQUIPMENT_CODE, END_FLAG, END_TIME,
+                    END_EQUIPMENT_CODE, SHIP_FLAG, SHIP_CODE, SHIP_TIME, 
+                    PRODUCTION_TIME, CREATE_TIME, OPER_IN_TIME, WORK_ORDER_ID,
+                    LOT_DELETE_FLAG, LOT_DELETE_CODE, LOT_DELETE_TIME, WORK_DATE,
+                    TRAN_USER_ID, TRAN_COMMENT, OLD_PRODUCT_CODE, OLD_OPERATION_CODE,
+                    OLD_STORE_CODE, OLD_LOT_QTY
+                    ) 
+                    VALUES 
+                    (
+                    @LOT_ID, @HIST_SEQ, @TRAN_TIME, @TRAN_CODE, @LOT_DESC, 
+                    @PRODUCT_CODE, @OPERATION_CODE, @STORE_CODE, @LOT_QTY, 
+                    @CREATE_QTY, @OPER_IN_QTY, @START_FLAG, @START_QTY, 
+                    @START_TIME, @START_EQUIPMENT_CODE, @END_FLAG, @END_TIME, 
+                    @END_EQUIPMENT_CODE, @SHIP_FLAG, @SHIP_CODE, @SHIP_TIME, 
+                    @PRODUCTION_TIME, @CREATE_TIME, @OPER_IN_TIME, @WORK_ORDER_ID,
+                    @LOT_DELETE_FLAG, @LOT_DELETE_CODE, @LOT_DELETE_TIME, @WORK_DATE, 
+                    @TRAN_USER_ID, @TRAN_COMMENT, @OLD_PRODUCT_CODE, @OLD_OPERATION_CODE,
+                    @OLD_STORE_CODE, @OLD_LOT_QTY
+                    )";
+            SqlCommand cmd2 = Helper.LotHisCmd(dto);
+            cmd2.Connection = conn;
+            cmd2.CommandText = sql;
+            cmd2.Transaction = trans;
+            cmd2.ExecuteNonQuery();
+
+            sql = @"INSERT INTO LOT_DEFECT_HIS
+                    (LOT_ID, HIST_SEQ, DEFECT_CODE, DEFECT_QTY, TRAN_TIME, WORK_DATE, 
+                     PRODUCT_CODE, OPERATION_CODE, STORE_CODE, EQUIPMENT_CODE, TRAN_USER_ID, TRAN_COMMENT)
+                    VALUES 
+                    (@LOT_ID, @HIST_SEQ, @DEFECT_CODE, @DEFECT_QTY, @TRAN_TIME, @WORK_DATE,
+                     @PRODUCT_CODE, @OPERATION_CODE, @STORE_CODE, @EQUIPMENT_CODE, @TRAN_USER_ID, @TRAN_COMMENT)";
+            SqlCommand cmd3 = new SqlCommand(sql, conn);
+            cmd3.Transaction = trans;
+            cmd3.Parameters.AddWithValue("@LOT_ID", dto.LOT_ID);
+            cmd3.Parameters.AddWithValue("@HIST_SEQ", dto.LAST_HIST_SEQ);
+            cmd3.Parameters.Add(new SqlParameter("@DEFECT_CODE", SqlDbType.VarChar));
+            cmd3.Parameters.Add(new SqlParameter("@DEFECT_QTY", SqlDbType.Decimal));
+            cmd3.Parameters.AddWithValue("@TRAN_TIME", dto.LAST_TRAN_TIME);
+            cmd3.Parameters.AddWithValue("@WORK_DATE", DateTime.Now.ToString("yyyyMMdd"));
+            cmd3.Parameters.AddWithValue("@PRODUCT_CODE", string.IsNullOrWhiteSpace(dto.PRODUCT_CODE) ? (object)DBNull.Value : dto.PRODUCT_CODE);
+            cmd3.Parameters.AddWithValue("@OPERATION_CODE", string.IsNullOrWhiteSpace(dto.OPERATION_CODE) ? (object)DBNull.Value : dto.OPERATION_CODE);
+            cmd3.Parameters.AddWithValue("@STORE_CODE", string.IsNullOrWhiteSpace(dto.STORE_CODE) ? (object)DBNull.Value : dto.STORE_CODE);
+            cmd3.Parameters.Add(new SqlParameter("@EQUIPMENT_CODE", SqlDbType.VarChar));
+            cmd3.Parameters.AddWithValue("@TRAN_USER_ID", string.IsNullOrWhiteSpace(dto.LAST_TRAN_USER_ID) ? (object)DBNull.Value : dto.LAST_TRAN_USER_ID);
+            cmd3.Parameters.AddWithValue("@TRAN_COMMENT", string.IsNullOrWhiteSpace(dto.LAST_TRAN_COMMENT) ? (object)DBNull.Value : dto.LAST_TRAN_COMMENT);
+            decimal qty = 0;
+            foreach (var defect in defects)
+            {
+               cmd3.Parameters["@DEFECT_CODE"].Value = defect.DEFECT_CODE;
+               cmd3.Parameters["@DEFECT_QTY"].Value = defect.DEFECT_QTY;
+               cmd3.Parameters["@EQUIPMENT_CODE"].Value = defect.EQUIPMENT_CODE;
+               qty += defect.DEFECT_QTY;
+               cmd3.ExecuteNonQuery();
+            }
+
+            sql = @"UPDATE WORK_ORDER_MST
+                     SET 
+                     DEFECT_QTY = @DEFECT_QTY,
+                     UPDATE_TIME = @UPDATE_TIME,
+                     UPDATE_USER_ID = @UPDATE_USER_ID
+                     WHERE 
+                     WORK_ORDER_ID = @WORK_ORDER_ID";
+            SqlCommand cmd4 = new SqlCommand(sql, conn);
+            cmd4.Parameters.AddWithValue("@DEFECT_QTY", qty);
+            cmd4.Parameters.AddWithValue("@UPDATE_TIME", DateTime.Now);
+            cmd4.Parameters.AddWithValue("@UPDATE_USER_ID", dto.LAST_TRAN_USER_ID);
+            cmd4.Parameters.AddWithValue("@WORK_ORDER_ID", dto.WORK_ORDER_ID);
+            cmd4.Transaction = trans;
+            cmd4.ExecuteNonQuery();
+               
+            trans.Commit();
+            return true;
+         }
+         catch (Exception err)
+         {
+            trans.Rollback();
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return false;
+         }
+         finally
+         {
+            conn.Close();
+         }
       }
       public void Dispose()
       {

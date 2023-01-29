@@ -53,6 +53,13 @@ namespace Cohesion_Project
             {
                MboxUtil.MboxWarn("선택하신 작업지시 LOT ID가 존재하지 않습니다.");
                txtOrder.Text = string.Empty;
+               CommonUtil.ResetControls(txtLotDesc, txtOperationCode, txtOperationName, txtProductCode, txtProductName, txtCustomerCode
+                                       , txtCustomerName, txtTotal, lblOrderStatus, lblOrderQty, lblProductQty, lblProductQty, lblDefectQty, txtOperationName, txtDesc);
+               cboLotId.Items.Clear();
+               cboLotId.Text = string.Empty;
+               cboEquipment.Items.Clear();
+               cboEquipment.Text = string.Empty;
+               flwOperation.Controls.Clear();
                return;
             }
          }
@@ -154,11 +161,11 @@ namespace Cohesion_Project
             MboxUtil.MboxWarn("LOT 정보를 선택해주십시오.");
             return;
          }
-
+         Lot.LOT_QTY = Convert.ToInt32(txtTotal.Text);
          Lot.START_FLAG = 'Y';
          Lot.START_QTY = Convert.ToInt32(txtTotal.Text);
          Lot.START_TIME = DateTime.Now;
-         Lot.START_EQUIPMENT_CODE = cboEquipment.Text;
+         Lot.START_EQUIPMENT_CODE = cboEquipment.SelectedIndex < 1 ? "" : cboEquipment.Text;
          Lot.LAST_TRAN_CODE = "START";
          Lot.LAST_TRAN_TIME = DateTime.Now;
          Lot.LAST_TRAN_USER_ID = "TEST";
@@ -172,13 +179,13 @@ namespace Cohesion_Project
             return;
          }
          MboxUtil.MboxInfo("작업이 시작되었습니다.");
-         CommonUtil.ResetControls(txtLotDesc, txtOperationCode, txtOperationName, txtProductCode, txtProductName, txtCustomerCode
+/*         CommonUtil.ResetControls(txtLotDesc, txtOperationCode, txtOperationName, txtProductCode, txtProductName, txtCustomerCode
          , txtCustomerName, txtTotal, lblOrderStatus, lblOrderQty, lblProductQty, lblProductQty, lblDefectQty, txtOperationName, txtDesc);
          cboLotId.Items.Clear();
          cboLotId.Text = string.Empty;
          cboEquipment.Items.Clear();
          cboEquipment.Text = string.Empty;
-         flwOperation.Controls.Clear();
+         flwOperation.Controls.Clear();*/
       }
    }
 }

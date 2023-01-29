@@ -126,6 +126,7 @@ namespace Cohesion_DAO
          {
             string sql = @"UPDATE LOT_STS
                            SET 
+                           LOT_QTY = @LOT_QTY,
                            START_FLAG = @START_FLAG, 
                            START_QTY = @START_QTY, 
                            START_TIME = @START_TIME, 
@@ -139,6 +140,7 @@ namespace Cohesion_DAO
                            LOT_ID = @LOT_ID";
             SqlCommand cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@LOT_ID", dto.LOT_ID);
+            cmd.Parameters.AddWithValue("@LOT_QTY", dto.LOT_QTY);
             cmd.Parameters.AddWithValue("@START_FLAG", dto.START_FLAG);
             cmd.Parameters.AddWithValue("@START_QTY", dto.START_QTY);
             cmd.Parameters.AddWithValue("@START_TIME", dto.START_TIME);

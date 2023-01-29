@@ -100,8 +100,9 @@ namespace Cohesion_Project
             return;
          }
          MboxUtil.MboxInfo("LOT가 생성되었습니다.");
-         CommonUtil.ResetControls(txtOperationCode, txtOperationName, txtCustomerCode, txtCustomerName, txtOrder);
-         CommonUtil.ResetControls(txtLotId, lblOrderStatus, lblProductQty, lblOrderQty, lblDefectQty, txtProductCode, txtProductName);
+         CommonUtil.ResetControls(txtOrder, txtCustomerCode, txtCustomerName, txtLotId, txtLotDesc, txtProductCode, txtProductName,
+                                  txtOperationCode, txtOperationName, txtTotal, txtTotalQty, txtOrderDesc, lblOrderQty, lblDefectQty, lblOrderStatus, lblProductQty);
+         order = null;
       }
 
       private void Btn_Close_Click(object sender, EventArgs e)

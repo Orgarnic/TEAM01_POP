@@ -108,7 +108,7 @@ namespace Cohesion_Project
       private void button9_Click(object sender, EventArgs e)
       {
          Activte_BtnChanged(sender as Button);
-         Frm_BadReg frm = new Frm_BadReg();
+         Frm_BedFlag frm = new Frm_BedFlag();
          frm.WindowState = FormWindowState.Maximized;
          frm.MdiParent = this;
          Lbl_MenuText.Text = frm.Text;
@@ -118,7 +118,7 @@ namespace Cohesion_Project
       private void button10_Click(object sender, EventArgs e)
       {
          Activte_BtnChanged(sender as Button);
-         Frm_BadReg frm = new Frm_BadReg();
+         Frm_BedFlag frm = new Frm_BedFlag();
          frm.WindowState = FormWindowState.Maximized;
          frm.MdiParent = this;
          Lbl_MenuText.Text = frm.Text;

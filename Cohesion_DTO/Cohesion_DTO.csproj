@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CODE_DATA_MST_DTO.cs" />
+    <Compile Include="CODE_TABLE_MST_DTO.cs" />
     <Compile Include="EQUIPMENT_MST_DTO.cs" />
     <Compile Include="EQUIPMENT_OPERATION_REL_DTO.cs" />
     <Compile Include="LOT_DEFECT_HIS_DTO.cs" />

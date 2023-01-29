@@ -117,12 +117,6 @@
     <Compile Include="Frm_LookUp.Designer.cs">
       <DependentUpon>Frm_LookUp.cs</DependentUpon>
     </Compile>
-    <Compile Include="Frm_BadReg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Frm_BadReg.Designer.cs">
-      <DependentUpon>Frm_BadReg.cs</DependentUpon>
-    </Compile>
     <Compile Include="Frm_Ship.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -224,9 +218,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Frm_LookUp.resx">
       <DependentUpon>Frm_LookUp.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Frm_BadReg.resx">
-      <DependentUpon>Frm_BadReg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Frm_Ship.resx">
       <DependentUpon>Frm_Ship.cs</DependentUpon>
