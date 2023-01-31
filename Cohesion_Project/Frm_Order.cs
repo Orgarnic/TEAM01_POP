@@ -30,8 +30,10 @@ namespace Cohesion_Project
          DialogResult dia = pop.ShowDialog();
          int total = 0;
          if (dia == DialogResult.OK)
+         {
             order = pop.order;
-         operation = srvOrder.SelectOperation(order.PRODUCT_CODE);
+            operation = srvOrder.SelectOperation(order.PRODUCT_CODE);
+         }
          if (operation == null)
          {
             MboxUtil.MboxWarn("해당 제품은 공정이 등록되지 않은 제품입니다.");

@@ -43,14 +43,17 @@ namespace Cohesion_Project
          }
          cboLotId.SelectedIndex = 0;
       }
-
       private void DgvInit()
       {
          DgvUtil.DgvInit(dgvInspect);
-         DgvUtil.AddTextCol(dgvInspect, "불량 코드", "DEFECT_CODE", width: 250, readOnly: true, frozen: true);
-         DgvUtil.AddTextCol(dgvInspect, "불량 명칭", "DEFECT_NAME", width: 250, readOnly: true, frozen: true);
-         DgvUtil.AddTextCol(dgvInspect, "입력 수량", "DEFECT_QTY", width: 250, readOnly: true, frozen: true);
-         DgvUtil.AddButtonCol(dgvInspect, "삭제 하기", "Delete", width: 150, cellText: "삭제");
+         DgvUtil.AddTextCol(dgvInspect, "검사 코드", "INSPECT_ITEM_CODE", width: 200, readOnly: true, frozen: true);
+         DgvUtil.AddTextCol(dgvInspect, "검사 항목", "INSPECT_ITEM_NAME", width: 200, readOnly: true, frozen: true);
+         DgvUtil.AddTextCol(dgvInspect, "검사 유형", "VALUE_TYPE", width: 100, readOnly: true, frozen: true);
+         DgvUtil.AddTextCol(dgvInspect, "스펙 하한", "SPEC_LSL", width: 200, readOnly: true);
+         DgvUtil.AddTextCol(dgvInspect, "스펙 타겟", "SPEC_TARGET", width: 200, readOnly: true);
+         DgvUtil.AddTextCol(dgvInspect, "스펙 상한", "SPEC_USL", width: 200, readOnly: true);
+         DgvUtil.AddTextCol(dgvInspect, "검사 데이터", "", width: 200);
+         DgvUtil.AddTextCol(dgvInspect, "유효성", "", width: 100, readOnly: true);
       }
 
       private void btnOrder_Click(object sender, EventArgs e)
@@ -99,7 +102,7 @@ namespace Cohesion_Project
             lblProductQty.Text = Convert.ToInt32(Lot.LOT_QTY).ToString();
             lblDefectQty.Text = Convert.ToInt32(Lot.LOT_DEFECT_QTY).ToString();
 
-            var list = operations.FindAll((o) => o.PRODUCT_CODE.Equals(Lot.PRODUCT_CODE));
+            var list = operations.FindAll((o) => o.PRODUCT_CODE.Equals(Lot.PRODUCT_CODE)).OrderBy((o) => o.FLOW_SEQ).ToList();
             var operation = operations.Find((o) => o.PRODUCT_CODE.Equals(Lot.PRODUCT_CODE) && o.OPERATION_CODE.Equals(Lot.OPERATION_CODE));
             if (list.Count > 0)
             {
@@ -131,12 +134,19 @@ namespace Cohesion_Project
             }
             else
                MboxUtil.MboxError("공정 진행정보를 불러오는데 오류가 발생했습니다.");
+            var inspect = srvFlag.SelectInspects(operation.OPERATION_CODE);
+            dgvInspect.DataSource = null;
+            dgvInspect.DataSource = inspect;
          }
          else
          {
             MboxUtil.MboxError("LOT 이력을 불러오는데 오류가 발생했습니다.");
             return;
          }
+      }
+      private void dgvInspect_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+      {
+
       }
 
       private void btnStart_Click(object sender, EventArgs e)
@@ -169,9 +179,5 @@ namespace Cohesion_Project
          txtLotDesc.Text = string.Empty;
       }
 
-      private void dgvDefect_CellClick(object sender, DataGridViewCellEventArgs e)
-      {
-
-      }
    }
 }

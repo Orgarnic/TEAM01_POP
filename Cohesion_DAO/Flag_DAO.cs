@@ -61,7 +61,6 @@ namespace Cohesion_DAO
          }
          return list;
       }
-
       public List<LOT_STS_DTO> SelectOrderLotInspect(string orderId)
       {
          List<LOT_STS_DTO> list = null;
@@ -117,6 +116,33 @@ namespace Cohesion_DAO
             cmd.Connection = conn;
             conn.Open();
             list = Helper.DataReaderMapToList<CODE_DATA_MST_DTO>(cmd.ExecuteReader());
+         }
+         catch (Exception err)
+         {
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return null;
+         }
+         finally
+         {
+            conn.Close();
+         }
+         return list;
+      }
+      public List<INSPECT_ITEM_MST_DTO> SelectInspects(string operation)
+      {
+         List<INSPECT_ITEM_MST_DTO> list = null;
+         try
+         {
+            SqlCommand cmd = new SqlCommand();
+            string sql = @"SELECT I.INSPECT_ITEM_CODE, INSPECT_ITEM_NAME, VALUE_TYPE, SPEC_LSL, SPEC_TARGET, SPEC_USL, I.CREATE_TIME, I.CREATE_USER_ID, I.UPDATE_TIME, I.UPDATE_USER_ID
+                           FROM INSPECT_ITEM_MST I INNER JOIN INSPECT_ITEM_OPERATION_REL O ON I.INSPECT_ITEM_CODE = O.INSPECT_ITEM_CODE
+                           WHERE O.OPERATION_CODE = @OPERATION_CODE";
+            cmd.Parameters.AddWithValue("@OPERATION_CODE", operation);
+            cmd.CommandText = sql.ToString();
+            cmd.Connection = conn;
+            conn.Open();
+            list = Helper.DataReaderMapToList<INSPECT_ITEM_MST_DTO>(cmd.ExecuteReader());
          }
          catch (Exception err)
          {

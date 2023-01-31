@@ -41,6 +41,8 @@ namespace Cohesion_Project
          this.btnStart = new System.Windows.Forms.Button();
          this.Btn_Close = new System.Windows.Forms.Button();
          this.panel3 = new System.Windows.Forms.Panel();
+         this.panel5 = new System.Windows.Forms.Panel();
+         this.dgvInspect = new System.Windows.Forms.DataGridView();
          this.txtDesc = new System.Windows.Forms.TextBox();
          this.label20 = new System.Windows.Forms.Label();
          this.label9 = new System.Windows.Forms.Label();
@@ -73,15 +75,13 @@ namespace Cohesion_Project
          this.label21 = new System.Windows.Forms.Label();
          this.panel4 = new System.Windows.Forms.Panel();
          this.flwOperation = new System.Windows.Forms.FlowLayoutPanel();
-         this.dgvInspect = new System.Windows.Forms.DataGridView();
-         this.panel5 = new System.Windows.Forms.Panel();
          this.tableLayoutPanel1.SuspendLayout();
          this.panel3.SuspendLayout();
+         this.panel5.SuspendLayout();
+         ((System.ComponentModel.ISupportInitialize)(this.dgvInspect)).BeginInit();
          this.panel2.SuspendLayout();
          this.panel1.SuspendLayout();
          this.panel4.SuspendLayout();
-         ((System.ComponentModel.ISupportInitialize)(this.dgvInspect)).BeginInit();
-         this.panel5.SuspendLayout();
          this.SuspendLayout();
          // 
          // tableLayoutPanel1
@@ -278,6 +278,28 @@ namespace Cohesion_Project
          this.panel3.Name = "panel3";
          this.panel3.Size = new System.Drawing.Size(1454, 330);
          this.panel3.TabIndex = 33;
+         // 
+         // panel5
+         // 
+         this.panel5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+         this.panel5.Controls.Add(this.dgvInspect);
+         this.panel5.Location = new System.Drawing.Point(3, 33);
+         this.panel5.Name = "panel5";
+         this.panel5.Size = new System.Drawing.Size(1446, 217);
+         this.panel5.TabIndex = 81;
+         // 
+         // dgvInspect
+         // 
+         this.dgvInspect.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+         this.dgvInspect.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+         this.dgvInspect.Location = new System.Drawing.Point(16, 14);
+         this.dgvInspect.Name = "dgvInspect";
+         this.dgvInspect.RowTemplate.Height = 23;
+         this.dgvInspect.Size = new System.Drawing.Size(1160, 97);
+         this.dgvInspect.TabIndex = 74;
+         this.dgvInspect.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvInspect_CellEndEdit);
          // 
          // txtDesc
          // 
@@ -673,27 +695,6 @@ namespace Cohesion_Project
          this.flwOperation.Size = new System.Drawing.Size(1454, 32);
          this.flwOperation.TabIndex = 3;
          // 
-         // dgvInspect
-         // 
-         this.dgvInspect.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-         this.dgvInspect.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-         this.dgvInspect.Location = new System.Drawing.Point(95, 43);
-         this.dgvInspect.Name = "dgvInspect";
-         this.dgvInspect.RowTemplate.Height = 23;
-         this.dgvInspect.Size = new System.Drawing.Size(1160, 97);
-         this.dgvInspect.TabIndex = 74;
-         // 
-         // panel5
-         // 
-         this.panel5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-         this.panel5.Controls.Add(this.dgvInspect);
-         this.panel5.Location = new System.Drawing.Point(3, 33);
-         this.panel5.Name = "panel5";
-         this.panel5.Size = new System.Drawing.Size(1446, 215);
-         this.panel5.TabIndex = 81;
-         // 
          // Frm_InspectFlag
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -711,13 +712,13 @@ namespace Cohesion_Project
          this.tableLayoutPanel1.ResumeLayout(false);
          this.panel3.ResumeLayout(false);
          this.panel3.PerformLayout();
+         this.panel5.ResumeLayout(false);
+         ((System.ComponentModel.ISupportInitialize)(this.dgvInspect)).EndInit();
          this.panel2.ResumeLayout(false);
          this.panel2.PerformLayout();
          this.panel1.ResumeLayout(false);
          this.panel1.PerformLayout();
          this.panel4.ResumeLayout(false);
-         ((System.ComponentModel.ISupportInitialize)(this.dgvInspect)).EndInit();
-         this.panel5.ResumeLayout(false);
          this.ResumeLayout(false);
 
       }

@@ -34,6 +34,14 @@ namespace Cohesion_Project
 
          return list;
       }
+      public List<INSPECT_ITEM_MST_DTO> SelectInspects(string operation)
+      {
+         Flag_DAO dao = new Flag_DAO();
+         List<INSPECT_ITEM_MST_DTO> list = dao.SelectInspects(operation);
+         dao.Dispose();
+
+         return list;
+      }
       public bool BedRegCheck(string operation)
       {
          Flag_DAO dao = new Flag_DAO();
