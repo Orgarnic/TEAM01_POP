@@ -18,6 +18,14 @@ namespace Cohesion_Project
 
          return list;
       }
+      public List<LOT_STS_DTO> SelectOrderLotInspect(string orderId)
+      {
+         Flag_DAO dao = new Flag_DAO();
+         List<LOT_STS_DTO> list = dao.SelectOrderLotInspect(orderId);
+         dao.Dispose();
+
+         return list;
+      }
       public List<CODE_DATA_MST_DTO> SelectBedCodes()
       {
          Flag_DAO dao = new Flag_DAO();

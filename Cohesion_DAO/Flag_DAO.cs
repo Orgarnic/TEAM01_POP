@@ -61,6 +61,49 @@ namespace Cohesion_DAO
          }
          return list;
       }
+
+      public List<LOT_STS_DTO> SelectOrderLotInspect(string orderId)
+      {
+         List<LOT_STS_DTO> list = null;
+         try
+         {
+            SqlCommand cmd = new SqlCommand();
+            string sql = @"SELECT 
+                           LOT_ID, LOT_DESC, L.PRODUCT_CODE, L.OPERATION_CODE, O.OPERATION_NAME OPERATION_NAME, STORE_CODE, LOT_QTY, CREATE_QTY,
+						   		 CASE WHEN (SELECT SUM(DEFECT_QTY) FROM LOT_DEFECT_HIS WHERE LOT_ID = L.LOT_ID) IS NULL THEN 0 
+						         ELSE (SELECT SUM(DEFECT_QTY) FROM LOT_DEFECT_HIS WHERE LOT_ID = L.LOT_ID) END LOT_DEFECT_QTY,
+                           OPER_IN_QTY, START_FLAG, START_QTY, START_TIME, START_EQUIPMENT_CODE, END_FLAG,
+                           END_TIME, END_EQUIPMENT_CODE, SHIP_FLAG, SHIP_CODE, SHIP_TIME, PRODUCTION_TIME,
+                           L.CREATE_TIME, OPER_IN_TIME, L.WORK_ORDER_ID, LOT_DELETE_FLAG, LOT_DELETE_CODE, LOT_DELETE_TIME,
+                           LAST_TRAN_CODE, LAST_TRAN_TIME, LAST_TRAN_USER_ID, LAST_TRAN_COMMENT, LAST_HIST_SEQ
+                           FROM 
+                           LOT_STS L INNER JOIN PRODUCT_OPERATION_REL P ON L.PRODUCT_CODE = P.PRODUCT_CODE AND L.OPERATION_CODE = P.OPERATION_CODE
+                           			 INNER JOIN OPERATION_MST O ON L.OPERATION_CODE = O.OPERATION_CODE
+									          INNER JOIN WORK_ORDER_MST W ON W.WORK_ORDER_ID = L.WORK_ORDER_ID
+                           WHERE 
+                           LAST_TRAN_CODE in ('START', 'DEFECT', 'INSPECT', 'INPUT') 
+						         AND LOT_DELETE_FLAG IS NULL
+						         AND W.ORDER_STATUS <> 'CLOSE'
+                           AND L.WORK_ORDER_ID = @WORK_ORDER_ID
+                           AND O.CHECK_INSPECT_FLAG = 'Y'";
+            cmd.Parameters.AddWithValue("@WORK_ORDER_ID", orderId);
+            cmd.CommandText = sql.ToString();
+            cmd.Connection = conn;
+            conn.Open();
+            list = Helper.DataReaderMapToList<LOT_STS_DTO>(cmd.ExecuteReader());
+         }
+         catch (Exception err)
+         {
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return null;
+         }
+         finally
+         {
+            conn.Close();
+         }
+         return list;
+      }
       public List<CODE_DATA_MST_DTO> SelectBedCodes()
       {
          List<CODE_DATA_MST_DTO> list = null;
