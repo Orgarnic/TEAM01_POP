@@ -27,6 +27,8 @@ namespace Cohesion_DAO
             SqlCommand cmd = new SqlCommand();
             string sql = @"SELECT 
                            LOT_ID, LOT_DESC, L.PRODUCT_CODE, L.OPERATION_CODE, O.OPERATION_NAME OPERATION_NAME, STORE_CODE, LOT_QTY, CREATE_QTY,
+						   		 CASE WHEN (SELECT SUM(DEFECT_QTY) FROM LOT_DEFECT_HIS WHERE LOT_ID = L.LOT_ID) IS NULL THEN 0 
+						         ELSE (SELECT SUM(DEFECT_QTY) FROM LOT_DEFECT_HIS WHERE LOT_ID = L.LOT_ID) END LOT_DEFECT_QTY,
                            OPER_IN_QTY, START_FLAG, START_QTY, START_TIME, START_EQUIPMENT_CODE, END_FLAG,
                            END_TIME, END_EQUIPMENT_CODE, SHIP_FLAG, SHIP_CODE, SHIP_TIME, PRODUCTION_TIME,
                            L.CREATE_TIME, OPER_IN_TIME, L.WORK_ORDER_ID, LOT_DELETE_FLAG, LOT_DELETE_CODE, LOT_DELETE_TIME,
@@ -34,12 +36,13 @@ namespace Cohesion_DAO
                            FROM 
                            LOT_STS L INNER JOIN PRODUCT_OPERATION_REL P ON L.PRODUCT_CODE = P.PRODUCT_CODE AND L.OPERATION_CODE = P.OPERATION_CODE
                            			 INNER JOIN OPERATION_MST O ON L.OPERATION_CODE = O.OPERATION_CODE
-									 INNER JOIN WORK_ORDER_MST W ON W.WORK_ORDER_ID = L.WORK_ORDER_ID
+									          INNER JOIN WORK_ORDER_MST W ON W.WORK_ORDER_ID = L.WORK_ORDER_ID
                            WHERE 
-                           LAST_TRAN_CODE = 'START' 
+                           LAST_TRAN_CODE in ('START', 'DEFECT', 'INSPECT', 'INPUT') 
 						         AND LOT_DELETE_FLAG IS NULL
 						         AND W.ORDER_STATUS <> 'CLOSE'
-                           AND L.WORK_ORDER_ID = @WORK_ORDER_ID";
+                           AND L.WORK_ORDER_ID = @WORK_ORDER_ID
+                           AND O.CHECK_DEFECT_FLAG = 'Y'";
             cmd.Parameters.AddWithValue("@WORK_ORDER_ID", orderId);
             cmd.CommandText = sql.ToString();
             cmd.Connection = conn;
@@ -168,16 +171,19 @@ namespace Cohesion_DAO
             cmd2.Transaction = trans;
             cmd2.ExecuteNonQuery();
 
-            sql = @"INSERT INTO LOT_DEFECT_HIS
+            sql = @"
+                     DECLARE @SEQ INT
+                     SET @SEQ = (SELECT CASE WHEN (SELECT COUNT(*) FROM LOT_DEFECT_HIS WHERE  LOT_ID = @LOT_ID AND PRODUCT_CODE = @PRODUCT_CODE) IS NULL 
+                     THEN 0 ELSE (SELECT COUNT(*) FROM LOT_DEFECT_HIS WHERE  LOT_ID = @LOT_ID AND PRODUCT_CODE = @PRODUCT_CODE) END + 1)
+                     INSERT INTO LOT_DEFECT_HIS
                     (LOT_ID, HIST_SEQ, DEFECT_CODE, DEFECT_QTY, TRAN_TIME, WORK_DATE, 
                      PRODUCT_CODE, OPERATION_CODE, STORE_CODE, EQUIPMENT_CODE, TRAN_USER_ID, TRAN_COMMENT)
                     VALUES 
-                    (@LOT_ID, @HIST_SEQ, @DEFECT_CODE, @DEFECT_QTY, @TRAN_TIME, @WORK_DATE,
+                    (@LOT_ID, @SEQ, @DEFECT_CODE, @DEFECT_QTY, @TRAN_TIME, @WORK_DATE,
                      @PRODUCT_CODE, @OPERATION_CODE, @STORE_CODE, @EQUIPMENT_CODE, @TRAN_USER_ID, @TRAN_COMMENT)";
             SqlCommand cmd3 = new SqlCommand(sql, conn);
             cmd3.Transaction = trans;
             cmd3.Parameters.AddWithValue("@LOT_ID", dto.LOT_ID);
-            cmd3.Parameters.AddWithValue("@HIST_SEQ", dto.LAST_HIST_SEQ);
             cmd3.Parameters.Add(new SqlParameter("@DEFECT_CODE", SqlDbType.VarChar));
             cmd3.Parameters.Add(new SqlParameter("@DEFECT_QTY", SqlDbType.Decimal));
             cmd3.Parameters.AddWithValue("@TRAN_TIME", dto.LAST_TRAN_TIME);
@@ -188,31 +194,14 @@ namespace Cohesion_DAO
             cmd3.Parameters.Add(new SqlParameter("@EQUIPMENT_CODE", SqlDbType.VarChar));
             cmd3.Parameters.AddWithValue("@TRAN_USER_ID", string.IsNullOrWhiteSpace(dto.LAST_TRAN_USER_ID) ? (object)DBNull.Value : dto.LAST_TRAN_USER_ID);
             cmd3.Parameters.AddWithValue("@TRAN_COMMENT", string.IsNullOrWhiteSpace(dto.LAST_TRAN_COMMENT) ? (object)DBNull.Value : dto.LAST_TRAN_COMMENT);
-            decimal qty = 0;
             foreach (var defect in defects)
             {
                cmd3.Parameters["@DEFECT_CODE"].Value = defect.DEFECT_CODE;
                cmd3.Parameters["@DEFECT_QTY"].Value = defect.DEFECT_QTY;
-               cmd3.Parameters["@EQUIPMENT_CODE"].Value = defect.EQUIPMENT_CODE;
-               qty += defect.DEFECT_QTY;
+               cmd3.Parameters["@EQUIPMENT_CODE"].Value = string.IsNullOrWhiteSpace(defect.EQUIPMENT_CODE) ? (object)DBNull.Value : defect.EQUIPMENT_CODE;
                cmd3.ExecuteNonQuery();
             }
 
-            sql = @"UPDATE WORK_ORDER_MST
-                     SET 
-                     DEFECT_QTY = @DEFECT_QTY,
-                     UPDATE_TIME = @UPDATE_TIME,
-                     UPDATE_USER_ID = @UPDATE_USER_ID
-                     WHERE 
-                     WORK_ORDER_ID = @WORK_ORDER_ID";
-            SqlCommand cmd4 = new SqlCommand(sql, conn);
-            cmd4.Parameters.AddWithValue("@DEFECT_QTY", qty);
-            cmd4.Parameters.AddWithValue("@UPDATE_TIME", DateTime.Now);
-            cmd4.Parameters.AddWithValue("@UPDATE_USER_ID", dto.LAST_TRAN_USER_ID);
-            cmd4.Parameters.AddWithValue("@WORK_ORDER_ID", dto.WORK_ORDER_ID);
-            cmd4.Transaction = trans;
-            cmd4.ExecuteNonQuery();
-               
             trans.Commit();
             return true;
          }

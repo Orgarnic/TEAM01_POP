@@ -657,7 +657,7 @@ namespace Cohesion_Project
          this.label1.Name = "label1";
          this.label1.Size = new System.Drawing.Size(1452, 30);
          this.label1.TabIndex = 0;
-         this.label1.Text = "작업시작 LOT";
+         this.label1.Text = "생산 LOT";
          this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
          // 
          // label22

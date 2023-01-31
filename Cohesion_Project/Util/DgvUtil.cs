@@ -38,7 +38,7 @@ namespace Cohesion_Project
       public static void AddTextCol(DataGridView dgv, string text, string property, int width = 100, bool readOnly = false, int align = 1, bool visible = true, bool frozen = false)
       {
          DataGridViewTextBoxColumn col = new DataGridViewTextBoxColumn();
-         col.Name = text;
+         col.Name = property;
          col.DataPropertyName = property;
          col.HeaderText = text;
          col.Width = width;
