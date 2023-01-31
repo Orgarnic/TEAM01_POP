@@ -268,7 +268,6 @@ namespace Cohesion_Project
 
          CommonUtil.ResetControls(txtBedRegName, txtBedRegTotal);
          Lots = srvFlag.SelectOrderLotBed(txtOrder.Text);
-         txtLotDesc.Text = string.Empty;
          ResetDefectItems();
       }
    }

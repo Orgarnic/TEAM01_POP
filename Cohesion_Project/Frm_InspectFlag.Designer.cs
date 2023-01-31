@@ -300,6 +300,7 @@ namespace Cohesion_Project
          this.dgvInspect.Size = new System.Drawing.Size(1160, 97);
          this.dgvInspect.TabIndex = 74;
          this.dgvInspect.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvInspect_CellEndEdit);
+         this.dgvInspect.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.DgvInspect_EditingControlShowing);
          // 
          // txtDesc
          // 

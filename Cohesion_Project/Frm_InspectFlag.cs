@@ -14,8 +14,8 @@ namespace Cohesion_Project
    {
       private WORK_ORDER_MST_DTO order = null;
       private List<PRODUCT_OPERATION_REL_DTO> operations = null;
-      private List<LOT_DEFECT_HIS_DTO> LotDefects = null;
       private List<LOT_STS_DTO> Lots = null;
+      private List<INSPECT_ITEM_MST_DTO> inspects;
       private LOT_STS_DTO Lot = null;
       private Srv_Work srvWork = new Srv_Work();
       private Srv_Flag srvFlag = new Srv_Flag();
@@ -24,13 +24,11 @@ namespace Cohesion_Project
       {
          InitializeComponent();
       }
-
       private void Frm_WORK_ORDER_Load(object sender, EventArgs e)
       {
          operations = srvWork.SelectOperations();
          DgvInit();
       }
-
       private void ComboBoxBinding()
       {
          txtLotDesc.Text = string.Empty;
@@ -48,14 +46,25 @@ namespace Cohesion_Project
          DgvUtil.DgvInit(dgvInspect);
          DgvUtil.AddTextCol(dgvInspect, "검사 코드", "INSPECT_ITEM_CODE", width: 200, readOnly: true, frozen: true);
          DgvUtil.AddTextCol(dgvInspect, "검사 항목", "INSPECT_ITEM_NAME", width: 200, readOnly: true, frozen: true);
-         DgvUtil.AddTextCol(dgvInspect, "검사 유형", "VALUE_TYPE", width: 100, readOnly: true, frozen: true);
+         DgvUtil.AddTextCol(dgvInspect, "검사 유형", "VALUE_TYPE", width: 200, readOnly: true, frozen: true);
          DgvUtil.AddTextCol(dgvInspect, "스펙 하한", "SPEC_LSL", width: 200, readOnly: true);
          DgvUtil.AddTextCol(dgvInspect, "스펙 타겟", "SPEC_TARGET", width: 200, readOnly: true);
          DgvUtil.AddTextCol(dgvInspect, "스펙 상한", "SPEC_USL", width: 200, readOnly: true);
-         DgvUtil.AddTextCol(dgvInspect, "검사 데이터", "", width: 200);
-         DgvUtil.AddTextCol(dgvInspect, "유효성", "", width: 100, readOnly: true);
+         DgvUtil.AddTextCol(dgvInspect, "검사 데이터", "INPUT", width: 200);
+         DgvUtil.AddTextCol(dgvInspect, "유효성", "Checked", width: 200, readOnly: true);
       }
-
+      private void DgvInspect_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+      {
+         if (dgvInspect.CurrentCell.ColumnIndex == 6)
+         {
+            e.Control.KeyPress += DgvInspect_KeyPress;
+         }
+      }
+      private void DgvInspect_KeyPress(object sender, KeyPressEventArgs e)
+      {
+         if (!(char.IsDigit(e.KeyChar) || e.KeyChar == Convert.ToChar(Keys.Back)))
+            e.Handled = true;
+      }
       private void btnOrder_Click(object sender, EventArgs e)
       {
          Pop_Purchase pop = new Pop_Purchase();
@@ -93,7 +102,7 @@ namespace Cohesion_Project
             return;
          }
          Lot = Lots.Find((l) => l.LOT_ID.Equals(cboLotId.Text));
-         if(Lot != null)
+         if (Lot != null)
          {
             txtLotDesc.Text = Lot.LOT_DESC;
             txtOperationCode.Text = Lot.OPERATION_CODE;
@@ -134,9 +143,32 @@ namespace Cohesion_Project
             }
             else
                MboxUtil.MboxError("공정 진행정보를 불러오는데 오류가 발생했습니다.");
-            var inspect = srvFlag.SelectInspects(operation.OPERATION_CODE);
+            inspects = srvFlag.SelectInspects(operation.OPERATION_CODE);
             dgvInspect.DataSource = null;
-            dgvInspect.DataSource = inspect;
+            foreach (var item in inspects)
+            {
+               DataGridViewRow row = new DataGridViewRow();
+               for (int i = 0; i < item.GetType().GetProperties().Length - 4; i++)
+               {
+                  DataGridViewTextBoxCell cell = new DataGridViewTextBoxCell();
+                  cell.Value = item.GetType().GetProperties()[i].GetValue(item);
+                  row.Cells.Add(cell);
+               }
+               if (item.VALUE_TYPE.Equals('N'))
+               {
+                  DataGridViewTextBoxCell col07 = new DataGridViewTextBoxCell();
+                  col07.Value = "0";
+                  row.Cells.Add(col07);
+               }
+               else if (item.VALUE_TYPE.Equals('C'))
+               {
+                  DataGridViewComboBoxCell col07 = new DataGridViewComboBoxCell();
+                  col07.Items.AddRange(new string[3] { "선택", "양호", "불량" });
+                  col07.Value = "선택";
+                  row.Cells.Add(col07);
+               }
+               dgvInspect.Rows.Add(row);
+            }
          }
          else
          {
@@ -146,9 +178,43 @@ namespace Cohesion_Project
       }
       private void dgvInspect_CellEndEdit(object sender, DataGridViewCellEventArgs e)
       {
-
+         // SPEC_LSL SPEC_USL
+         int row = e.RowIndex;
+         int col = e.ColumnIndex;
+         string type = dgvInspect["VALUE_TYPE", row].Value.ToString();
+         if (type.Equals("N"))
+         {
+            decimal lsl = Convert.ToDecimal(dgvInspect["SPEC_LSL", row].Value);
+            decimal usl = Convert.ToDecimal(dgvInspect["SPEC_USL", row].Value);
+            decimal input = Convert.ToDecimal(dgvInspect["INPUT", row].Value);
+            if (input >= lsl && input <= usl)
+            {
+               dgvInspect["Checked", row].Value = "OK";
+               dgvInspect["Checked", row].Style.ForeColor = Color.YellowGreen;
+            }
+            else
+            {
+               dgvInspect["Checked", row].Value = "NG";
+               dgvInspect["Checked", row].Style.ForeColor = Color.Tomato;
+            }
+         }
+         else if(type.Equals("C"))
+         {
+            string input = dgvInspect["INPUT", row].Value.ToString();
+            if (input.Equals("양호"))
+            {
+               dgvInspect["Checked", row].Value = "OK";
+               dgvInspect["Checked", row].Style.ForeColor = Color.YellowGreen;
+            }
+            else if (input.Equals("불량"))
+            {
+               dgvInspect["Checked", row].Value = "NG";
+               dgvInspect["Checked", row].Style.ForeColor = Color.Tomato;
+            }
+            else
+               dgvInspect["Checked", row].Value = "";
+         }
       }
-
       private void btnStart_Click(object sender, EventArgs e)
       {
          if (string.IsNullOrWhiteSpace(txtOrder.Text))
@@ -161,23 +227,50 @@ namespace Cohesion_Project
             MboxUtil.MboxWarn("LOT 정보를 선택해주십시오.");
             return;
          }
-         Lot.LAST_TRAN_CODE = "DEFECT";
+         foreach (DataGridViewRow row in dgvInspect.Rows)
+         {
+            if (string.IsNullOrWhiteSpace((string)row.Cells["Checked"].Value))
+            {
+               MboxUtil.MboxWarn("모든 검사 데이터를 입력하십시오.");
+               return;
+            }
+         }
+         Lot.LAST_TRAN_CODE = "INSPECT";
          Lot.LAST_TRAN_TIME = DateTime.Now;
          Lot.LAST_TRAN_USER_ID = "TEST";
          Lot.LAST_TRAN_COMMENT = txtDesc.Text;
          Lot.LAST_HIST_SEQ += 1;
-
-         bool result = srvFlag.InsertBedReg(Lot, LotDefects);
+         List<LOT_INSPECT_HIS_DTO> hisInspects = new List<LOT_INSPECT_HIS_DTO>();
+         for (int i = 0; i < inspects.Count; i++)
+         {
+            LOT_INSPECT_HIS_DTO his = new LOT_INSPECT_HIS_DTO();
+            his.INSPECT_ITEM_CODE = inspects[i].INSPECT_ITEM_CODE;
+            his.INSPECT_ITEM_NAME = inspects[i].INSPECT_ITEM_NAME;
+            his.VALUE_TYPE = inspects[i].VALUE_TYPE;
+            his.SPEC_LSL = inspects[i].SPEC_LSL;
+            his.SPEC_TARGET = inspects[i].SPEC_TARGET;
+            his.SPEC_USL = inspects[i].SPEC_USL;
+            his.INSPECT_VALUE = dgvInspect["INPUT", i].Value.ToString();
+            his.INSPECT_RESULT = dgvInspect["Checked", i].Value.ToString();
+            his.EQUIPMENT_CODE = Lot.START_EQUIPMENT_CODE;
+            hisInspects.Add(his);
+         }
+         bool result = srvFlag.InsertInspect(Lot, hisInspects);
          if (!result)
          {
             MboxUtil.MboxError("오류가 발생했습니다.");
             return;
          }
-         MboxUtil.MboxInfo("불량이 등록되었습니다.");
-
+         MboxUtil.MboxInfo("검사 데이터가 등록되었습니다.");
+         for (int i = 0; i < dgvInspect.Rows.Count; i++)
+         {
+            if(dgvInspect.Rows[i].Cells["INPUT"] is DataGridViewTextBoxCell)
+               dgvInspect.Rows[i].Cells["INPUT"].Value = "0";
+            else
+               dgvInspect.Rows[i].Cells["INPUT"].Value = "선택";
+            dgvInspect.Rows[i].Cells["Checked"].Value = "";
+         }
          Lots = srvFlag.SelectOrderLotBed(txtOrder.Text);
-         txtLotDesc.Text = string.Empty;
       }
-
    }
 }

@@ -58,5 +58,13 @@ namespace Cohesion_Project
 
          return temp;
       }
+      public bool InsertInspect(LOT_STS_DTO dto, List<LOT_INSPECT_HIS_DTO> inspects)
+      {
+         Flag_DAO dao = new Flag_DAO();
+         bool temp = dao.InsertInspect(dto, inspects);
+         dao.Dispose();
+
+         return temp;
+      }
    }
 }
