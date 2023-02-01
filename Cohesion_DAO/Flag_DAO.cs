@@ -156,6 +156,71 @@ namespace Cohesion_DAO
          }
          return list;
       }
+      public List<BOM_MST_DTO> SelectMateriars(string prodId)
+      {
+         List<BOM_MST_DTO> list = null;
+         try
+         {
+            SqlCommand cmd = new SqlCommand();
+            string sql = @"SELECT B.PRODUCT_CODE, CHILD_PRODUCT_CODE, P.PRODUCT_NAME CHILD_PRODUCT_NAME, REQUIRE_QTY, L.LOT_ID, L.LOT_QTY, ALTER_PRODUCT_CODE, B.CREATE_TIME, B.CREATE_USER_ID, B.UPDATE_TIME, B.UPDATE_USER_ID, L.LAST_HIST_SEQ
+                           FROM BOM_MST B INNER JOIN LOT_STS L ON B.CHILD_PRODUCT_CODE = L.PRODUCT_CODE
+                           			   INNER JOIN PRODUCT_MST P ON B.CHILD_PRODUCT_CODE = P.PRODUCT_CODE
+                           WHERE B.PRODUCT_CODE = @PRODUCT_CODE";
+            cmd.Parameters.AddWithValue("@PRODUCT_CODE", prodId);
+            cmd.CommandText = sql.ToString();
+            cmd.Connection = conn;
+            conn.Open();
+            list = Helper.DataReaderMapToList<BOM_MST_DTO>(cmd.ExecuteReader());
+         }
+         catch (Exception err)
+         {
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return null;
+         }
+         finally
+         {
+            conn.Close();
+         }
+         return list;
+      }
+
+      public List<LOT_STS_DTO> SelectMateriarLot(string lots)
+      {
+         List<LOT_STS_DTO> list = null;
+         try
+         {
+            SqlCommand cmd = new SqlCommand();
+            string sql = $@"SELECT 
+                           LOT_ID, LOT_DESC, L.PRODUCT_CODE, L.OPERATION_CODE, STORE_CODE, LOT_QTY, CREATE_QTY
+                           OPER_IN_QTY, START_FLAG, START_QTY, START_TIME, START_EQUIPMENT_CODE, END_FLAG,
+                           END_TIME, END_EQUIPMENT_CODE, SHIP_FLAG, SHIP_CODE, SHIP_TIME, PRODUCTION_TIME,
+                           L.CREATE_TIME, OPER_IN_TIME, L.WORK_ORDER_ID, LOT_DELETE_FLAG, LOT_DELETE_CODE, LOT_DELETE_TIME,
+                           LAST_TRAN_CODE, LAST_TRAN_TIME, LAST_TRAN_USER_ID, LAST_TRAN_COMMENT, LAST_HIST_SEQ
+                           FROM 
+                           LOT_STS L
+                           WHERE 
+                              LAST_TRAN_CODE in ('CREATE', 'MOVE', 'INPUT') 
+						            AND LOT_DELETE_FLAG IS NULL
+								      AND STORE_CODE IS NOT NULL
+								      AND LOT_ID IN ({lots})";
+            cmd.CommandText = sql.ToString();
+            cmd.Connection = conn;
+            conn.Open();
+            list = Helper.DataReaderMapToList<LOT_STS_DTO>(cmd.ExecuteReader());
+         }
+         catch (Exception err)
+         {
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return null;
+         }
+         finally
+         {
+            conn.Close();
+         }
+         return list;
+      }
       public bool BedRegCheck(string operation)
       {
          try

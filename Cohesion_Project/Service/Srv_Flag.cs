@@ -42,6 +42,22 @@ namespace Cohesion_Project
 
          return list;
       }
+      public List<BOM_MST_DTO> SelectMateriars(string prodId)
+      {
+         Flag_DAO dao = new Flag_DAO();
+         List<BOM_MST_DTO> list = dao.SelectMateriars(prodId);
+         dao.Dispose();
+
+         return list;
+      }
+      public List<LOT_STS_DTO> SelectMateriarLot(string lots)
+      {
+         Flag_DAO dao = new Flag_DAO();
+         List<LOT_STS_DTO> list = dao.SelectMateriarLot(lots);
+         dao.Dispose();
+
+         return list;
+      }
       public bool BedRegCheck(string operation)
       {
          Flag_DAO dao = new Flag_DAO();

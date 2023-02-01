@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BOM_MST_DTO.cs" />
     <Compile Include="CODE_DATA_MST_DTO.cs" />
     <Compile Include="CODE_TABLE_MST_DTO.cs" />
     <Compile Include="EQUIPMENT_MST_DTO.cs" />
