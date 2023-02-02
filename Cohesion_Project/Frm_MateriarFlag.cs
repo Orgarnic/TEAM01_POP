@@ -49,6 +49,7 @@ namespace Cohesion_Project
          DgvUtil.AddTextCol(dgvMateriar, "단위 수량", "REQUIRE_QTY", width: 200, readOnly: true, frozen: true);
          DgvUtil.AddTextCol(dgvMateriar, "자재 LOT", "LOT_ID", width: 200);
          DgvUtil.AddTextCol(dgvMateriar, "자재 LOT 수량", "LOT_QTY", width: 200, readOnly: true);
+         DgvUtil.AddTextCol(dgvMateriar, "사용 LOT 수량", "TOTAL", width: 200, readOnly: true);
          DgvUtil.AddTextCol(dgvMateriar, "자 품번 재고", "LOT_QTY_TOTAL", width: 200, readOnly: true);
       }
       private void btnOrder_Click(object sender, EventArgs e)
@@ -164,8 +165,11 @@ namespace Cohesion_Project
          cell5.Value = 0;
          row.Cells.Add(cell5);
          DataGridViewTextBoxCell cell6 = new DataGridViewTextBoxCell();
-         cell6.Value = (from meaterial in LotsMaterialr where meaterial.PRODUCT_CODE.Equals(item.PRODUCT_CODE) select meaterial).Sum(m => m.LOT_QTY);
+         cell6.Value = Convert.ToInt32(item.REQUIRE_QTY * Lot.START_QTY);
          row.Cells.Add(cell6);
+         DataGridViewTextBoxCell cell7 = new DataGridViewTextBoxCell();
+         cell7.Value = Convert.ToInt32((from meaterial in LotsMaterialr where meaterial.PRODUCT_CODE.Equals(item.PRODUCT_CODE) select meaterial).Sum(m => m.LOT_QTY));
+         row.Cells.Add(cell7);
          dgvMateriar.Rows.Add(row);
       }
       private void dgvMateriar_CellEndEdit(object sender, DataGridViewCellEventArgs e)
@@ -181,7 +185,7 @@ namespace Cohesion_Project
          else
          {
             decimal logQty = LotsMaterialr.Find((m) => m.LOT_ID.Equals(type)).LOT_QTY;
-            dgvMateriar["LOT_QTY", row].Value = logQty;
+            dgvMateriar["LOT_QTY", row].Value = Convert.ToInt32(logQty);
          }
          
       }
