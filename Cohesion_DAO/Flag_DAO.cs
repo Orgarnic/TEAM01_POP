@@ -311,18 +311,16 @@ namespace Cohesion_DAO
             cmd2.Transaction = trans;
             cmd2.ExecuteNonQuery();
 
-            sql = @" DECLARE @SEQ INT
-                     SET @SEQ = (SELECT CASE WHEN (SELECT COUNT(*) FROM LOT_DEFECT_HIS WHERE  LOT_ID = @LOT_ID AND PRODUCT_CODE = @PRODUCT_CODE) IS NULL 
-                     THEN 0 ELSE (SELECT COUNT(*) FROM LOT_DEFECT_HIS WHERE  LOT_ID = @LOT_ID AND PRODUCT_CODE = @PRODUCT_CODE) END + 1)
-                     INSERT INTO LOT_DEFECT_HIS
+            sql = @"INSERT INTO LOT_DEFECT_HIS
                     (LOT_ID, HIST_SEQ, DEFECT_CODE, DEFECT_QTY, TRAN_TIME, WORK_DATE, 
                      PRODUCT_CODE, OPERATION_CODE, STORE_CODE, EQUIPMENT_CODE, TRAN_USER_ID, TRAN_COMMENT)
                     VALUES 
-                    (@LOT_ID, @SEQ, @DEFECT_CODE, @DEFECT_QTY, @TRAN_TIME, @WORK_DATE,
+                    (@LOT_ID, @HIST_SEQ, @DEFECT_CODE, @DEFECT_QTY, @TRAN_TIME, @WORK_DATE,
                      @PRODUCT_CODE, @OPERATION_CODE, @STORE_CODE, @EQUIPMENT_CODE, @TRAN_USER_ID, @TRAN_COMMENT)";
             SqlCommand cmd3 = new SqlCommand(sql, conn);
             cmd3.Transaction = trans;
             cmd3.Parameters.AddWithValue("@LOT_ID", dto.LOT_ID);
+            cmd3.Parameters.AddWithValue("@HIST_SEQ", dto.LAST_HIST_SEQ);
             cmd3.Parameters.Add(new SqlParameter("@DEFECT_CODE", SqlDbType.VarChar));
             cmd3.Parameters.Add(new SqlParameter("@DEFECT_QTY", SqlDbType.Decimal));
             cmd3.Parameters.AddWithValue("@TRAN_TIME", dto.LAST_TRAN_TIME);
@@ -411,20 +409,18 @@ namespace Cohesion_DAO
             cmd2.Transaction = trans;
             cmd2.ExecuteNonQuery();
 
-            sql = @"DECLARE @SEQ INT
-                        SET @SEQ = (SELECT CASE WHEN (SELECT COUNT(*) FROM LOT_INSPECT_HIS WHERE LOT_ID = @LOT_ID) IS NULL 
-                        THEN 0 ELSE (SELECT COUNT(*) FROM LOT_INSPECT_HIS WHERE LOT_ID = @LOT_ID) END + 1)
-                   INSERT INTO LOT_INSPECT_HIS
+            sql = @"INSERT INTO LOT_INSPECT_HIS
                         (LOT_ID, HIST_SEQ, INSPECT_ITEM_CODE, INSPECT_ITEM_NAME, VALUE_TYPE, SPEC_LSL, SPEC_TARGET, SPEC_USL,
 					         INSPECT_VALUE, INSPECT_RESULT, TRAN_TIME, WORK_DATE, PRODUCT_CODE, OPERATION_CODE, STORE_CODE,
 					         EQUIPMENT_CODE, TRAN_USER_ID, TRAN_COMMENT)
                    VALUES 
-                       (@LOT_ID, @SEQ, @INSPECT_ITEM_CODE, @INSPECT_ITEM_NAME, @VALUE_TYPE, @SPEC_LSL, @SPEC_TARGET, 
+                       (@LOT_ID, @HIST_SEQ, @INSPECT_ITEM_CODE, @INSPECT_ITEM_NAME, @VALUE_TYPE, @SPEC_LSL, @SPEC_TARGET, 
 					        @SPEC_USL, @INSPECT_VALUE, @INSPECT_RESULT, @TRAN_TIME, @WORK_DATE, @PRODUCT_CODE, @OPERATION_CODE, 
 					        @STORE_CODE, @EQUIPMENT_CODE, @TRAN_USER_ID, @TRAN_COMMENT)";
             SqlCommand cmd3 = new SqlCommand(sql, conn);
             cmd3.Transaction = trans;
             cmd3.Parameters.AddWithValue("@LOT_ID", dto.LOT_ID);
+            cmd3.Parameters.AddWithValue("@HIST_SEQ", dto.LAST_HIST_SEQ);
             cmd3.Parameters.Add(new SqlParameter("@INSPECT_ITEM_CODE", SqlDbType.VarChar));
             cmd3.Parameters.Add(new SqlParameter("@INSPECT_ITEM_NAME", SqlDbType.VarChar));
             cmd3.Parameters.Add(new SqlParameter("@VALUE_TYPE", SqlDbType.Char));

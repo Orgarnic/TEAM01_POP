@@ -47,10 +47,12 @@ namespace Cohesion_Project
          DgvUtil.AddTextCol(dgvMateriar, "자 품번", "PRODUCT_CODE", width: 200, readOnly: true, frozen: true);
          DgvUtil.AddTextCol(dgvMateriar, "자 품명", "PRODUCT_NAME", width: 200, readOnly: true, frozen: true);
          DgvUtil.AddTextCol(dgvMateriar, "단위 수량", "REQUIRE_QTY", width: 200, readOnly: true, frozen: true);
-         DgvUtil.AddTextCol(dgvMateriar, "자재 LOT", "LOT_ID", width: 200);
+         DgvUtil.AddTextCol(dgvMateriar, "자재 LOT", "LOT_ID", width: 250);
          DgvUtil.AddTextCol(dgvMateriar, "자재 LOT 수량", "LOT_QTY", width: 200, readOnly: true);
          DgvUtil.AddTextCol(dgvMateriar, "사용 LOT 수량", "TOTAL", width: 200, readOnly: true);
          DgvUtil.AddTextCol(dgvMateriar, "자 품번 재고", "LOT_QTY_TOTAL", width: 200, readOnly: true);
+         dgvMateriar.SelectionMode = DataGridViewSelectionMode.CellSelect;
+         dgvMateriar.Font = new Font("맑은 고딕", 12, FontStyle.Bold);
       }
       private void btnOrder_Click(object sender, EventArgs e)
       {

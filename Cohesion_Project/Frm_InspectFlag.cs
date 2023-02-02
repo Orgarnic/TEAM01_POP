@@ -46,12 +46,14 @@ namespace Cohesion_Project
          DgvUtil.DgvInit(dgvInspect);
          DgvUtil.AddTextCol(dgvInspect, "검사 코드", "INSPECT_ITEM_CODE", width: 200, readOnly: true, frozen: true);
          DgvUtil.AddTextCol(dgvInspect, "검사 항목", "INSPECT_ITEM_NAME", width: 200, readOnly: true, frozen: true);
-         DgvUtil.AddTextCol(dgvInspect, "검사 유형", "VALUE_TYPE", width: 200, readOnly: true, frozen: true);
-         DgvUtil.AddTextCol(dgvInspect, "스펙 하한", "SPEC_LSL", width: 200, readOnly: true);
-         DgvUtil.AddTextCol(dgvInspect, "스펙 타겟", "SPEC_TARGET", width: 200, readOnly: true);
-         DgvUtil.AddTextCol(dgvInspect, "스펙 상한", "SPEC_USL", width: 200, readOnly: true);
-         DgvUtil.AddTextCol(dgvInspect, "검사 데이터", "INPUT", width: 200);
-         DgvUtil.AddTextCol(dgvInspect, "유효성", "Checked", width: 200, readOnly: true);
+         DgvUtil.AddTextCol(dgvInspect, "검사 유형", "VALUE_TYPE", width: 200, readOnly: true, frozen: true, align:1);
+         DgvUtil.AddTextCol(dgvInspect, "스펙 하한", "SPEC_LSL", width: 200, readOnly: true, align: 1);
+         DgvUtil.AddTextCol(dgvInspect, "스펙 타겟", "SPEC_TARGET", width: 200, readOnly: true, align: 1);
+         DgvUtil.AddTextCol(dgvInspect, "스펙 상한", "SPEC_USL", width: 200, readOnly: true, align: 1);
+         DgvUtil.AddTextCol(dgvInspect, "검사 데이터", "INPUT", width: 200, align: 1);
+         DgvUtil.AddTextCol(dgvInspect, "유효성", "Checked", width: 200, readOnly: true, align: 1);
+         dgvInspect.SelectionMode = DataGridViewSelectionMode.CellSelect;
+         dgvInspect.Font = new Font("맑은 고딕", 12, FontStyle.Bold);
       }
       private void DgvInspect_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
       {
@@ -83,20 +85,14 @@ namespace Cohesion_Project
             }
             ComboBoxBinding();
             txtOrder.Text = order.WORK_ORDER_ID;
-            lblOrderStatus.Text = order.ORDER_STATUS;
-            lblOrderQty.Text = Convert.ToInt32(order.ORDER_QTY).ToString();
-
-            txtProductCode.Text = order.PRODUCT_CODE;
-            txtProductName.Text = order.PRODUCT_NAME;
-            txtCustomerCode.Text = order.CUSTOMER_CODE;
-            txtCustomerName.Text = order.CUSTOMER_NAME;
          }
       }
       private void cboLotId_SelectedIndexChanged(object sender, EventArgs e)
       {
+         dgvInspect.Rows.Clear();
          if (cboLotId.SelectedIndex < 1)
          {
-            CommonUtil.ResetControls(txtOperationCode, txtOperationName, txtTotal, txtOperationName, txtLotDesc);
+            CommonUtil.ResetControls(txtOperationCode, txtOperationName, txtTotal, txtOperationName, txtLotDesc, lblOrderStatus, lblOrderQty, txtProductCode, txtProductName, txtCustomerCode, txtCustomerName);
             lblDefectQty.Text = "0"; lblProductQty.Text = "0";
             flwOperation.Controls.Clear();
             return;
@@ -104,6 +100,14 @@ namespace Cohesion_Project
          Lot = Lots.Find((l) => l.LOT_ID.Equals(cboLotId.Text));
          if (Lot != null)
          {
+            lblOrderStatus.Text = order.ORDER_STATUS;
+            lblOrderQty.Text = Convert.ToInt32(order.ORDER_QTY).ToString();
+
+            txtProductCode.Text = order.PRODUCT_CODE;
+            txtProductName.Text = order.PRODUCT_NAME;
+            txtCustomerCode.Text = order.CUSTOMER_CODE;
+            txtCustomerName.Text = order.CUSTOMER_NAME;
+
             txtLotDesc.Text = Lot.LOT_DESC;
             txtOperationCode.Text = Lot.OPERATION_CODE;
             txtOperationName.Text = Lot.OPERATION_NAME;
@@ -169,11 +173,26 @@ namespace Cohesion_Project
                }
                dgvInspect.Rows.Add(row);
             }
+            if (dgvInspect.Rows.Count > 0)
+               dgvInspect.Focus();
          }
          else
          {
             MboxUtil.MboxError("LOT 이력을 불러오는데 오류가 발생했습니다.");
             return;
+         }
+      }
+      private void cboLotId_Leave(object sender, EventArgs e)
+      {
+         if (cboLotId.Items.Count < 1) return;
+         if (cboLotId.Items.Contains(cboLotId.Text))
+         {
+            int idx = cboLotId.Items.IndexOf(cboLotId.Text);
+            cboLotId.SelectedIndex = idx;
+         }
+         else
+         {
+            cboLotId.SelectedIndex = 0;
          }
       }
       private void dgvInspect_CellEndEdit(object sender, DataGridViewCellEventArgs e)
@@ -196,6 +215,7 @@ namespace Cohesion_Project
             {
                dgvInspect["Checked", row].Value = "NG";
                dgvInspect["Checked", row].Style.ForeColor = Color.Tomato;
+               dgvInspect.Rows[row].DefaultCellStyle.BackColor = Color.Gold;
             }
          }
          else if(type.Equals("C"))
@@ -210,6 +230,7 @@ namespace Cohesion_Project
             {
                dgvInspect["Checked", row].Value = "NG";
                dgvInspect["Checked", row].Style.ForeColor = Color.Tomato;
+               dgvInspect.Rows[row].DefaultCellStyle.BackColor = Color.Gold;
             }
             else
                dgvInspect["Checked", row].Value = "";
@@ -270,6 +291,7 @@ namespace Cohesion_Project
                dgvInspect.Rows[i].Cells["INPUT"].Value = "선택";
             dgvInspect.Rows[i].Cells["Checked"].Value = "";
          }
+         cboLotId.SelectedIndex = 0;
          Lots = srvFlag.SelectOrderLotBed(txtOrder.Text);
       }
    }

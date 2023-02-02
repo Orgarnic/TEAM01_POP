@@ -793,6 +793,7 @@ namespace Cohesion_Project
          this.cboLotId.Size = new System.Drawing.Size(387, 29);
          this.cboLotId.TabIndex = 31;
          this.cboLotId.SelectedIndexChanged += new System.EventHandler(this.cboLotId_SelectedIndexChanged);
+         this.cboLotId.Leave += new System.EventHandler(this.cboLotId_Leave);
          // 
          // label1
          // 

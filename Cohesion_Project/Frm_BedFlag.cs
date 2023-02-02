@@ -25,7 +25,6 @@ namespace Cohesion_Project
       {
          InitializeComponent();
       }
-
       private void Frm_WORK_ORDER_Load(object sender, EventArgs e)
       {
          operations = srvWork.SelectOperations();
@@ -33,12 +32,11 @@ namespace Cohesion_Project
          DgvInit();
          ComboBoxBind();
       }
-
       private void ComboBoxBind()
       {
          cboBedReg.Items.Insert(0, "선택");
-         cboBedReg.SelectedIndex = 0;
          Beds.ForEach((b) => cboBedReg.Items.Add(b.KEY_1));
+         cboBedReg.SelectedIndex = 0;
       }
       private void ComboBoxBinding()
       {
@@ -52,7 +50,6 @@ namespace Cohesion_Project
          }
          cboLotId.SelectedIndex = 0;
       }
-
       private void DgvInit()
       {
          DgvUtil.DgvInit(dgvDefect);
@@ -60,8 +57,9 @@ namespace Cohesion_Project
          DgvUtil.AddTextCol(dgvDefect, "불량 명칭", "DEFECT_NAME", width: 250, readOnly: true, frozen: true);
          DgvUtil.AddTextCol(dgvDefect, "입력 수량", "DEFECT_QTY", width: 250, readOnly: true, frozen: true);
          DgvUtil.AddButtonCol(dgvDefect, "삭제 하기", "Delete", width: 150, cellText:"삭제");
+         dgvDefect.SelectionMode = DataGridViewSelectionMode.CellSelect;
+         dgvDefect.Font = new Font("맑은 고딕", 12, FontStyle.Bold);
       }
-
       private void btnOrder_Click(object sender, EventArgs e)
       {
          Pop_Purchase pop = new Pop_Purchase();
@@ -81,20 +79,14 @@ namespace Cohesion_Project
             ResetDefectItems();
             ComboBoxBinding();
             txtOrder.Text = order.WORK_ORDER_ID;
-            lblOrderStatus.Text = order.ORDER_STATUS;
-            lblOrderQty.Text = Convert.ToInt32(order.ORDER_QTY).ToString();
-
-            txtProductCode.Text = order.PRODUCT_CODE;
-            txtProductName.Text = order.PRODUCT_NAME;
-            txtCustomerCode.Text = order.CUSTOMER_CODE;
-            txtCustomerName.Text = order.CUSTOMER_NAME;
+            cboLotId.Focus();
          }
       }
       private void cboLotId_SelectedIndexChanged(object sender, EventArgs e)
       {
          if (cboLotId.SelectedIndex < 1)
          {
-            CommonUtil.ResetControls(txtOperationCode, txtOperationName, txtTotal, txtOperationName, txtLotDesc);
+            CommonUtil.ResetControls(txtOperationCode, txtOperationName, txtTotal, txtOperationName, txtLotDesc, lblOrderStatus, lblOrderQty, txtProductCode, txtProductName, txtCustomerCode, txtCustomerName, txtBedRegTotal, txtLotQty);
             lblDefectQty.Text = "0"; lblProductQty.Text = "0";
             ResetDefectItems();
             flwOperation.Controls.Clear();
@@ -103,6 +95,14 @@ namespace Cohesion_Project
          Lot = Lots.Find((l) => l.LOT_ID.Equals(cboLotId.Text));
          if(Lot != null)
          {
+            lblOrderStatus.Text = order.ORDER_STATUS;
+            lblOrderQty.Text = Convert.ToInt32(order.ORDER_QTY).ToString();
+
+            txtProductCode.Text = order.PRODUCT_CODE;
+            txtProductName.Text = order.PRODUCT_NAME;
+            txtCustomerCode.Text = order.CUSTOMER_CODE;
+            txtCustomerName.Text = order.CUSTOMER_NAME;
+
             txtLotDesc.Text = Lot.LOT_DESC;
             txtOperationCode.Text = Lot.OPERATION_CODE;
             txtOperationName.Text = Lot.OPERATION_NAME;
@@ -140,6 +140,7 @@ namespace Cohesion_Project
                   }
                   flwOperation.Controls.Add(label);
                }
+               cboBedReg.Focus();
             }
             else
                MboxUtil.MboxError("공정 진행정보를 불러오는데 오류가 발생했습니다.");
@@ -148,6 +149,19 @@ namespace Cohesion_Project
          {
             MboxUtil.MboxError("LOT 이력을 불러오는데 오류가 발생했습니다.");
             return;
+         }
+      }
+      private void cboLotId_Leave(object sender, EventArgs e)
+      {
+         if (cboLotId.Items.Count < 1) return;
+         if (cboLotId.Items.Contains(cboLotId.Text))
+         {
+            int idx = cboLotId.Items.IndexOf(cboLotId.Text);
+            cboLotId.SelectedIndex = idx;
+         }
+         else
+         {
+            cboLotId.SelectedIndex = 0;
          }
       }
       private void cboBedReg_SelectedIndexChanged(object sender, EventArgs e)
@@ -159,6 +173,7 @@ namespace Cohesion_Project
          }
          txtBedRegName.Text = Beds.Find((b) => b.KEY_1.Equals(cboBedReg.Text)).DATA_1;
          txtBedQty.Text = "0";
+         txtBedQty.Focus();
       }
       private void txtBedQty_KeyPress(object sender, KeyPressEventArgs e) { if (!char.IsDigit(e.KeyChar) && e.KeyChar != 8) e.Handled = true; }
       private void btnBedRegAdd_Click(object sender, EventArgs e)
@@ -199,6 +214,8 @@ namespace Cohesion_Project
                LotDefects.Add(temp);
             else
                LotDefects.Find((d) => d.DEFECT_CODE.Equals(temp.DEFECT_CODE)).DEFECT_QTY += temp.DEFECT_QTY;
+            CommonUtil.ResetControls(txtBedRegName);
+            cboBedReg.SelectedIndex = 0; txtBedQty.Text = "0"; flwOperation.Controls.Clear();
             QtyRange();
          }
       }
@@ -215,7 +232,6 @@ namespace Cohesion_Project
             QtyRange();
          }
       }
-
       private void QtyRange()
       {
          dgvDefect.DataSource = null;
@@ -223,9 +239,8 @@ namespace Cohesion_Project
          int total = 0;
          LotDefects.ForEach((d) => total += Convert.ToInt32(d.DEFECT_QTY));
          txtBedRegTotal.Text = total.ToString();
-         txtLotQty.Text = (Convert.ToInt32(txtTotal.Text) - Convert.ToInt32(txtBedRegTotal.Text)) > 0 ? (Convert.ToInt32(txtTotal.Text) - Convert.ToInt32(txtBedRegTotal.Text)).ToString() : "0";
+         txtLotQty.Text = (Convert.ToInt32(lblProductQty.Text) - Convert.ToInt32(txtBedRegTotal.Text)) > 0 ? (Convert.ToInt32(lblProductQty.Text) - Convert.ToInt32(txtBedRegTotal.Text)).ToString() : "0";
       }
-
       private void ResetDefectItems()
       {
          dgvDefect.DataSource = null;
@@ -235,7 +250,6 @@ namespace Cohesion_Project
          LotDefects = null;
          txtBedQty.Text = "0";
       }
-
       private void btnStart_Click(object sender, EventArgs e)
       {
          if (string.IsNullOrWhiteSpace(txtOrder.Text))
@@ -265,9 +279,8 @@ namespace Cohesion_Project
 
          lblDefectQty.Text = (Convert.ToInt32(lblDefectQty.Text) + Convert.ToInt32(txtBedRegTotal.Text)).ToString();
          lblProductQty.Text = (Convert.ToInt32(lblProductQty.Text) - Convert.ToInt32(txtBedRegTotal.Text)).ToString();
-
-         CommonUtil.ResetControls(txtBedRegName, txtBedRegTotal);
          Lots = srvFlag.SelectOrderLotBed(txtOrder.Text);
+         cboLotId.SelectedIndex = 0;
          ResetDefectItems();
       }
    }
