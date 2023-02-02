@@ -92,8 +92,8 @@ namespace Cohesion_Project
          dgvInspect.Rows.Clear();
          if (cboLotId.SelectedIndex < 1)
          {
-            CommonUtil.ResetControls(txtOperationCode, txtOperationName, txtTotal, txtOperationName, txtLotDesc, lblOrderStatus, lblOrderQty, txtProductCode, txtProductName, txtCustomerCode, txtCustomerName);
-            lblDefectQty.Text = "0"; lblProductQty.Text = "0";
+            CommonUtil.ResetControls(txtOperationCode, txtOperationName, txtTotal, txtOperationName, txtLotDesc, lblOrderStatus, txtProductCode, txtProductName, txtCustomerCode, txtCustomerName);
+            lblDefectQty.Text = "0"; lblProductQty.Text = "0"; lblOrderQty.Text = "0";
             flwOperation.Controls.Clear();
             return;
          }

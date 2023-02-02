@@ -72,6 +72,21 @@ namespace Cohesion_Project
             }
             ComboBoxBinding();
             txtOrder.Text = order.WORK_ORDER_ID;
+         }
+      }
+      private void cboLotId_SelectedIndexChanged(object sender, EventArgs e)
+      {
+         if (cboLotId.SelectedIndex < 1)
+         {
+            CommonUtil.ResetControls(lblOrderStatus, txtProductCode, txtProductName, txtCustomerCode, txtCustomerName, txtOperationCode, txtOperationName, txtTotal, txtLotDesc);
+            lblDefectQty.Text = "0"; lblProductQty.Text = "0"; lblOrderQty.Text = "0";
+            dgvMateriar.Rows.Clear();
+            flwOperation.Controls.Clear();
+            return;
+         }
+         Lot = Lots.Find((l) => l.LOT_ID.Equals(cboLotId.Text));
+         if (Lot != null)
+         {
             lblOrderStatus.Text = order.ORDER_STATUS;
             lblOrderQty.Text = Convert.ToInt32(order.ORDER_QTY).ToString();
 
@@ -79,20 +94,7 @@ namespace Cohesion_Project
             txtProductName.Text = order.PRODUCT_NAME;
             txtCustomerCode.Text = order.CUSTOMER_CODE;
             txtCustomerName.Text = order.CUSTOMER_NAME;
-         }
-      }
-      private void cboLotId_SelectedIndexChanged(object sender, EventArgs e)
-      {
-         if (cboLotId.SelectedIndex < 1)
-         {
-            CommonUtil.ResetControls(txtOperationCode, txtOperationName, txtTotal, txtOperationName, txtLotDesc);
-            lblDefectQty.Text = "0"; lblProductQty.Text = "0";
-            flwOperation.Controls.Clear();
-            return;
-         }
-         Lot = Lots.Find((l) => l.LOT_ID.Equals(cboLotId.Text));
-         if (Lot != null)
-         {
+
             txtLotDesc.Text = Lot.LOT_DESC;
             txtOperationCode.Text = Lot.OPERATION_CODE;
             txtOperationName.Text = Lot.OPERATION_NAME;

@@ -86,8 +86,8 @@ namespace Cohesion_Project
       {
          if (cboLotId.SelectedIndex < 1)
          {
-            CommonUtil.ResetControls(txtOperationCode, txtOperationName, txtTotal, txtOperationName, txtLotDesc, lblOrderStatus, lblOrderQty, txtProductCode, txtProductName, txtCustomerCode, txtCustomerName, txtBedRegTotal, txtLotQty);
-            lblDefectQty.Text = "0"; lblProductQty.Text = "0";
+            CommonUtil.ResetControls(txtOperationCode, txtOperationName, txtTotal, txtOperationName, txtLotDesc, lblOrderStatus, txtProductCode, txtProductName, txtCustomerCode, txtCustomerName, txtBedRegTotal, txtLotQty);
+            lblDefectQty.Text = "0"; lblProductQty.Text = "0"; lblOrderQty.Text = "0";
             ResetDefectItems();
             flwOperation.Controls.Clear();
             return;
