@@ -18,10 +18,42 @@ namespace Cohesion_Project
 
          return list;
       }
+      public List<LOT_STS_DTO> SelectOrderLotInspect(string orderId)
+      {
+         Flag_DAO dao = new Flag_DAO();
+         List<LOT_STS_DTO> list = dao.SelectOrderLotInspect(orderId);
+         dao.Dispose();
+
+         return list;
+      }
       public List<CODE_DATA_MST_DTO> SelectBedCodes()
       {
          Flag_DAO dao = new Flag_DAO();
          List<CODE_DATA_MST_DTO> list = dao.SelectBedCodes();
+         dao.Dispose();
+
+         return list;
+      }
+      public List<INSPECT_ITEM_MST_DTO> SelectInspects(string operation)
+      {
+         Flag_DAO dao = new Flag_DAO();
+         List<INSPECT_ITEM_MST_DTO> list = dao.SelectInspects(operation);
+         dao.Dispose();
+
+         return list;
+      }
+      public List<BOM_MST_DTO> SelectMateriars(string prodId)
+      {
+         Flag_DAO dao = new Flag_DAO();
+         List<BOM_MST_DTO> list = dao.SelectMateriars(prodId);
+         dao.Dispose();
+
+         return list;
+      }
+      public List<LOT_STS_DTO> SelectMateriarLot(string lots)
+      {
+         Flag_DAO dao = new Flag_DAO();
+         List<LOT_STS_DTO> list = dao.SelectMateriarLot(lots);
          dao.Dispose();
 
          return list;
@@ -38,6 +70,14 @@ namespace Cohesion_Project
       {
          Flag_DAO dao = new Flag_DAO();
          bool temp = dao.InsertBedReg(dto, defects);
+         dao.Dispose();
+
+         return temp;
+      }
+      public bool InsertInspect(LOT_STS_DTO dto, List<LOT_INSPECT_HIS_DTO> inspects)
+      {
+         Flag_DAO dao = new Flag_DAO();
+         bool temp = dao.InsertInspect(dto, inspects);
          dao.Dispose();
 
          return temp;

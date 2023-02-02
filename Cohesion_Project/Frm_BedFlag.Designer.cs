@@ -331,7 +331,7 @@ namespace Cohesion_Project
          this.txtBedRegTotal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
          this.txtBedRegTotal.Enabled = false;
          this.txtBedRegTotal.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-         this.txtBedRegTotal.Location = new System.Drawing.Point(1172, 171);
+         this.txtBedRegTotal.Location = new System.Drawing.Point(1172, 144);
          this.txtBedRegTotal.Name = "txtBedRegTotal";
          this.txtBedRegTotal.Size = new System.Drawing.Size(265, 29);
          this.txtBedRegTotal.TabIndex = 79;
@@ -344,7 +344,7 @@ namespace Cohesion_Project
          this.label14.BackColor = System.Drawing.Color.Transparent;
          this.label14.Font = new System.Drawing.Font("나눔고딕", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
          this.label14.ForeColor = System.Drawing.Color.Black;
-         this.label14.Location = new System.Drawing.Point(1063, 170);
+         this.label14.Location = new System.Drawing.Point(1169, 111);
          this.label14.Name = "label14";
          this.label14.Size = new System.Drawing.Size(138, 30);
          this.label14.TabIndex = 78;
@@ -370,7 +370,7 @@ namespace Cohesion_Project
          this.label34.BackColor = System.Drawing.Color.Transparent;
          this.label34.Font = new System.Drawing.Font("나눔고딕", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
          this.label34.ForeColor = System.Drawing.Color.Black;
-         this.label34.Location = new System.Drawing.Point(1063, 223);
+         this.label34.Location = new System.Drawing.Point(1169, 187);
          this.label34.Name = "label34";
          this.label34.Size = new System.Drawing.Size(138, 30);
          this.label34.TabIndex = 76;
@@ -384,7 +384,7 @@ namespace Cohesion_Project
          this.btnBedRegAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
          this.btnBedRegAdd.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
          this.btnBedRegAdd.ForeColor = System.Drawing.Color.White;
-         this.btnBedRegAdd.Location = new System.Drawing.Point(1340, 49);
+         this.btnBedRegAdd.Location = new System.Drawing.Point(1260, 50);
          this.btnBedRegAdd.Margin = new System.Windows.Forms.Padding(0);
          this.btnBedRegAdd.Name = "btnBedRegAdd";
          this.btnBedRegAdd.Size = new System.Drawing.Size(92, 30);
@@ -458,11 +458,10 @@ namespace Cohesion_Project
          this.txtBedQty.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
          this.txtBedQty.Location = new System.Drawing.Point(1069, 50);
          this.txtBedQty.Name = "txtBedQty";
-         this.txtBedQty.Size = new System.Drawing.Size(265, 29);
+         this.txtBedQty.Size = new System.Drawing.Size(188, 29);
          this.txtBedQty.TabIndex = 55;
          this.txtBedQty.Text = "0";
          this.txtBedQty.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-         this.txtBedQty.TextChanged += new System.EventHandler(this.txtBedQty_TextChanged);
          this.txtBedQty.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtBedQty_KeyPress);
          // 
          // label13
@@ -497,7 +496,7 @@ namespace Cohesion_Project
          this.panel5.Controls.Add(this.dgvDefect);
          this.panel5.Location = new System.Drawing.Point(128, 94);
          this.panel5.Name = "panel5";
-         this.panel5.Size = new System.Drawing.Size(908, 159);
+         this.panel5.Size = new System.Drawing.Size(1035, 159);
          this.panel5.TabIndex = 80;
          // 
          // dgvDefect
@@ -508,7 +507,7 @@ namespace Cohesion_Project
          this.dgvDefect.Location = new System.Drawing.Point(96, 26);
          this.dgvDefect.Name = "dgvDefect";
          this.dgvDefect.RowTemplate.Height = 23;
-         this.dgvDefect.Size = new System.Drawing.Size(622, 97);
+         this.dgvDefect.Size = new System.Drawing.Size(749, 97);
          this.dgvDefect.TabIndex = 74;
          this.dgvDefect.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDefect_CellClick);
          // 
@@ -521,7 +520,7 @@ namespace Cohesion_Project
          this.label10.Name = "label10";
          this.label10.Size = new System.Drawing.Size(138, 30);
          this.label10.TabIndex = 75;
-         this.label10.Text = "◾ 등록현황";
+         this.label10.Text = "◾ 불량등록";
          this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
          // 
          // panel2
@@ -880,7 +879,7 @@ namespace Cohesion_Project
          this.Controls.Add(this.panel2);
          this.Controls.Add(this.panel1);
          this.Name = "Frm_BedFlag";
-         this.Text = "작업 시작";
+         this.Text = "불량 등록";
          this.Load += new System.EventHandler(this.Frm_WORK_ORDER_Load);
          this.tableLayoutPanel1.ResumeLayout(false);
          this.panel3.ResumeLayout(false);

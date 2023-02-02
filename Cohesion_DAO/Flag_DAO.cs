@@ -27,6 +27,8 @@ namespace Cohesion_DAO
             SqlCommand cmd = new SqlCommand();
             string sql = @"SELECT 
                            LOT_ID, LOT_DESC, L.PRODUCT_CODE, L.OPERATION_CODE, O.OPERATION_NAME OPERATION_NAME, STORE_CODE, LOT_QTY, CREATE_QTY,
+						   		 CASE WHEN (SELECT SUM(DEFECT_QTY) FROM LOT_DEFECT_HIS WHERE LOT_ID = L.LOT_ID) IS NULL THEN 0 
+						         ELSE (SELECT SUM(DEFECT_QTY) FROM LOT_DEFECT_HIS WHERE LOT_ID = L.LOT_ID) END LOT_DEFECT_QTY,
                            OPER_IN_QTY, START_FLAG, START_QTY, START_TIME, START_EQUIPMENT_CODE, END_FLAG,
                            END_TIME, END_EQUIPMENT_CODE, SHIP_FLAG, SHIP_CODE, SHIP_TIME, PRODUCTION_TIME,
                            L.CREATE_TIME, OPER_IN_TIME, L.WORK_ORDER_ID, LOT_DELETE_FLAG, LOT_DELETE_CODE, LOT_DELETE_TIME,
@@ -34,12 +36,55 @@ namespace Cohesion_DAO
                            FROM 
                            LOT_STS L INNER JOIN PRODUCT_OPERATION_REL P ON L.PRODUCT_CODE = P.PRODUCT_CODE AND L.OPERATION_CODE = P.OPERATION_CODE
                            			 INNER JOIN OPERATION_MST O ON L.OPERATION_CODE = O.OPERATION_CODE
-									 INNER JOIN WORK_ORDER_MST W ON W.WORK_ORDER_ID = L.WORK_ORDER_ID
+									          INNER JOIN WORK_ORDER_MST W ON W.WORK_ORDER_ID = L.WORK_ORDER_ID
                            WHERE 
-                           LAST_TRAN_CODE = 'START' 
+                           LAST_TRAN_CODE in ('START', 'DEFECT', 'INSPECT', 'INPUT') 
 						         AND LOT_DELETE_FLAG IS NULL
 						         AND W.ORDER_STATUS <> 'CLOSE'
-                           AND L.WORK_ORDER_ID = @WORK_ORDER_ID";
+                           AND L.WORK_ORDER_ID = @WORK_ORDER_ID
+                           AND O.CHECK_DEFECT_FLAG = 'Y'";
+            cmd.Parameters.AddWithValue("@WORK_ORDER_ID", orderId);
+            cmd.CommandText = sql.ToString();
+            cmd.Connection = conn;
+            conn.Open();
+            list = Helper.DataReaderMapToList<LOT_STS_DTO>(cmd.ExecuteReader());
+         }
+         catch (Exception err)
+         {
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return null;
+         }
+         finally
+         {
+            conn.Close();
+         }
+         return list;
+      }
+      public List<LOT_STS_DTO> SelectOrderLotInspect(string orderId)
+      {
+         List<LOT_STS_DTO> list = null;
+         try
+         {
+            SqlCommand cmd = new SqlCommand();
+            string sql = @"SELECT 
+                           LOT_ID, LOT_DESC, L.PRODUCT_CODE, L.OPERATION_CODE, O.OPERATION_NAME OPERATION_NAME, STORE_CODE, LOT_QTY, CREATE_QTY,
+						   		 CASE WHEN (SELECT SUM(DEFECT_QTY) FROM LOT_DEFECT_HIS WHERE LOT_ID = L.LOT_ID) IS NULL THEN 0 
+						         ELSE (SELECT SUM(DEFECT_QTY) FROM LOT_DEFECT_HIS WHERE LOT_ID = L.LOT_ID) END LOT_DEFECT_QTY,
+                           OPER_IN_QTY, START_FLAG, START_QTY, START_TIME, START_EQUIPMENT_CODE, END_FLAG,
+                           END_TIME, END_EQUIPMENT_CODE, SHIP_FLAG, SHIP_CODE, SHIP_TIME, PRODUCTION_TIME,
+                           L.CREATE_TIME, OPER_IN_TIME, L.WORK_ORDER_ID, LOT_DELETE_FLAG, LOT_DELETE_CODE, LOT_DELETE_TIME,
+                           LAST_TRAN_CODE, LAST_TRAN_TIME, LAST_TRAN_USER_ID, LAST_TRAN_COMMENT, LAST_HIST_SEQ
+                           FROM 
+                           LOT_STS L INNER JOIN PRODUCT_OPERATION_REL P ON L.PRODUCT_CODE = P.PRODUCT_CODE AND L.OPERATION_CODE = P.OPERATION_CODE
+                           			 INNER JOIN OPERATION_MST O ON L.OPERATION_CODE = O.OPERATION_CODE
+									          INNER JOIN WORK_ORDER_MST W ON W.WORK_ORDER_ID = L.WORK_ORDER_ID
+                           WHERE 
+                           LAST_TRAN_CODE in ('START', 'DEFECT', 'INSPECT', 'INPUT') 
+						         AND LOT_DELETE_FLAG IS NULL
+						         AND W.ORDER_STATUS <> 'CLOSE'
+                           AND L.WORK_ORDER_ID = @WORK_ORDER_ID
+                           AND O.CHECK_INSPECT_FLAG = 'Y'";
             cmd.Parameters.AddWithValue("@WORK_ORDER_ID", orderId);
             cmd.CommandText = sql.ToString();
             cmd.Connection = conn;
@@ -71,6 +116,98 @@ namespace Cohesion_DAO
             cmd.Connection = conn;
             conn.Open();
             list = Helper.DataReaderMapToList<CODE_DATA_MST_DTO>(cmd.ExecuteReader());
+         }
+         catch (Exception err)
+         {
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return null;
+         }
+         finally
+         {
+            conn.Close();
+         }
+         return list;
+      }
+      public List<INSPECT_ITEM_MST_DTO> SelectInspects(string operation)
+      {
+         List<INSPECT_ITEM_MST_DTO> list = null;
+         try
+         {
+            SqlCommand cmd = new SqlCommand();
+            string sql = @"SELECT I.INSPECT_ITEM_CODE, INSPECT_ITEM_NAME, VALUE_TYPE, SPEC_LSL, SPEC_TARGET, SPEC_USL, I.CREATE_TIME, I.CREATE_USER_ID, I.UPDATE_TIME, I.UPDATE_USER_ID
+                           FROM INSPECT_ITEM_MST I INNER JOIN INSPECT_ITEM_OPERATION_REL O ON I.INSPECT_ITEM_CODE = O.INSPECT_ITEM_CODE
+                           WHERE O.OPERATION_CODE = @OPERATION_CODE";
+            cmd.Parameters.AddWithValue("@OPERATION_CODE", operation);
+            cmd.CommandText = sql.ToString();
+            cmd.Connection = conn;
+            conn.Open();
+            list = Helper.DataReaderMapToList<INSPECT_ITEM_MST_DTO>(cmd.ExecuteReader());
+         }
+         catch (Exception err)
+         {
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return null;
+         }
+         finally
+         {
+            conn.Close();
+         }
+         return list;
+      }
+      public List<BOM_MST_DTO> SelectMateriars(string prodId)
+      {
+         List<BOM_MST_DTO> list = null;
+         try
+         {
+            SqlCommand cmd = new SqlCommand();
+            string sql = @"SELECT B.PRODUCT_CODE, CHILD_PRODUCT_CODE, P.PRODUCT_NAME CHILD_PRODUCT_NAME, REQUIRE_QTY, L.LOT_ID, L.LOT_QTY, ALTER_PRODUCT_CODE, B.CREATE_TIME, B.CREATE_USER_ID, B.UPDATE_TIME, B.UPDATE_USER_ID, L.LAST_HIST_SEQ
+                           FROM BOM_MST B INNER JOIN LOT_STS L ON B.CHILD_PRODUCT_CODE = L.PRODUCT_CODE
+                           			   INNER JOIN PRODUCT_MST P ON B.CHILD_PRODUCT_CODE = P.PRODUCT_CODE
+                           WHERE B.PRODUCT_CODE = @PRODUCT_CODE";
+            cmd.Parameters.AddWithValue("@PRODUCT_CODE", prodId);
+            cmd.CommandText = sql.ToString();
+            cmd.Connection = conn;
+            conn.Open();
+            list = Helper.DataReaderMapToList<BOM_MST_DTO>(cmd.ExecuteReader());
+         }
+         catch (Exception err)
+         {
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return null;
+         }
+         finally
+         {
+            conn.Close();
+         }
+         return list;
+      }
+
+      public List<LOT_STS_DTO> SelectMateriarLot(string lots)
+      {
+         List<LOT_STS_DTO> list = null;
+         try
+         {
+            SqlCommand cmd = new SqlCommand();
+            string sql = $@"SELECT 
+                           LOT_ID, LOT_DESC, L.PRODUCT_CODE, L.OPERATION_CODE, STORE_CODE, LOT_QTY, CREATE_QTY
+                           OPER_IN_QTY, START_FLAG, START_QTY, START_TIME, START_EQUIPMENT_CODE, END_FLAG,
+                           END_TIME, END_EQUIPMENT_CODE, SHIP_FLAG, SHIP_CODE, SHIP_TIME, PRODUCTION_TIME,
+                           L.CREATE_TIME, OPER_IN_TIME, L.WORK_ORDER_ID, LOT_DELETE_FLAG, LOT_DELETE_CODE, LOT_DELETE_TIME,
+                           LAST_TRAN_CODE, LAST_TRAN_TIME, LAST_TRAN_USER_ID, LAST_TRAN_COMMENT, LAST_HIST_SEQ
+                           FROM 
+                           LOT_STS L
+                           WHERE 
+                              LAST_TRAN_CODE in ('CREATE', 'MOVE', 'INPUT') 
+						            AND LOT_DELETE_FLAG IS NULL
+								      AND STORE_CODE IS NOT NULL
+								      AND LOT_ID IN ({lots})";
+            cmd.CommandText = sql.ToString();
+            cmd.Connection = conn;
+            conn.Open();
+            list = Helper.DataReaderMapToList<LOT_STS_DTO>(cmd.ExecuteReader());
          }
          catch (Exception err)
          {
@@ -168,16 +305,18 @@ namespace Cohesion_DAO
             cmd2.Transaction = trans;
             cmd2.ExecuteNonQuery();
 
-            sql = @"INSERT INTO LOT_DEFECT_HIS
+            sql = @" DECLARE @SEQ INT
+                     SET @SEQ = (SELECT CASE WHEN (SELECT COUNT(*) FROM LOT_DEFECT_HIS WHERE  LOT_ID = @LOT_ID AND PRODUCT_CODE = @PRODUCT_CODE) IS NULL 
+                     THEN 0 ELSE (SELECT COUNT(*) FROM LOT_DEFECT_HIS WHERE  LOT_ID = @LOT_ID AND PRODUCT_CODE = @PRODUCT_CODE) END + 1)
+                     INSERT INTO LOT_DEFECT_HIS
                     (LOT_ID, HIST_SEQ, DEFECT_CODE, DEFECT_QTY, TRAN_TIME, WORK_DATE, 
                      PRODUCT_CODE, OPERATION_CODE, STORE_CODE, EQUIPMENT_CODE, TRAN_USER_ID, TRAN_COMMENT)
                     VALUES 
-                    (@LOT_ID, @HIST_SEQ, @DEFECT_CODE, @DEFECT_QTY, @TRAN_TIME, @WORK_DATE,
+                    (@LOT_ID, @SEQ, @DEFECT_CODE, @DEFECT_QTY, @TRAN_TIME, @WORK_DATE,
                      @PRODUCT_CODE, @OPERATION_CODE, @STORE_CODE, @EQUIPMENT_CODE, @TRAN_USER_ID, @TRAN_COMMENT)";
             SqlCommand cmd3 = new SqlCommand(sql, conn);
             cmd3.Transaction = trans;
             cmd3.Parameters.AddWithValue("@LOT_ID", dto.LOT_ID);
-            cmd3.Parameters.AddWithValue("@HIST_SEQ", dto.LAST_HIST_SEQ);
             cmd3.Parameters.Add(new SqlParameter("@DEFECT_CODE", SqlDbType.VarChar));
             cmd3.Parameters.Add(new SqlParameter("@DEFECT_QTY", SqlDbType.Decimal));
             cmd3.Parameters.AddWithValue("@TRAN_TIME", dto.LAST_TRAN_TIME);
@@ -188,31 +327,128 @@ namespace Cohesion_DAO
             cmd3.Parameters.Add(new SqlParameter("@EQUIPMENT_CODE", SqlDbType.VarChar));
             cmd3.Parameters.AddWithValue("@TRAN_USER_ID", string.IsNullOrWhiteSpace(dto.LAST_TRAN_USER_ID) ? (object)DBNull.Value : dto.LAST_TRAN_USER_ID);
             cmd3.Parameters.AddWithValue("@TRAN_COMMENT", string.IsNullOrWhiteSpace(dto.LAST_TRAN_COMMENT) ? (object)DBNull.Value : dto.LAST_TRAN_COMMENT);
-            decimal qty = 0;
             foreach (var defect in defects)
             {
                cmd3.Parameters["@DEFECT_CODE"].Value = defect.DEFECT_CODE;
                cmd3.Parameters["@DEFECT_QTY"].Value = defect.DEFECT_QTY;
-               cmd3.Parameters["@EQUIPMENT_CODE"].Value = defect.EQUIPMENT_CODE;
-               qty += defect.DEFECT_QTY;
+               cmd3.Parameters["@EQUIPMENT_CODE"].Value = string.IsNullOrWhiteSpace(defect.EQUIPMENT_CODE) ? (object)DBNull.Value : defect.EQUIPMENT_CODE;
                cmd3.ExecuteNonQuery();
             }
 
-            sql = @"UPDATE WORK_ORDER_MST
-                     SET 
-                     DEFECT_QTY = @DEFECT_QTY,
-                     UPDATE_TIME = @UPDATE_TIME,
-                     UPDATE_USER_ID = @UPDATE_USER_ID
-                     WHERE 
-                     WORK_ORDER_ID = @WORK_ORDER_ID";
-            SqlCommand cmd4 = new SqlCommand(sql, conn);
-            cmd4.Parameters.AddWithValue("@DEFECT_QTY", qty);
-            cmd4.Parameters.AddWithValue("@UPDATE_TIME", DateTime.Now);
-            cmd4.Parameters.AddWithValue("@UPDATE_USER_ID", dto.LAST_TRAN_USER_ID);
-            cmd4.Parameters.AddWithValue("@WORK_ORDER_ID", dto.WORK_ORDER_ID);
-            cmd4.Transaction = trans;
-            cmd4.ExecuteNonQuery();
-               
+            trans.Commit();
+            return true;
+         }
+         catch (Exception err)
+         {
+            trans.Rollback();
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return false;
+         }
+         finally
+         {
+            conn.Close();
+         }
+      }
+      public bool InsertInspect(LOT_STS_DTO dto, List<LOT_INSPECT_HIS_DTO> inspects)
+      {
+         conn.Open();
+         SqlTransaction trans = conn.BeginTransaction();
+         try
+         {
+            string sql = @"UPDATE LOT_STS
+                           SET 
+                           LAST_TRAN_CODE = @LAST_TRAN_CODE,
+                           LAST_TRAN_TIME = @LAST_TRAN_TIME,
+                           LAST_TRAN_USER_ID = @LAST_TRAN_USER_ID,
+                           LAST_TRAN_COMMENT = @LAST_TRAN_COMMENT, 
+                           LAST_HIST_SEQ = @LAST_HIST_SEQ
+                           WHERE 
+                           LOT_ID = @LOT_ID";
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@LOT_ID", dto.LOT_ID);
+            cmd.Parameters.AddWithValue("@LAST_TRAN_CODE", dto.LAST_TRAN_CODE);
+            cmd.Parameters.AddWithValue("@LAST_TRAN_TIME", dto.LAST_TRAN_TIME);
+            cmd.Parameters.AddWithValue("@LAST_TRAN_USER_ID", dto.LAST_TRAN_USER_ID);
+            cmd.Parameters.AddWithValue("@LAST_TRAN_COMMENT", dto.LAST_TRAN_COMMENT);
+            cmd.Parameters.AddWithValue("@LAST_HIST_SEQ", dto.LAST_HIST_SEQ);
+
+            cmd.Transaction = trans;
+            cmd.ExecuteNonQuery();
+            sql = @"INSERT INTO LOT_HIS
+                    (
+                    LOT_ID, HIST_SEQ, TRAN_TIME, TRAN_CODE, LOT_DESC,
+                    PRODUCT_CODE, OPERATION_CODE, STORE_CODE, LOT_QTY,
+                    CREATE_QTY, OPER_IN_QTY, START_FLAG, START_QTY, 
+                    START_TIME, START_EQUIPMENT_CODE, END_FLAG, END_TIME,
+                    END_EQUIPMENT_CODE, SHIP_FLAG, SHIP_CODE, SHIP_TIME, 
+                    PRODUCTION_TIME, CREATE_TIME, OPER_IN_TIME, WORK_ORDER_ID,
+                    LOT_DELETE_FLAG, LOT_DELETE_CODE, LOT_DELETE_TIME, WORK_DATE,
+                    TRAN_USER_ID, TRAN_COMMENT, OLD_PRODUCT_CODE, OLD_OPERATION_CODE,
+                    OLD_STORE_CODE, OLD_LOT_QTY
+                    ) 
+                    VALUES 
+                    (
+                    @LOT_ID, @HIST_SEQ, @TRAN_TIME, @TRAN_CODE, @LOT_DESC, 
+                    @PRODUCT_CODE, @OPERATION_CODE, @STORE_CODE, @LOT_QTY, 
+                    @CREATE_QTY, @OPER_IN_QTY, @START_FLAG, @START_QTY, 
+                    @START_TIME, @START_EQUIPMENT_CODE, @END_FLAG, @END_TIME, 
+                    @END_EQUIPMENT_CODE, @SHIP_FLAG, @SHIP_CODE, @SHIP_TIME, 
+                    @PRODUCTION_TIME, @CREATE_TIME, @OPER_IN_TIME, @WORK_ORDER_ID,
+                    @LOT_DELETE_FLAG, @LOT_DELETE_CODE, @LOT_DELETE_TIME, @WORK_DATE, 
+                    @TRAN_USER_ID, @TRAN_COMMENT, @OLD_PRODUCT_CODE, @OLD_OPERATION_CODE,
+                    @OLD_STORE_CODE, @OLD_LOT_QTY
+                    )";
+            SqlCommand cmd2 = Helper.LotHisCmd(dto);
+            cmd2.Connection = conn;
+            cmd2.CommandText = sql;
+            cmd2.Transaction = trans;
+            cmd2.ExecuteNonQuery();
+
+            sql = @"DECLARE @SEQ INT
+                        SET @SEQ = (SELECT CASE WHEN (SELECT COUNT(*) FROM LOT_INSPECT_HIS WHERE LOT_ID = @LOT_ID) IS NULL 
+                        THEN 0 ELSE (SELECT COUNT(*) FROM LOT_INSPECT_HIS WHERE LOT_ID = @LOT_ID) END + 1)
+                   INSERT INTO LOT_INSPECT_HIS
+                        (LOT_ID, HIST_SEQ, INSPECT_ITEM_CODE, INSPECT_ITEM_NAME, VALUE_TYPE, SPEC_LSL, SPEC_TARGET, SPEC_USL,
+					         INSPECT_VALUE, INSPECT_RESULT, TRAN_TIME, WORK_DATE, PRODUCT_CODE, OPERATION_CODE, STORE_CODE,
+					         EQUIPMENT_CODE, TRAN_USER_ID, TRAN_COMMENT)
+                   VALUES 
+                       (@LOT_ID, @SEQ, @INSPECT_ITEM_CODE, @INSPECT_ITEM_NAME, @VALUE_TYPE, @SPEC_LSL, @SPEC_TARGET, 
+					        @SPEC_USL, @INSPECT_VALUE, @INSPECT_RESULT, @TRAN_TIME, @WORK_DATE, @PRODUCT_CODE, @OPERATION_CODE, 
+					        @STORE_CODE, @EQUIPMENT_CODE, @TRAN_USER_ID, @TRAN_COMMENT)";
+            SqlCommand cmd3 = new SqlCommand(sql, conn);
+            cmd3.Transaction = trans;
+            cmd3.Parameters.AddWithValue("@LOT_ID", dto.LOT_ID);
+            cmd3.Parameters.Add(new SqlParameter("@INSPECT_ITEM_CODE", SqlDbType.VarChar));
+            cmd3.Parameters.Add(new SqlParameter("@INSPECT_ITEM_NAME", SqlDbType.VarChar));
+            cmd3.Parameters.Add(new SqlParameter("@VALUE_TYPE", SqlDbType.Char));
+            cmd3.Parameters.Add(new SqlParameter("@SPEC_LSL", SqlDbType.VarChar));
+            cmd3.Parameters.Add(new SqlParameter("@SPEC_TARGET", SqlDbType.VarChar));
+            cmd3.Parameters.Add(new SqlParameter("@SPEC_USL", SqlDbType.VarChar));
+            cmd3.Parameters.Add(new SqlParameter("@INSPECT_VALUE", SqlDbType.VarChar));
+            cmd3.Parameters.Add(new SqlParameter("@INSPECT_RESULT", SqlDbType.VarChar));
+            cmd3.Parameters.AddWithValue("@TRAN_TIME", dto.LAST_TRAN_TIME);
+            cmd3.Parameters.AddWithValue("@WORK_DATE", DateTime.Now.ToString("yyyyMMdd"));
+            cmd3.Parameters.AddWithValue("@PRODUCT_CODE", string.IsNullOrWhiteSpace(dto.PRODUCT_CODE) ? (object)DBNull.Value : dto.PRODUCT_CODE);
+            cmd3.Parameters.AddWithValue("@OPERATION_CODE", string.IsNullOrWhiteSpace(dto.OPERATION_CODE) ? (object)DBNull.Value : dto.OPERATION_CODE);
+            cmd3.Parameters.AddWithValue("@STORE_CODE", string.IsNullOrWhiteSpace(dto.STORE_CODE) ? (object)DBNull.Value : dto.STORE_CODE);
+            cmd3.Parameters.Add(new SqlParameter("@EQUIPMENT_CODE", SqlDbType.VarChar));
+            cmd3.Parameters.AddWithValue("@TRAN_USER_ID", string.IsNullOrWhiteSpace(dto.LAST_TRAN_USER_ID) ? (object)DBNull.Value : dto.LAST_TRAN_USER_ID);
+            cmd3.Parameters.AddWithValue("@TRAN_COMMENT", string.IsNullOrWhiteSpace(dto.LAST_TRAN_COMMENT) ? (object)DBNull.Value : dto.LAST_TRAN_COMMENT);
+            foreach (var inspect in inspects)
+            {
+               cmd3.Parameters["@INSPECT_ITEM_CODE"].Value = string.IsNullOrWhiteSpace(inspect.INSPECT_ITEM_CODE) ? (object)DBNull.Value : inspect.INSPECT_ITEM_CODE;
+               cmd3.Parameters["@INSPECT_ITEM_NAME"].Value = string.IsNullOrWhiteSpace(inspect.INSPECT_ITEM_NAME) ? (object)DBNull.Value : inspect.INSPECT_ITEM_NAME;
+               cmd3.Parameters["@VALUE_TYPE"].Value = inspect.VALUE_TYPE == '\0' ? (object)DBNull.Value : inspect.VALUE_TYPE;
+               cmd3.Parameters["@SPEC_LSL"].Value = string.IsNullOrWhiteSpace(inspect.SPEC_LSL) ? (object)DBNull.Value : inspect.SPEC_LSL;
+               cmd3.Parameters["@SPEC_TARGET"].Value = string.IsNullOrWhiteSpace(inspect.SPEC_TARGET) ? (object)DBNull.Value : inspect.SPEC_TARGET;
+               cmd3.Parameters["@SPEC_USL"].Value = string.IsNullOrWhiteSpace(inspect.SPEC_USL) ? (object)DBNull.Value : inspect.SPEC_USL;
+               cmd3.Parameters["@INSPECT_VALUE"].Value = string.IsNullOrWhiteSpace(inspect.INSPECT_VALUE) ? (object)DBNull.Value : inspect.INSPECT_VALUE;
+               cmd3.Parameters["@INSPECT_RESULT"].Value = string.IsNullOrWhiteSpace(inspect.INSPECT_RESULT) ? (object)DBNull.Value : inspect.INSPECT_RESULT;
+               cmd3.Parameters["@EQUIPMENT_CODE"].Value = string.IsNullOrWhiteSpace(inspect.EQUIPMENT_CODE) ? (object)DBNull.Value : inspect.EQUIPMENT_CODE;
+               cmd3.ExecuteNonQuery();
+            }
+
             trans.Commit();
             return true;
          }

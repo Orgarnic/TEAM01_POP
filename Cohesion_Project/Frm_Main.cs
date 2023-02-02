@@ -46,7 +46,7 @@ namespace Cohesion_Project
       private void button11_Click(object sender, EventArgs e)
       {
          Activte_BtnChanged(sender as Button);
-         Frm_Inspect frm = new Frm_Inspect();
+         Frm_InspectFlag frm = new Frm_InspectFlag();
          frm.WindowState = FormWindowState.Maximized;
          frm.MdiParent = this;
          Lbl_MenuText.Text = frm.Text;
@@ -128,7 +128,7 @@ namespace Cohesion_Project
       private void button8_Click(object sender, EventArgs e)
       {
          Activte_BtnChanged(sender as Button);
-         Frm_Materiar frm = new Frm_Materiar();
+         Frm_MateriarFlag frm = new Frm_MateriarFlag();
          frm.WindowState = FormWindowState.Maximized;
          frm.MdiParent = this;
          Lbl_MenuText.Text = frm.Text;

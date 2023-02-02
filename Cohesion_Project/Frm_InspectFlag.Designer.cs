@@ -1,7 +1,7 @@
 ﻿
 namespace Cohesion_Project
 {
-   partial class Frm_WorkStart
+   partial class Frm_InspectFlag
    {
       /// <summary>
       /// 필수 디자이너 변수입니다.
@@ -41,14 +41,12 @@ namespace Cohesion_Project
          this.btnStart = new System.Windows.Forms.Button();
          this.Btn_Close = new System.Windows.Forms.Button();
          this.panel3 = new System.Windows.Forms.Panel();
-         this.cboEquipment = new System.Windows.Forms.ComboBox();
-         this.label12 = new System.Windows.Forms.Label();
-         this.txtEquipment = new System.Windows.Forms.TextBox();
-         this.label13 = new System.Windows.Forms.Label();
-         this.label14 = new System.Windows.Forms.Label();
-         this.label3 = new System.Windows.Forms.Label();
+         this.panel5 = new System.Windows.Forms.Panel();
+         this.dgvInspect = new System.Windows.Forms.DataGridView();
          this.txtDesc = new System.Windows.Forms.TextBox();
-         this.label17 = new System.Windows.Forms.Label();
+         this.label20 = new System.Windows.Forms.Label();
+         this.label9 = new System.Windows.Forms.Label();
+         this.label3 = new System.Windows.Forms.Label();
          this.panel2 = new System.Windows.Forms.Panel();
          this.txtCustomerName = new System.Windows.Forms.TextBox();
          this.label32 = new System.Windows.Forms.Label();
@@ -79,6 +77,8 @@ namespace Cohesion_Project
          this.flwOperation = new System.Windows.Forms.FlowLayoutPanel();
          this.tableLayoutPanel1.SuspendLayout();
          this.panel3.SuspendLayout();
+         this.panel5.SuspendLayout();
+         ((System.ComponentModel.ISupportInitialize)(this.dgvInspect)).BeginInit();
          this.panel2.SuspendLayout();
          this.panel1.SuspendLayout();
          this.panel4.SuspendLayout();
@@ -237,7 +237,7 @@ namespace Cohesion_Project
          this.btnStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
          this.btnStart.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
          this.btnStart.ForeColor = System.Drawing.Color.White;
-         this.btnStart.Location = new System.Drawing.Point(1156, 832);
+         this.btnStart.Location = new System.Drawing.Point(1156, 944);
          this.btnStart.Margin = new System.Windows.Forms.Padding(0);
          this.btnStart.Name = "btnStart";
          this.btnStart.Size = new System.Drawing.Size(150, 40);
@@ -254,7 +254,7 @@ namespace Cohesion_Project
          this.Btn_Close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
          this.Btn_Close.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
          this.Btn_Close.ForeColor = System.Drawing.Color.White;
-         this.Btn_Close.Location = new System.Drawing.Point(1315, 832);
+         this.Btn_Close.Location = new System.Drawing.Point(1315, 944);
          this.Btn_Close.Margin = new System.Windows.Forms.Padding(0);
          this.Btn_Close.Name = "Btn_Close";
          this.Btn_Close.Size = new System.Drawing.Size(150, 40);
@@ -269,74 +269,75 @@ namespace Cohesion_Project
             | System.Windows.Forms.AnchorStyles.Right)));
          this.panel3.BackColor = System.Drawing.Color.White;
          this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-         this.panel3.Controls.Add(this.cboEquipment);
-         this.panel3.Controls.Add(this.label12);
-         this.panel3.Controls.Add(this.txtEquipment);
-         this.panel3.Controls.Add(this.label13);
-         this.panel3.Controls.Add(this.label14);
-         this.panel3.Controls.Add(this.label3);
+         this.panel3.Controls.Add(this.panel5);
          this.panel3.Controls.Add(this.txtDesc);
-         this.panel3.Controls.Add(this.label17);
+         this.panel3.Controls.Add(this.label20);
+         this.panel3.Controls.Add(this.label9);
+         this.panel3.Controls.Add(this.label3);
          this.panel3.Location = new System.Drawing.Point(12, 607);
          this.panel3.Name = "panel3";
-         this.panel3.Size = new System.Drawing.Size(1454, 218);
+         this.panel3.Size = new System.Drawing.Size(1454, 330);
          this.panel3.TabIndex = 33;
          // 
-         // cboEquipment
+         // panel5
          // 
-         this.cboEquipment.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-         this.cboEquipment.FormattingEnabled = true;
-         this.cboEquipment.Location = new System.Drawing.Point(122, 47);
-         this.cboEquipment.Name = "cboEquipment";
-         this.cboEquipment.Size = new System.Drawing.Size(390, 29);
-         this.cboEquipment.TabIndex = 39;
-         this.cboEquipment.SelectedIndexChanged += new System.EventHandler(this.cboEquipment_SelectedIndexChanged);
+         this.panel5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+         this.panel5.Controls.Add(this.dgvInspect);
+         this.panel5.Location = new System.Drawing.Point(3, 33);
+         this.panel5.Name = "panel5";
+         this.panel5.Size = new System.Drawing.Size(1446, 217);
+         this.panel5.TabIndex = 81;
          // 
-         // label12
+         // dgvInspect
          // 
-         this.label12.BackColor = System.Drawing.Color.Transparent;
-         this.label12.Font = new System.Drawing.Font("나눔고딕", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-         this.label12.ForeColor = System.Drawing.Color.Black;
-         this.label12.Location = new System.Drawing.Point(13, 46);
-         this.label12.Name = "label12";
-         this.label12.Size = new System.Drawing.Size(138, 30);
-         this.label12.TabIndex = 21;
-         this.label12.Text = "◾ 설비";
-         this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+         this.dgvInspect.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+         this.dgvInspect.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+         this.dgvInspect.Location = new System.Drawing.Point(16, 14);
+         this.dgvInspect.Name = "dgvInspect";
+         this.dgvInspect.RowTemplate.Height = 23;
+         this.dgvInspect.Size = new System.Drawing.Size(1160, 97);
+         this.dgvInspect.TabIndex = 74;
+         this.dgvInspect.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvInspect_CellEndEdit);
+         this.dgvInspect.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.DgvInspect_EditingControlShowing);
          // 
-         // txtEquipment
+         // txtDesc
          // 
-         this.txtEquipment.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-         this.txtEquipment.Enabled = false;
-         this.txtEquipment.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-         this.txtEquipment.Location = new System.Drawing.Point(660, 48);
-         this.txtEquipment.Name = "txtEquipment";
-         this.txtEquipment.Size = new System.Drawing.Size(265, 29);
-         this.txtEquipment.TabIndex = 30;
+         this.txtDesc.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+         this.txtDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+         this.txtDesc.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+         this.txtDesc.Location = new System.Drawing.Point(126, 268);
+         this.txtDesc.Multiline = true;
+         this.txtDesc.Name = "txtDesc";
+         this.txtDesc.Size = new System.Drawing.Size(1311, 40);
+         this.txtDesc.TabIndex = 62;
          // 
-         // label13
+         // label20
          // 
-         this.label13.BackColor = System.Drawing.Color.Transparent;
-         this.label13.Font = new System.Drawing.Font("나눔고딕", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-         this.label13.ForeColor = System.Drawing.Color.Black;
-         this.label13.Location = new System.Drawing.Point(551, 47);
-         this.label13.Name = "label13";
-         this.label13.Size = new System.Drawing.Size(138, 30);
-         this.label13.TabIndex = 28;
-         this.label13.Text = "◾ 설비명";
-         this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+         this.label20.BackColor = System.Drawing.Color.Transparent;
+         this.label20.Font = new System.Drawing.Font("나눔고딕", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+         this.label20.ForeColor = System.Drawing.Color.Black;
+         this.label20.Location = new System.Drawing.Point(17, 267);
+         this.label20.Name = "label20";
+         this.label20.Size = new System.Drawing.Size(138, 30);
+         this.label20.TabIndex = 61;
+         this.label20.Text = "◾ 생산 주석";
+         this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
          // 
-         // label14
+         // label9
          // 
-         this.label14.BackColor = System.Drawing.Color.Transparent;
-         this.label14.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-         this.label14.ForeColor = System.Drawing.Color.Black;
-         this.label14.Location = new System.Drawing.Point(551, 45);
-         this.label14.Name = "label14";
-         this.label14.Size = new System.Drawing.Size(138, 30);
-         this.label14.TabIndex = 27;
-         this.label14.Text = "◾ label4";
-         this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+         this.label9.BackColor = System.Drawing.Color.Transparent;
+         this.label9.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+         this.label9.ForeColor = System.Drawing.Color.Black;
+         this.label9.Location = new System.Drawing.Point(16, 265);
+         this.label9.Name = "label9";
+         this.label9.Size = new System.Drawing.Size(138, 30);
+         this.label9.TabIndex = 60;
+         this.label9.Text = "◾ label4";
+         this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
          // 
          // label3
          // 
@@ -350,31 +351,6 @@ namespace Cohesion_Project
          this.label3.TabIndex = 1;
          this.label3.Text = "작업 공정 정보";
          this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-         // 
-         // txtDesc
-         // 
-         this.txtDesc.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-         this.txtDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-         this.txtDesc.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-         this.txtDesc.Location = new System.Drawing.Point(122, 101);
-         this.txtDesc.Multiline = true;
-         this.txtDesc.Name = "txtDesc";
-         this.txtDesc.Size = new System.Drawing.Size(1311, 95);
-         this.txtDesc.TabIndex = 38;
-         // 
-         // label17
-         // 
-         this.label17.BackColor = System.Drawing.Color.Transparent;
-         this.label17.Font = new System.Drawing.Font("나눔고딕", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-         this.label17.ForeColor = System.Drawing.Color.Black;
-         this.label17.Location = new System.Drawing.Point(13, 101);
-         this.label17.Name = "label17";
-         this.label17.Size = new System.Drawing.Size(138, 30);
-         this.label17.TabIndex = 22;
-         this.label17.Text = "◾ 작업 주석";
-         this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
          // 
          // panel2
          // 
@@ -720,10 +696,10 @@ namespace Cohesion_Project
          this.flwOperation.Size = new System.Drawing.Size(1454, 32);
          this.flwOperation.TabIndex = 3;
          // 
-         // Frm_WorkStart
+         // Frm_InspectFlag
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
-         this.ClientSize = new System.Drawing.Size(1478, 878);
+         this.ClientSize = new System.Drawing.Size(1478, 990);
          this.Controls.Add(this.panel4);
          this.Controls.Add(this.tableLayoutPanel1);
          this.Controls.Add(this.btnStart);
@@ -731,12 +707,14 @@ namespace Cohesion_Project
          this.Controls.Add(this.panel3);
          this.Controls.Add(this.panel2);
          this.Controls.Add(this.panel1);
-         this.Name = "Frm_WorkStart";
-         this.Text = "작업 시작";
+         this.Name = "Frm_InspectFlag";
+         this.Text = "불량 등록";
          this.Load += new System.EventHandler(this.Frm_WORK_ORDER_Load);
          this.tableLayoutPanel1.ResumeLayout(false);
          this.panel3.ResumeLayout(false);
          this.panel3.PerformLayout();
+         this.panel5.ResumeLayout(false);
+         ((System.ComponentModel.ISupportInitialize)(this.dgvInspect)).EndInit();
          this.panel2.ResumeLayout(false);
          this.panel2.PerformLayout();
          this.panel1.ResumeLayout(false);
@@ -765,10 +743,6 @@ namespace Cohesion_Project
       protected System.Windows.Forms.Label label2;
       protected System.Windows.Forms.Panel panel1;
       protected System.Windows.Forms.Label label1;
-      protected System.Windows.Forms.Label label12;
-      protected System.Windows.Forms.TextBox txtEquipment;
-      protected System.Windows.Forms.Label label13;
-      protected System.Windows.Forms.TextBox txtDesc;
       protected System.Windows.Forms.Label label22;
       protected System.Windows.Forms.TextBox txtProductCode;
       protected System.Windows.Forms.Label label26;
@@ -784,17 +758,19 @@ namespace Cohesion_Project
       protected System.Windows.Forms.TextBox txtLotDesc;
       protected System.Windows.Forms.TextBox txtCustomerName;
       protected System.Windows.Forms.Label label32;
-      private System.Windows.Forms.ComboBox cboEquipment;
-      protected System.Windows.Forms.Label label17;
       protected System.Windows.Forms.Label label21;
       private System.Windows.Forms.Panel panel4;
       private System.Windows.Forms.Button btnOrder;
       protected System.Windows.Forms.TextBox txtOrder;
       protected System.Windows.Forms.Label label19;
-      protected System.Windows.Forms.Label label14;
       protected System.Windows.Forms.TextBox txtTotal;
       protected System.Windows.Forms.Label label25;
       protected System.Windows.Forms.Label label4;
       private System.Windows.Forms.FlowLayoutPanel flwOperation;
+      protected System.Windows.Forms.TextBox txtDesc;
+      protected System.Windows.Forms.Label label20;
+      protected System.Windows.Forms.Label label9;
+      private System.Windows.Forms.Panel panel5;
+      private System.Windows.Forms.DataGridView dgvInspect;
    }
 }

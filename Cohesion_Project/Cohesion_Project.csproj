@@ -75,6 +75,18 @@
     <Compile Include="Base\Frm_BasePop.Designer.cs">
       <DependentUpon>Frm_BasePop.cs</DependentUpon>
     </Compile>
+    <Compile Include="Frm_MateriarFlag.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm_MateriarFlag.Designer.cs">
+      <DependentUpon>Frm_MateriarFlag.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frm_InspectFlag.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm_InspectFlag.Designer.cs">
+      <DependentUpon>Frm_InspectFlag.cs</DependentUpon>
+    </Compile>
     <Compile Include="Frm_InspectLookUp.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,18 +110,6 @@
     </Compile>
     <Compile Include="Frm_WorkEnd.Designer.cs">
       <DependentUpon>Frm_WorkEnd.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Frm_Materiar.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Frm_Materiar.Designer.cs">
-      <DependentUpon>Frm_Materiar.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Frm_Inspect.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Frm_Inspect.Designer.cs">
-      <DependentUpon>Frm_Inspect.cs</DependentUpon>
     </Compile>
     <Compile Include="Frm_LookUp.cs">
       <SubType>Form</SubType>
@@ -198,6 +198,12 @@
     <EmbeddedResource Include="Base\Frm_BasePop.resx">
       <DependentUpon>Frm_BasePop.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Frm_MateriarFlag.resx">
+      <DependentUpon>Frm_MateriarFlag.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm_InspectFlag.resx">
+      <DependentUpon>Frm_InspectFlag.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Frm_InspectLookUp.resx">
       <DependentUpon>Frm_InspectLookUp.cs</DependentUpon>
     </EmbeddedResource>
@@ -209,12 +215,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Frm_WorkEnd.resx">
       <DependentUpon>Frm_WorkEnd.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Frm_Materiar.resx">
-      <DependentUpon>Frm_Materiar.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Frm_Inspect.resx">
-      <DependentUpon>Frm_Inspect.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Frm_LookUp.resx">
       <DependentUpon>Frm_LookUp.cs</DependentUpon>
