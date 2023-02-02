@@ -16,7 +16,6 @@ namespace Cohesion_Project
       private List<PRODUCT_OPERATION_REL_DTO> operations = null;
       private List<LOT_STS_DTO> Lots = null;
       private List<LOT_STS_DTO> LotsMaterialr = null;
-      private List<BOM_MST_DTO> materiars;
       private LOT_STS_DTO Lot = null;
       private Srv_Work srvWork = new Srv_Work();
       private Srv_Flag srvFlag = new Srv_Flag();
@@ -45,8 +44,8 @@ namespace Cohesion_Project
       private void DgvInit()
       {
          DgvUtil.DgvInit(dgvMateriar);
-         DgvUtil.AddTextCol(dgvMateriar, "자 품번", "CHILD_PRODUCT_CODE", width: 200, readOnly: true, frozen: true);
-         DgvUtil.AddTextCol(dgvMateriar, "자 품명", "CHILD_PRODUCT_NAME", width: 200, readOnly: true, frozen: true);
+         DgvUtil.AddTextCol(dgvMateriar, "자 품번", "PRODUCT_CODE", width: 200, readOnly: true, frozen: true);
+         DgvUtil.AddTextCol(dgvMateriar, "자 품명", "PRODUCT_NAME", width: 200, readOnly: true, frozen: true);
          DgvUtil.AddTextCol(dgvMateriar, "단위 수량", "REQUIRE_QTY", width: 200, readOnly: true, frozen: true);
          DgvUtil.AddTextCol(dgvMateriar, "자재 LOT", "LOT_ID", width: 200);
          DgvUtil.AddTextCol(dgvMateriar, "자재 LOT 수량", "LOT_QTY", width: 200, readOnly: true);
@@ -130,60 +129,44 @@ namespace Cohesion_Project
             }
             else
                MboxUtil.MboxError("공정 진행정보를 불러오는데 오류가 발생했습니다.");
-            materiars = srvFlag.SelectMateriars(Lot.PRODUCT_CODE);
-            string lots = null;
-            foreach (var item in materiars)
-            {
-               lots += "'" + item.LOT_ID + "',";
-            }
-            LotsMaterialr = srvFlag.SelectMateriarLot(lots.TrimEnd(','));
-            List<BOM_MST_DTO> temp = new List<BOM_MST_DTO>();
-            foreach (var item in materiars)
-            {
-               if (temp.Any((a) => a.CHILD_PRODUCT_CODE.Equals(item.CHILD_PRODUCT_CODE)))
-               {
-                  temp.Find((t) => t.CHILD_PRODUCT_CODE.Equals(item.CHILD_PRODUCT_CODE)).LOT_QTY_TOTAL += item.LOT_QTY;
-                  continue ;
-               }
-               item.LOT_QTY_TOTAL = item.LOT_QTY;
-               temp.Add(item);
-            }
+            LotsMaterialr = srvFlag.SelectLotMateriars(Lot.PRODUCT_CODE);
+            dgvMateriar.DataSource = null;
+            var temp = LotsMaterialr.Distinct();
             dgvMateriar.Rows.Clear();
             foreach (var item in temp)
-            {
-               DataGridViewRow row = new DataGridViewRow();
-               DataGridViewTextBoxCell cell = new DataGridViewTextBoxCell();
-               cell.Value = item.CHILD_PRODUCT_CODE;
-               row.Cells.Add(cell);
-               DataGridViewTextBoxCell cell2 = new DataGridViewTextBoxCell();
-               cell2.Value = item.CHILD_PRODUCT_NAME;
-               row.Cells.Add(cell2);
-               DataGridViewTextBoxCell cell3 = new DataGridViewTextBoxCell();
-               cell3.Value = item.REQUIRE_QTY;
-               row.Cells.Add(cell3);
-               DataGridViewComboBoxCell col04 = new DataGridViewComboBoxCell();
-               List<BOM_MST_DTO> tmp = materiars.FindAll((m) => m.CHILD_PRODUCT_CODE.Equals(item.CHILD_PRODUCT_CODE));
-               string[] str = new string[tmp.Count + 1];
-               str[0] = "선택";
-               for (int i = 0; i < tmp.Count; i++)
-                  str[i + 1] = tmp[i].LOT_ID;
-               col04.Items.AddRange(str);
-               col04.Value = "선택";
-               row.Cells.Add(col04);
-               DataGridViewTextBoxCell cell5 = new DataGridViewTextBoxCell();
-               cell5.Value = 0;
-               row.Cells.Add(cell5);
-               DataGridViewTextBoxCell cell6 = new DataGridViewTextBoxCell();
-               cell6.Value = item.LOT_QTY_TOTAL;
-               row.Cells.Add(cell6);
-               dgvMateriar.Rows.Add(row);
-            }
+               Row(item);
          }
          else
          {
             MboxUtil.MboxError("LOT 이력을 불러오는데 오류가 발생했습니다.");
             return;
          }
+      }
+      private void Row(LOT_STS_DTO item)
+      {
+         DataGridViewRow row = new DataGridViewRow();
+         DataGridViewTextBoxCell cell = new DataGridViewTextBoxCell();
+         cell.Value = item.PRODUCT_CODE;
+         row.Cells.Add(cell);
+         DataGridViewTextBoxCell cell2 = new DataGridViewTextBoxCell();
+         cell2.Value = item.PRODUCT_NAME;
+         row.Cells.Add(cell2);
+         DataGridViewTextBoxCell cell3 = new DataGridViewTextBoxCell();
+         cell3.Value = item.REQUIRE_QTY;
+         row.Cells.Add(cell3);
+         DataGridViewComboBoxCell col04 = new DataGridViewComboBoxCell();
+         List<string> items = new List<string> { "선택" };
+         LotsMaterialr.Where((m) => m.PRODUCT_CODE.Equals(item.PRODUCT_CODE)).Select((m) => m.LOT_ID).ToList().ForEach((l) => items.Add(l));
+         col04.Items.AddRange(items.ToArray());
+         col04.Value = "선택";
+         row.Cells.Add(col04);
+         DataGridViewTextBoxCell cell5 = new DataGridViewTextBoxCell();
+         cell5.Value = 0;
+         row.Cells.Add(cell5);
+         DataGridViewTextBoxCell cell6 = new DataGridViewTextBoxCell();
+         cell6.Value = (from meaterial in LotsMaterialr where meaterial.PRODUCT_CODE.Equals(item.PRODUCT_CODE) select meaterial).Sum(m => m.LOT_QTY);
+         row.Cells.Add(cell6);
+         dgvMateriar.Rows.Add(row);
       }
       private void dgvMateriar_CellEndEdit(object sender, DataGridViewCellEventArgs e)
       {
@@ -197,7 +180,7 @@ namespace Cohesion_Project
          }
          else
          {
-            decimal logQty = materiars.Find((m) => m.LOT_ID.Equals(type)).LOT_QTY;
+            decimal logQty = LotsMaterialr.Find((m) => m.LOT_ID.Equals(type)).LOT_QTY;
             dgvMateriar["LOT_QTY", row].Value = logQty;
          }
          
@@ -214,7 +197,7 @@ namespace Cohesion_Project
             MboxUtil.MboxWarn("LOT 정보를 선택해주십시오.");
             return;
          }
-         if (materiars == null)
+         if (LotsMaterialr == null)
          {
             MboxUtil.MboxWarn("자 품번 LOT가 존재하지 않습니다.");
             return;
