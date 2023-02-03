@@ -75,6 +75,7 @@ namespace Cohesion_Project
          this.label21 = new System.Windows.Forms.Label();
          this.panel4 = new System.Windows.Forms.Panel();
          this.flwOperation = new System.Windows.Forms.FlowLayoutPanel();
+         this.label10 = new System.Windows.Forms.Label();
          this.tableLayoutPanel1.SuspendLayout();
          this.panel3.SuspendLayout();
          this.panel5.SuspendLayout();
@@ -242,7 +243,7 @@ namespace Cohesion_Project
          this.btnStart.Name = "btnStart";
          this.btnStart.Size = new System.Drawing.Size(150, 40);
          this.btnStart.TabIndex = 35;
-         this.btnStart.Text = "시작";
+         this.btnStart.Text = "입력";
          this.btnStart.UseVisualStyleBackColor = false;
          this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
          // 
@@ -274,6 +275,7 @@ namespace Cohesion_Project
          this.panel3.Controls.Add(this.label20);
          this.panel3.Controls.Add(this.label9);
          this.panel3.Controls.Add(this.label3);
+         this.panel3.Controls.Add(this.label10);
          this.panel3.Location = new System.Drawing.Point(12, 607);
          this.panel3.Name = "panel3";
          this.panel3.Size = new System.Drawing.Size(1454, 330);
@@ -284,9 +286,9 @@ namespace Cohesion_Project
          this.panel5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
          this.panel5.Controls.Add(this.dgvInspect);
-         this.panel5.Location = new System.Drawing.Point(3, 33);
+         this.panel5.Location = new System.Drawing.Point(126, 47);
          this.panel5.Name = "panel5";
-         this.panel5.Size = new System.Drawing.Size(1446, 217);
+         this.panel5.Size = new System.Drawing.Size(1311, 203);
          this.panel5.TabIndex = 81;
          // 
          // dgvInspect
@@ -297,7 +299,7 @@ namespace Cohesion_Project
          this.dgvInspect.Location = new System.Drawing.Point(16, 14);
          this.dgvInspect.Name = "dgvInspect";
          this.dgvInspect.RowTemplate.Height = 23;
-         this.dgvInspect.Size = new System.Drawing.Size(1160, 97);
+         this.dgvInspect.Size = new System.Drawing.Size(1025, 97);
          this.dgvInspect.TabIndex = 74;
          this.dgvInspect.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvInspect_CellEndEdit);
          this.dgvInspect.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.DgvInspect_EditingControlShowing);
@@ -697,6 +699,18 @@ namespace Cohesion_Project
          this.flwOperation.Size = new System.Drawing.Size(1454, 32);
          this.flwOperation.TabIndex = 3;
          // 
+         // label10
+         // 
+         this.label10.BackColor = System.Drawing.Color.Transparent;
+         this.label10.Font = new System.Drawing.Font("나눔고딕", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+         this.label10.ForeColor = System.Drawing.Color.Black;
+         this.label10.Location = new System.Drawing.Point(16, 47);
+         this.label10.Name = "label10";
+         this.label10.Size = new System.Drawing.Size(138, 30);
+         this.label10.TabIndex = 82;
+         this.label10.Text = "◾ 결과 입력";
+         this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+         // 
          // Frm_InspectFlag
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -773,5 +787,6 @@ namespace Cohesion_Project
       protected System.Windows.Forms.Label label9;
       private System.Windows.Forms.Panel panel5;
       private System.Windows.Forms.DataGridView dgvInspect;
+      protected System.Windows.Forms.Label label10;
    }
 }

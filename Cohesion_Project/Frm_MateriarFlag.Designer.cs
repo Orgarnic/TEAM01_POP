@@ -75,6 +75,10 @@ namespace Cohesion_Project
          this.label21 = new System.Windows.Forms.Label();
          this.panel4 = new System.Windows.Forms.Panel();
          this.flwOperation = new System.Windows.Forms.FlowLayoutPanel();
+         this.panel6 = new System.Windows.Forms.Panel();
+         this.dgvMateriarInput = new System.Windows.Forms.DataGridView();
+         this.label10 = new System.Windows.Forms.Label();
+         this.label11 = new System.Windows.Forms.Label();
          this.tableLayoutPanel1.SuspendLayout();
          this.panel3.SuspendLayout();
          this.panel5.SuspendLayout();
@@ -82,6 +86,8 @@ namespace Cohesion_Project
          this.panel2.SuspendLayout();
          this.panel1.SuspendLayout();
          this.panel4.SuspendLayout();
+         this.panel6.SuspendLayout();
+         ((System.ComponentModel.ISupportInitialize)(this.dgvMateriarInput)).BeginInit();
          this.SuspendLayout();
          // 
          // tableLayoutPanel1
@@ -242,7 +248,7 @@ namespace Cohesion_Project
          this.btnStart.Name = "btnStart";
          this.btnStart.Size = new System.Drawing.Size(150, 40);
          this.btnStart.TabIndex = 35;
-         this.btnStart.Text = "시작";
+         this.btnStart.Text = "입력";
          this.btnStart.UseVisualStyleBackColor = false;
          this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
          // 
@@ -269,11 +275,14 @@ namespace Cohesion_Project
             | System.Windows.Forms.AnchorStyles.Right)));
          this.panel3.BackColor = System.Drawing.Color.White;
          this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+         this.panel3.Controls.Add(this.panel6);
          this.panel3.Controls.Add(this.panel5);
          this.panel3.Controls.Add(this.txtDesc);
          this.panel3.Controls.Add(this.label20);
          this.panel3.Controls.Add(this.label9);
          this.panel3.Controls.Add(this.label3);
+         this.panel3.Controls.Add(this.label11);
+         this.panel3.Controls.Add(this.label10);
          this.panel3.Location = new System.Drawing.Point(12, 607);
          this.panel3.Name = "panel3";
          this.panel3.Size = new System.Drawing.Size(1454, 330);
@@ -284,9 +293,9 @@ namespace Cohesion_Project
          this.panel5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
          this.panel5.Controls.Add(this.dgvMateriar);
-         this.panel5.Location = new System.Drawing.Point(3, 33);
+         this.panel5.Location = new System.Drawing.Point(125, 48);
          this.panel5.Name = "panel5";
-         this.panel5.Size = new System.Drawing.Size(1446, 217);
+         this.panel5.Size = new System.Drawing.Size(1312, 103);
          this.panel5.TabIndex = 81;
          // 
          // dgvMateriar
@@ -294,10 +303,10 @@ namespace Cohesion_Project
          this.dgvMateriar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
          this.dgvMateriar.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-         this.dgvMateriar.Location = new System.Drawing.Point(80, 43);
+         this.dgvMateriar.Location = new System.Drawing.Point(194, 15);
          this.dgvMateriar.Name = "dgvMateriar";
          this.dgvMateriar.RowTemplate.Height = 23;
-         this.dgvMateriar.Size = new System.Drawing.Size(1160, 97);
+         this.dgvMateriar.Size = new System.Drawing.Size(281, 72);
          this.dgvMateriar.TabIndex = 74;
          this.dgvMateriar.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMateriar_CellEndEdit);
          // 
@@ -695,6 +704,51 @@ namespace Cohesion_Project
          this.flwOperation.Size = new System.Drawing.Size(1454, 32);
          this.flwOperation.TabIndex = 3;
          // 
+         // panel6
+         // 
+         this.panel6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+         this.panel6.Controls.Add(this.dgvMateriarInput);
+         this.panel6.Location = new System.Drawing.Point(125, 150);
+         this.panel6.Name = "panel6";
+         this.panel6.Size = new System.Drawing.Size(1312, 103);
+         this.panel6.TabIndex = 82;
+         // 
+         // dgvMateriarInput
+         // 
+         this.dgvMateriarInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+         this.dgvMateriarInput.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+         this.dgvMateriarInput.Location = new System.Drawing.Point(194, 7);
+         this.dgvMateriarInput.Name = "dgvMateriarInput";
+         this.dgvMateriarInput.RowTemplate.Height = 23;
+         this.dgvMateriarInput.Size = new System.Drawing.Size(158, 62);
+         this.dgvMateriarInput.TabIndex = 74;
+         // 
+         // label10
+         // 
+         this.label10.BackColor = System.Drawing.Color.Transparent;
+         this.label10.Font = new System.Drawing.Font("나눔고딕", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+         this.label10.ForeColor = System.Drawing.Color.Black;
+         this.label10.Location = new System.Drawing.Point(17, 48);
+         this.label10.Name = "label10";
+         this.label10.Size = new System.Drawing.Size(138, 30);
+         this.label10.TabIndex = 83;
+         this.label10.Text = "◾ 자재 LOT";
+         this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+         // 
+         // label11
+         // 
+         this.label11.BackColor = System.Drawing.Color.Transparent;
+         this.label11.Font = new System.Drawing.Font("나눔고딕", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+         this.label11.ForeColor = System.Drawing.Color.Black;
+         this.label11.Location = new System.Drawing.Point(16, 152);
+         this.label11.Name = "label11";
+         this.label11.Size = new System.Drawing.Size(138, 30);
+         this.label11.TabIndex = 84;
+         this.label11.Text = "◾ 선택 LOT";
+         this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+         // 
          // Frm_MateriarFlag
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -719,6 +773,8 @@ namespace Cohesion_Project
          this.panel1.ResumeLayout(false);
          this.panel1.PerformLayout();
          this.panel4.ResumeLayout(false);
+         this.panel6.ResumeLayout(false);
+         ((System.ComponentModel.ISupportInitialize)(this.dgvMateriarInput)).EndInit();
          this.ResumeLayout(false);
 
       }
@@ -771,5 +827,9 @@ namespace Cohesion_Project
       protected System.Windows.Forms.Label label9;
       private System.Windows.Forms.Panel panel5;
       private System.Windows.Forms.DataGridView dgvMateriar;
+      private System.Windows.Forms.Panel panel6;
+      private System.Windows.Forms.DataGridView dgvMateriarInput;
+      protected System.Windows.Forms.Label label11;
+      protected System.Windows.Forms.Label label10;
    }
 }

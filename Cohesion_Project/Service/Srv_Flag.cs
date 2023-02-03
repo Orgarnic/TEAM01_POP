@@ -42,10 +42,10 @@ namespace Cohesion_Project
 
          return list;
       }
-      public List<LOT_STS_DTO> SelectLotMateriars(string prodId)
+      public List<LOT_STS_DTO> SelectLotMateriars(string prodId, string operation)
       {
          Flag_DAO dao = new Flag_DAO();
-         List<LOT_STS_DTO> list = dao.SelectLotMateriars(prodId);
+         List<LOT_STS_DTO> list = dao.SelectLotMateriars(prodId, operation);
          dao.Dispose();
 
          return list;

@@ -46,12 +46,12 @@ namespace Cohesion_Project
          DgvUtil.DgvInit(dgvInspect);
          DgvUtil.AddTextCol(dgvInspect, "검사 코드", "INSPECT_ITEM_CODE", width: 200, readOnly: true, frozen: true);
          DgvUtil.AddTextCol(dgvInspect, "검사 항목", "INSPECT_ITEM_NAME", width: 200, readOnly: true, frozen: true);
-         DgvUtil.AddTextCol(dgvInspect, "검사 유형", "VALUE_TYPE", width: 200, readOnly: true, frozen: true, align:1);
+         DgvUtil.AddTextCol(dgvInspect, "검사 유형", "VALUE_TYPE", width: 120, readOnly: true, frozen: true, align:1);
          DgvUtil.AddTextCol(dgvInspect, "스펙 하한", "SPEC_LSL", width: 200, readOnly: true, align: 1);
          DgvUtil.AddTextCol(dgvInspect, "스펙 타겟", "SPEC_TARGET", width: 200, readOnly: true, align: 1);
          DgvUtil.AddTextCol(dgvInspect, "스펙 상한", "SPEC_USL", width: 200, readOnly: true, align: 1);
          DgvUtil.AddTextCol(dgvInspect, "검사 데이터", "INPUT", width: 200, align: 1);
-         DgvUtil.AddTextCol(dgvInspect, "유효성", "Checked", width: 200, readOnly: true, align: 1);
+         DgvUtil.AddTextCol(dgvInspect, "유효성", "Checked", width: 120, readOnly: true, align: 1);
          dgvInspect.SelectionMode = DataGridViewSelectionMode.CellSelect;
          dgvInspect.Font = new Font("맑은 고딕", 12, FontStyle.Bold);
       }

@@ -53,6 +53,18 @@ namespace Cohesion_Project
          DgvUtil.AddTextCol(dgvMateriar, "자 품번 재고", "LOT_QTY_TOTAL", width: 200, readOnly: true);
          dgvMateriar.SelectionMode = DataGridViewSelectionMode.CellSelect;
          dgvMateriar.Font = new Font("맑은 고딕", 12, FontStyle.Bold);
+
+         DgvUtil.DgvInit(dgvMateriarInput);
+         DgvUtil.AddTextCol(dgvMateriarInput, "자 품번", "PRODUCT_CODE", width: 200, readOnly: true, frozen: true);
+         DgvUtil.AddTextCol(dgvMateriarInput, "자 품명", "PRODUCT_NAME", width: 200, readOnly: true, frozen: true);
+         DgvUtil.AddTextCol(dgvMateriarInput, "단위 수량", "REQUIRE_QTY", width: 200, readOnly: true, frozen: true);
+         DgvUtil.AddTextCol(dgvMateriarInput, "자재 LOT", "LOT_ID", width: 250, readOnly: true);
+         DgvUtil.AddTextCol(dgvMateriarInput, "자재 LOT 수량", "LOT_QTY", width: 200, readOnly: true);
+         DgvUtil.AddTextCol(dgvMateriarInput, "필요 LOT 수량", "TOTAL", width: 200, readOnly: true);
+         DgvUtil.AddTextCol(dgvMateriarInput, "자 품번 재고", "LOT_QTY_TOTAL", width: 200, readOnly: true);
+         dgvMateriarInput.SelectionMode = DataGridViewSelectionMode.CellSelect;
+         dgvMateriarInput.ColumnHeadersVisible = false;
+         dgvMateriarInput.Font = new Font("맑은 고딕", 12, FontStyle.Bold);
       }
       private void btnOrder_Click(object sender, EventArgs e)
       {
@@ -134,7 +146,7 @@ namespace Cohesion_Project
             }
             else
                MboxUtil.MboxError("공정 진행정보를 불러오는데 오류가 발생했습니다.");
-            LotsMaterialr = srvFlag.SelectLotMateriars(Lot.PRODUCT_CODE);
+            LotsMaterialr = srvFlag.SelectLotMateriars(Lot.PRODUCT_CODE, operation.OPERATION_CODE);
             dgvMateriar.DataSource = null;
             var temp = LotsMaterialr.Distinct();
             dgvMateriar.Rows.Clear();

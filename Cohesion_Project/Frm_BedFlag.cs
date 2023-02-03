@@ -56,7 +56,7 @@ namespace Cohesion_Project
          DgvUtil.AddTextCol(dgvDefect, "불량 코드", "DEFECT_CODE", width: 250, readOnly: true, frozen: true);
          DgvUtil.AddTextCol(dgvDefect, "불량 명칭", "DEFECT_NAME", width: 250, readOnly: true, frozen: true);
          DgvUtil.AddTextCol(dgvDefect, "입력 수량", "DEFECT_QTY", width: 250, readOnly: true, frozen: true);
-         DgvUtil.AddButtonCol(dgvDefect, "삭제 하기", "Delete", width: 150, cellText:"삭제");
+         DgvUtil.AddButtonCol(dgvDefect, "삭제", "Delete", width: 150, cellText:"삭제");
          dgvDefect.SelectionMode = DataGridViewSelectionMode.CellSelect;
          dgvDefect.Font = new Font("맑은 고딕", 12, FontStyle.Bold);
       }

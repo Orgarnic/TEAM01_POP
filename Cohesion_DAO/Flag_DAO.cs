@@ -156,23 +156,25 @@ namespace Cohesion_DAO
          }
          return list;
       }
-      public List<LOT_STS_DTO> SelectLotMateriars(string prodId)
+      public List<LOT_STS_DTO> SelectLotMateriars(string prodId, string operation)
       {
          List<LOT_STS_DTO> list = null;
          try
          {
             SqlCommand cmd = new SqlCommand();
             string sql = @"SELECT 
-                           LOT_ID, LOT_DESC, L.PRODUCT_CODE, P.PRODUCT_NAME, B.REQUIRE_QTY, B.ALTER_PRODUCT_CODE, OPERATION_CODE, STORE_CODE, LOT_QTY, CREATE_QTY,
+                           LOT_ID, LOT_DESC, L.PRODUCT_CODE, P.PRODUCT_NAME, B.REQUIRE_QTY, B.ALTER_PRODUCT_CODE, B.OPERATION_CODE, STORE_CODE, LOT_QTY, CREATE_QTY,
                            OPER_IN_QTY, START_FLAG, START_QTY, START_TIME, START_EQUIPMENT_CODE, END_FLAG,
                            END_TIME, END_EQUIPMENT_CODE, SHIP_FLAG, SHIP_CODE, SHIP_TIME, PRODUCTION_TIME,
                            L.CREATE_TIME, OPER_IN_TIME, WORK_ORDER_ID, LOT_DELETE_FLAG, LOT_DELETE_CODE,
                            LOT_DELETE_TIME, LAST_TRAN_CODE, LAST_TRAN_TIME, LAST_TRAN_USER_ID, LAST_TRAN_COMMENT,
                            LAST_HIST_SEQ
                            FROM 
-                           LOT_STS L INNER JOIN (SELECT CHILD_PRODUCT_CODE, REQUIRE_QTY, ALTER_PRODUCT_CODE FROM BOM_MST WHERE PRODUCT_CODE = @PRODUCT_CODE) B ON L.PRODUCT_CODE = B.CHILD_PRODUCT_CODE
-                           		  INNER JOIN PRODUCT_MST P ON P.PRODUCT_CODE = B.CHILD_PRODUCT_CODE";
+                           LOT_STS L INNER JOIN (SELECT CHILD_PRODUCT_CODE, REQUIRE_QTY, ALTER_PRODUCT_CODE, OPERATION_CODE FROM BOM_MST WHERE PRODUCT_CODE = @PRODUCT_CODE) B ON L.PRODUCT_CODE = B.CHILD_PRODUCT_CODE
+                           		     INNER JOIN PRODUCT_MST P ON P.PRODUCT_CODE = B.CHILD_PRODUCT_CODE
+						         WHERE B.OPERATION_CODE = @OPERATION_CODE";
             cmd.Parameters.AddWithValue("@PRODUCT_CODE", prodId);
+            cmd.Parameters.AddWithValue("@OPERATION_CODE", operation);
             cmd.CommandText = sql.ToString();
             cmd.Connection = conn;
             conn.Open();

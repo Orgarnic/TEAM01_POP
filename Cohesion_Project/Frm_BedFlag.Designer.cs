@@ -254,7 +254,7 @@ namespace Cohesion_Project
          this.btnStart.Name = "btnStart";
          this.btnStart.Size = new System.Drawing.Size(150, 40);
          this.btnStart.TabIndex = 35;
-         this.btnStart.Text = "시작";
+         this.btnStart.Text = "입력";
          this.btnStart.UseVisualStyleBackColor = false;
          this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
          // 
@@ -285,13 +285,13 @@ namespace Cohesion_Project
          this.panel3.Controls.Add(this.label11);
          this.panel3.Controls.Add(this.txtBedRegTotal);
          this.panel3.Controls.Add(this.label14);
-         this.panel3.Controls.Add(this.txtLotQty);
-         this.panel3.Controls.Add(this.label34);
          this.panel3.Controls.Add(this.btnBedRegAdd);
          this.panel3.Controls.Add(this.cboBedReg);
          this.panel3.Controls.Add(this.txtDesc);
+         this.panel3.Controls.Add(this.txtLotQty);
          this.panel3.Controls.Add(this.label20);
          this.panel3.Controls.Add(this.label9);
+         this.panel3.Controls.Add(this.label34);
          this.panel3.Controls.Add(this.label12);
          this.panel3.Controls.Add(this.txtBedQty);
          this.panel3.Controls.Add(this.label13);
@@ -331,7 +331,7 @@ namespace Cohesion_Project
          this.txtBedRegTotal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
          this.txtBedRegTotal.Enabled = false;
          this.txtBedRegTotal.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-         this.txtBedRegTotal.Location = new System.Drawing.Point(1172, 144);
+         this.txtBedRegTotal.Location = new System.Drawing.Point(792, 226);
          this.txtBedRegTotal.Name = "txtBedRegTotal";
          this.txtBedRegTotal.Size = new System.Drawing.Size(265, 29);
          this.txtBedRegTotal.TabIndex = 79;
@@ -344,7 +344,7 @@ namespace Cohesion_Project
          this.label14.BackColor = System.Drawing.Color.Transparent;
          this.label14.Font = new System.Drawing.Font("나눔고딕", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
          this.label14.ForeColor = System.Drawing.Color.Black;
-         this.label14.Location = new System.Drawing.Point(1169, 111);
+         this.label14.Location = new System.Drawing.Point(695, 225);
          this.label14.Name = "label14";
          this.label14.Size = new System.Drawing.Size(138, 30);
          this.label14.TabIndex = 78;
@@ -357,7 +357,7 @@ namespace Cohesion_Project
          this.txtLotQty.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
          this.txtLotQty.Enabled = false;
          this.txtLotQty.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-         this.txtLotQty.Location = new System.Drawing.Point(1172, 224);
+         this.txtLotQty.Location = new System.Drawing.Point(1172, 226);
          this.txtLotQty.Name = "txtLotQty";
          this.txtLotQty.Size = new System.Drawing.Size(265, 29);
          this.txtLotQty.TabIndex = 77;
@@ -370,7 +370,7 @@ namespace Cohesion_Project
          this.label34.BackColor = System.Drawing.Color.Transparent;
          this.label34.Font = new System.Drawing.Font("나눔고딕", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
          this.label34.ForeColor = System.Drawing.Color.Black;
-         this.label34.Location = new System.Drawing.Point(1169, 187);
+         this.label34.Location = new System.Drawing.Point(1063, 225);
          this.label34.Name = "label34";
          this.label34.Size = new System.Drawing.Size(138, 30);
          this.label34.TabIndex = 76;
@@ -496,7 +496,7 @@ namespace Cohesion_Project
          this.panel5.Controls.Add(this.dgvDefect);
          this.panel5.Location = new System.Drawing.Point(128, 94);
          this.panel5.Name = "panel5";
-         this.panel5.Size = new System.Drawing.Size(1035, 159);
+         this.panel5.Size = new System.Drawing.Size(1309, 119);
          this.panel5.TabIndex = 80;
          // 
          // dgvDefect
@@ -504,10 +504,10 @@ namespace Cohesion_Project
          this.dgvDefect.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
          this.dgvDefect.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-         this.dgvDefect.Location = new System.Drawing.Point(96, 26);
+         this.dgvDefect.Location = new System.Drawing.Point(3, 3);
          this.dgvDefect.Name = "dgvDefect";
          this.dgvDefect.RowTemplate.Height = 23;
-         this.dgvDefect.Size = new System.Drawing.Size(749, 97);
+         this.dgvDefect.Size = new System.Drawing.Size(1023, 97);
          this.dgvDefect.TabIndex = 74;
          this.dgvDefect.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDefect_CellClick);
          // 
