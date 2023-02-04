@@ -15,6 +15,8 @@ namespace Cohesion_DAO
    {
       SqlConnection conn = null;
       readonly string DB = ConfigurationManager.ConnectionStrings["DB"].ConnectionString;
+
+      // ----------------------------------------- 진짜 너무 귀찮아서 CMD 재활용 전혀 안함 ----------------------------------------------------//
       public Flag_DAO()
       {
          conn = new SqlConnection(DB);
@@ -587,7 +589,7 @@ namespace Cohesion_DAO
 
             foreach (LOT_STS_DTO item in dto2)
             {
-               Helper.LotHisCmd(item, cmd4);
+               cmd4 = Helper.LotHisCmd(item, cmd4);
                cmd4.ExecuteNonQuery();
             }
             sql = @"INSERT INTO LOT_MATERIAL_HIS

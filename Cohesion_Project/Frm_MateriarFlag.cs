@@ -220,7 +220,7 @@ namespace Cohesion_Project
             MboxUtil.MboxWarn("LOT 정보를 선택해주십시오.");
             return;
          }
-         if (LotsMaterialr == null)
+         if (LotsMaterialr== null || LotsMaterialr.Count < 1)
          {
             MboxUtil.MboxWarn("자 품번 LOT가 존재하지 않습니다.");
             return;
@@ -248,7 +248,7 @@ namespace Cohesion_Project
                decimal qty = total <= item.LOT_QTY ? total : item.LOT_QTY; 
                total -= item.LOT_QTY;
                LotsMaterialr[idx].LOT_QTY = LotsMaterialr[idx].LOT_QTY - qty;
-               LotsMaterialr[idx].LAST_HIST_SEQ = LotsMaterialr[idx].LAST_HIST_SEQ;
+               LotsMaterialr[idx].LAST_HIST_SEQ = LotsMaterialr[idx].LAST_HIST_SEQ + 1;
                LotsMaterialr[idx].LAST_TRAN_CODE = "INPUT";
                LotsMaterialr[idx].LAST_TRAN_TIME = DateTime.Now;
                LotsMaterialr[idx].LAST_TRAN_COMMENT = "자재 사용";
