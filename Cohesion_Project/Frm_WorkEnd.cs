@@ -19,6 +19,7 @@ namespace Cohesion_Project
       private LOT_STS_DTO Lot = null;
       private Srv_Work srvWork = new Srv_Work();
       private Label[] state = new Label[3];
+      private bool isEndFlag = false;
 
       public Frm_WorkEnd()
       {
@@ -67,7 +68,7 @@ namespace Cohesion_Project
             return;
          }
          Lot = Lots.Find((l) => l.LOT_ID.Equals(cboLotId.Text));
-         if(Lot != null)
+         if (Lot != null)
          {
             lblOrderStatus.Text = order.ORDER_STATUS;
             lblOrderQty.Text = Convert.ToInt32(order.ORDER_QTY).ToString();
@@ -88,7 +89,7 @@ namespace Cohesion_Project
 
             var list = operations.FindAll((o) => o.PRODUCT_CODE.Equals(Lot.PRODUCT_CODE)).OrderBy((o) => o.FLOW_SEQ).ToList();
             var operation = operations.Find((o) => o.PRODUCT_CODE.Equals(Lot.PRODUCT_CODE) && o.OPERATION_CODE.Equals(Lot.OPERATION_CODE));
-            if (list.Count > 0) 
+            if (list.Count > 0)
             {
                int size = flwOperation.Width / list.Count;
                flwOperation.Controls.Clear();
@@ -108,7 +109,7 @@ namespace Cohesion_Project
                      label.Text = item.OPERATION_NAME + "[진행 중]";
                      label.BackColor = Color.Gold;
                   }
-                  else if(item.FLOW_SEQ > operation.FLOW_SEQ)
+                  else if (item.FLOW_SEQ > operation.FLOW_SEQ)
                   {
                      label.Text = item.OPERATION_NAME + "[대기 중]";
                      label.BackColor = Color.Gray;
@@ -120,7 +121,7 @@ namespace Cohesion_Project
                MboxUtil.MboxError("공정 진행정보를 불러오는데 오류가 발생했습니다.");
 
             var operationMst = srvWork.SelectOperation(operation.OPERATION_CODE);
-            char[] operationCheck = new char[3]{ operationMst.CHECK_DEFECT_FLAG, operationMst.CHECK_INSPECT_FLAG, operationMst.CHECK_MATERIAL_FLAG };
+            char[] operationCheck = new char[3] { operationMst.CHECK_DEFECT_FLAG, operationMst.CHECK_INSPECT_FLAG, operationMst.CHECK_MATERIAL_FLAG };
             if (operationMst.CHECK_DEFECT_FLAG == 'Y')
                lblDefectCheck.Text = "V";
             else
@@ -138,7 +139,7 @@ namespace Cohesion_Project
             string[] states = workState.Split('_');
             for (int i = 0; i < states.Length; i++)
             {
-               if(states[i].Equals("1") && operationCheck[i].Equals('Y'))
+               if (states[i].Equals("1") && operationCheck[i].Equals('Y'))
                {
                   state[i].Text = "입력 완료";
                   state[i].BackColor = Color.YellowGreen;
@@ -146,9 +147,9 @@ namespace Cohesion_Project
                else if (states[i].Equals("0") && operationCheck[i].Equals('Y'))
                {
                   state[i].Text = "입력 필요";
-                  state[i].BackColor = Color.Tomato;
+                  state[i].BackColor = Color.Red;
                }
-               else if(states[i].Equals("1") && !operationCheck[i].Equals('Y'))
+               else if (states[i].Equals("1") && !operationCheck[i].Equals('Y'))
                {
                   state[i].Text = "입력 완료";
                   state[i].BackColor = Color.Gray;
@@ -159,7 +160,12 @@ namespace Cohesion_Project
                   state[i].BackColor = Color.Gray;
                }
             }
-
+            if ((operationCheck[1] == 'Y' && states[1] == "1") && (operationCheck[2] == 'Y' && states[2] == "1"))
+               isEndFlag = true;
+            else if ((operationCheck[1] == 'N' && (operationCheck[2] == 'Y' && states[2] == "1")))
+               isEndFlag = true;
+            else if ((operationCheck[2] == 'N' && (operationCheck[1] == 'Y' && states[1] == "1")))
+               isEndFlag = true;
             var temp = Equipments.FindAll((q) => q.OPERATION_CODE.Equals(operation.OPERATION_CODE));
             if (temp.Count > 0)
             {
@@ -198,24 +204,63 @@ namespace Cohesion_Project
             MboxUtil.MboxWarn("LOT 정보를 선택해주십시오.");
             return;
          }
-         Lot.LOT_QTY = Convert.ToInt32(txtTotal.Text);
-         Lot.START_FLAG = 'Y';
-         Lot.START_QTY = Convert.ToInt32(txtTotal.Text);
-         Lot.START_TIME = DateTime.Now;
-         Lot.START_EQUIPMENT_CODE = cboEquipment.SelectedIndex < 1 ? "" : cboEquipment.Text;
-         Lot.LAST_TRAN_CODE = "START";
+         if (cboEquipment.SelectedIndex < 1)
+         {
+            MboxUtil.MboxWarn("설비 정보를 입력해주세요.");
+            return;
+         }
+         if (!isEndFlag)
+         {
+            MboxUtil.MboxWarn("미 입력된 항목이 존재합니다.");
+            return;
+         }
+         decimal maxSeq = operations.FindAll((o) => o.PRODUCT_CODE.Equals(Lot.PRODUCT_CODE)).Max(o => o.FLOW_SEQ);
+         decimal nowSeq = operations.Find((o) => o.PRODUCT_CODE.Equals(Lot.PRODUCT_CODE) && o.OPERATION_CODE.Equals(txtOperationCode.Text)).FLOW_SEQ;
+         bool result = false;
+         string operCode = null;
+         if(maxSeq > nowSeq)
+            operCode = operations.Find((o) => o.PRODUCT_CODE.Equals(Lot.PRODUCT_CODE) && o.FLOW_SEQ.Equals(nowSeq + 1)).OPERATION_CODE;
+         Lot.OPERATION_CODE = operCode;
+         Lot.OPER_IN_QTY = Convert.ToDecimal(lblProductQty.Text);
+         Lot.END_FLAG = 'Y';
+         Lot.END_TIME = DateTime.Now;
+         Lot.END_EQUIPMENT_CODE = cboEquipment.Text;
+         Lot.OPER_IN_TIME = DateTime.Now;
+         Lot.LAST_TRAN_CODE = "END";
          Lot.LAST_TRAN_TIME = DateTime.Now;
          Lot.LAST_TRAN_USER_ID = "TEST";
          Lot.LAST_TRAN_COMMENT = txtDesc.Text;
          Lot.LAST_HIST_SEQ += 1;
-
-         bool result = srvWork.StartWork(Lot);
+         LOT_END_HIS_DTO end = new LOT_END_HIS_DTO
+         {
+            LOT_ID = Lot.LOT_ID,
+            HIST_SEQ = Lot.LAST_HIST_SEQ,
+            TRAN_TIME = Lot.LAST_TRAN_TIME,
+            WORK_DATE = DateTime.Now.ToString("yyyyMMdd"),
+            PRODUCT_CODE = Lot.PRODUCT_CODE,
+            OPERATION_CODE = txtOperationCode.Text,
+            EQUIPMENT_CODE = Lot.END_EQUIPMENT_CODE,
+            TRAN_USER_ID = Lot.LAST_TRAN_USER_ID,
+            TRAN_COMMENT = Lot.LAST_TRAN_COMMENT,
+            TO_OPERATION_CODE = Lot.OPERATION_CODE,
+            OPER_IN_QTY = Lot.OPER_IN_QTY,
+            START_QTY = Lot.START_QTY,
+            END_QTY = Lot.OPER_IN_QTY,
+            OPER_IN_TIME = Lot.OPER_IN_TIME,
+            START_TIME = Lot.START_TIME,
+            WORK_ORDER_ID = Lot.WORK_ORDER_ID,
+            PROC_TIME = 90
+         };
+         if(maxSeq != nowSeq)
+            result = srvWork.EndWork(Lot, end, false);
+         else
+            result = srvWork.EndWork(Lot, end, true);
          if (!result)
          {
             MboxUtil.MboxError("오류가 발생했습니다.");
             return;
          }
-         MboxUtil.MboxInfo("작업이 시작되었습니다.");
+         MboxUtil.MboxInfo("작업이 완료되었습니다.");
          Lots = null;
          Lots = srvWork.SelectOrderLot(txtOrder.Text);
          ComboBoxBinding();

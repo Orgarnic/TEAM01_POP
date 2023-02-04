@@ -151,7 +151,7 @@ namespace Cohesion_Project
             MboxUtil.MboxWarn("LOT 정보를 선택해주십시오.");
             return;
          }
-         Lot.LOT_QTY = Convert.ToInt32(txtTotal.Text);
+         Lot.LOT_QTY = Convert.ToInt32(lblProductQty.Text);
          Lot.START_FLAG = 'Y';
          Lot.START_QTY = Convert.ToInt32(txtTotal.Text);
          Lot.START_TIME = DateTime.Now;

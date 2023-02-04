@@ -64,7 +64,7 @@ namespace Cohesion_Project
       }
       private void DgvInspect_KeyPress(object sender, KeyPressEventArgs e)
       {
-         if (!(char.IsDigit(e.KeyChar) || e.KeyChar == Convert.ToChar(Keys.Back)))
+         if (!(char.IsDigit(e.KeyChar) || e.KeyChar == Convert.ToChar(Keys.Back) || e.KeyChar == 46))
             e.Handled = true;
       }
       private void btnOrder_Click(object sender, EventArgs e)

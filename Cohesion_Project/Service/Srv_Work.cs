@@ -58,6 +58,14 @@ namespace Cohesion_Project
 
          return temp;
       }
+      public bool EndWork(LOT_STS_DTO dto, LOT_END_HIS_DTO end, bool finish)
+      {
+         Work_DAO dao = new Work_DAO();
+         bool temp = dao.EndWork(dto, end, finish);
+         dao.Dispose();
+
+         return temp;
+      }
       public string EndWorkCondition(string lotId, string operation)
       {
          Work_DAO dao = new Work_DAO();

@@ -769,7 +769,7 @@ namespace Cohesion_Project
          this.lblMateriar.Name = "lblMateriar";
          this.lblMateriar.Size = new System.Drawing.Size(486, 30);
          this.lblMateriar.TabIndex = 78;
-         this.lblMateriar.Text = "있음";
+         this.lblMateriar.Text = "없음";
          this.lblMateriar.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
          // 
          // lblInspect
