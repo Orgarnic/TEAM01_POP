@@ -18,7 +18,14 @@ namespace Cohesion_Project
 
          return list;
       }
+      public List<LOT_STS_DTO> SelectOrderLotEnd(string orderId)
+      {
+         Work_DAO dao = new Work_DAO();
+         List<LOT_STS_DTO> list = dao.SelectOrderLotEnd(orderId);
+         dao.Dispose();
 
+         return list;
+      }
       public List<PRODUCT_OPERATION_REL_DTO> SelectOperations()
       {
          Work_DAO dao = new Work_DAO();
@@ -26,6 +33,14 @@ namespace Cohesion_Project
          dao.Dispose();
 
          return list;
+      }
+      public OPERATION_MST_DTO SelectOperation(string operation)
+      {
+         Work_DAO dao = new Work_DAO();
+         OPERATION_MST_DTO temp = dao.SelectOperation(operation);
+         dao.Dispose();
+
+         return temp;
       }
       public List<EQUIPMENT_OPERATION_REL_DTO> SelectEquipments()
       {
@@ -35,11 +50,18 @@ namespace Cohesion_Project
 
          return list;
       }
-
       public bool StartWork(LOT_STS_DTO dto)
       {
          Work_DAO dao = new Work_DAO();
          bool temp = dao.StartWork(dto);
+         dao.Dispose();
+
+         return temp;
+      }
+      public string EndWorkCondition(string lotId, string operation)
+      {
+         Work_DAO dao = new Work_DAO();
+         string temp = dao.EndWorkCondition(lotId, operation);
          dao.Dispose();
 
          return temp;

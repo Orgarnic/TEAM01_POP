@@ -19,7 +19,6 @@ namespace Cohesion_DAO
       {
          conn = new SqlConnection(DB);
       }
-
       public List<LOT_STS_DTO> SelectOrderLot(string orderId)
       {
          List<LOT_STS_DTO> list = null;
@@ -67,7 +66,53 @@ namespace Cohesion_DAO
          }
          return list;
       }
-
+      public List<LOT_STS_DTO> SelectOrderLotEnd(string orderId)
+      {
+         List<LOT_STS_DTO> list = null;
+         try
+         {
+            SqlCommand cmd = new SqlCommand();
+            string sql = @"SELECT 
+                           L.LOT_ID, LOT_DESC, L.PRODUCT_CODE, L.OPERATION_CODE, O.OPERATION_NAME OPERATION_NAME, L.STORE_CODE, LOT_QTY, CREATE_QTY,
+						         CASE WHEN (SELECT SUM(DEFECT_QTY) FROM LOT_DEFECT_HIS WHERE LOT_ID = L.LOT_ID) IS NULL THEN 0 
+						         ELSE (SELECT SUM(DEFECT_QTY) FROM LOT_DEFECT_HIS WHERE LOT_ID = L.LOT_ID) END LOT_DEFECT_QTY,
+                           OPER_IN_QTY, START_FLAG, START_QTY, START_TIME, START_EQUIPMENT_CODE, END_FLAG,
+                           END_TIME, END_EQUIPMENT_CODE, SHIP_FLAG, SHIP_CODE, SHIP_TIME, PRODUCTION_TIME,
+                           L.CREATE_TIME, OPER_IN_TIME, L.WORK_ORDER_ID, LOT_DELETE_FLAG, LOT_DELETE_CODE, LOT_DELETE_TIME,
+                           LAST_TRAN_CODE, LAST_TRAN_TIME, LAST_TRAN_USER_ID, LAST_TRAN_COMMENT, LAST_HIST_SEQ
+                           FROM 
+                           LOT_STS L INNER JOIN PRODUCT_OPERATION_REL P ON L.PRODUCT_CODE = P.PRODUCT_CODE AND L.OPERATION_CODE = P.OPERATION_CODE
+                           		     INNER JOIN OPERATION_MST O ON L.OPERATION_CODE = O.OPERATION_CODE
+                                     INNER JOIN WORK_ORDER_MST W ON W.WORK_ORDER_ID = L.WORK_ORDER_ID
+                           WHERE 
+                           (LAST_TRAN_CODE = 'END' AND 
+                           P.FLOW_SEQ < 
+                           (SELECT 
+                           MAX(FLOW_SEQ)
+                           FROM PRODUCT_OPERATION_REL
+                           WHERE PRODUCT_CODE = L.PRODUCT_CODE AND OPERATION_CODE = L.OPERATION_CODE)) OR
+                           LAST_TRAN_CODE IN ('START', 'DEFECT', 'INSPECT', 'INPUT')
+                           AND LOT_DELETE_FLAG IS NULL
+						         AND W.ORDER_STATUS <> 'CLOSE'
+                           AND L.WORK_ORDER_ID = @WORK_ORDER_ID";
+            cmd.Parameters.AddWithValue("@WORK_ORDER_ID", orderId);
+            cmd.CommandText = sql.ToString();
+            cmd.Connection = conn;
+            conn.Open();
+            list = Helper.DataReaderMapToList<LOT_STS_DTO>(cmd.ExecuteReader());
+         }
+         catch (Exception err)
+         {
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return null;
+         }
+         finally
+         {
+            conn.Close();
+         }
+         return list;
+      }
       public List<PRODUCT_OPERATION_REL_DTO> SelectOperations()
       {
          List<PRODUCT_OPERATION_REL_DTO> list = null;
@@ -93,7 +138,34 @@ namespace Cohesion_DAO
          }
          return list;
       }
-
+      public OPERATION_MST_DTO SelectOperation(string operation)
+      {
+         OPERATION_MST_DTO temp = null;
+         try
+         {
+            SqlCommand cmd = new SqlCommand();
+            string sql = @"SELECT 
+                           OPERATION_CODE, OPERATION_NAME, CHECK_DEFECT_FLAG, CHECK_INSPECT_FLAG, CHECK_MATERIAL_FLAG, CREATE_TIME, CREATE_USER_ID, UPDATE_TIME, UPDATE_USER_ID
+                           FROM OPERATION_MST
+                           WHERE OPERATION_CODE = @OPERATION_CODE";
+            cmd.Parameters.AddWithValue("@OPERATION_CODE", operation);
+            cmd.CommandText = sql.ToString();
+            cmd.Connection = conn;
+            conn.Open();
+            temp = Helper.DataReaderMapToDTO<OPERATION_MST_DTO>(cmd.ExecuteReader());
+         }
+         catch (Exception err)
+         {
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return null;
+         }
+         finally
+         {
+            conn.Close();
+         }
+         return temp;
+      }
       public List<EQUIPMENT_OPERATION_REL_DTO> SelectEquipments()
       {
          List<EQUIPMENT_OPERATION_REL_DTO> list = null;
@@ -119,7 +191,6 @@ namespace Cohesion_DAO
          }
          return list;
       }
-
       public bool StartWork(LOT_STS_DTO dto)
       {
          conn.Open();
@@ -209,7 +280,34 @@ namespace Cohesion_DAO
             conn.Close();
          }
       }
-
+      public string EndWorkCondition(string lotId, string operation)
+      {
+         string workCondition = null;
+         try
+         {
+            SqlCommand cmd = new SqlCommand();
+            string sql = @"SP_GETLOTHIS";
+            cmd.Parameters.AddWithValue("@LOT_ID", lotId);
+            cmd.Parameters.AddWithValue("@OPERATION_CODE", operation);
+            cmd.CommandText = sql.ToString();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Connection = conn;
+            conn.Open();
+            workCondition = cmd.ExecuteScalar().ToString();
+            conn.Close();
+         }
+         catch (Exception err)
+         {
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return null;
+         }
+         finally
+         {
+            conn.Close();
+         }
+         return workCondition;
+      }
       public void Dispose()
       {
          if (conn != null || conn.State == ConnectionState.Open)
