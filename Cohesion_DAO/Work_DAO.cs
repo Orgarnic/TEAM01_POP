@@ -390,7 +390,7 @@ namespace Cohesion_DAO
                dto.PRODUCTION_TIME = DateTime.Now;
                dto.OPER_IN_TIME = DateTime.Now;
                dto.LAST_TRAN_COMMENT = "생산 제품 이동";
-               sql = @"DECLARE @TYPE VARCHAR
+               sql = @"DECLARE @TYPE VARCHAR(30)
                        SET @TYPE = (SELECT PRODUCT_TYPE FROM PRODUCT_MST WHERE PRODUCT_CODE = @PRODUCT_CODE);
                        UPDATE LOT_STS
                        SET 
