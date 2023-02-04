@@ -215,7 +215,7 @@ namespace Cohesion_Project
             else
                LotDefects.Find((d) => d.DEFECT_CODE.Equals(temp.DEFECT_CODE)).DEFECT_QTY += temp.DEFECT_QTY;
             CommonUtil.ResetControls(txtBedRegName);
-            cboBedReg.SelectedIndex = 0; txtBedQty.Text = "0"; flwOperation.Controls.Clear();
+            cboBedReg.SelectedIndex = 0; txtBedQty.Text = "0";
             QtyRange();
          }
       }

@@ -284,7 +284,7 @@ namespace Cohesion_DAO
             TRAN_TIME = dto.LAST_TRAN_TIME,
             TRAN_USER_ID = dto.LAST_TRAN_USER_ID,
             TRAN_COMMENT = dto.LAST_TRAN_COMMENT,
-            HIST_SEQ = dto.LAST_HIST_SEQ == 0 ? 1 : dto.LAST_HIST_SEQ + 1,
+            HIST_SEQ = dto.LAST_HIST_SEQ,
             WORK_DATE = DateTime.Now.ToString("yyyyMMdd"),
             OLD_PRODUCT_CODE = dto.PRODUCT_CODE,
             OLD_OPERATION_CODE = dto.OPERATION_CODE,
@@ -295,10 +295,19 @@ namespace Cohesion_DAO
          return his;
       }
       
-      public static SqlCommand LotHisCmd(LOT_STS_DTO dto)
+      public static SqlCommand LotHisCmd(LOT_STS_DTO dto, SqlCommand inCmd = null)
       {
          LOT_HIS_DTO his = LotStsToLotHis(dto);
-         SqlCommand cmd = new SqlCommand();
+         SqlCommand cmd = null;
+         if (inCmd == null)
+         {
+            cmd = new SqlCommand();
+         }
+         else
+         {
+            cmd = inCmd;
+            cmd.Parameters.Clear();
+         }
          cmd.Parameters.AddWithValue("@LOT_ID", string.IsNullOrWhiteSpace(his.LOT_ID) ? (object)DBNull.Value : his.LOT_ID);
          cmd.Parameters.AddWithValue("@HIST_SEQ", his.HIST_SEQ);
          cmd.Parameters.AddWithValue("@TRAN_TIME", his.TRAN_TIME == new DateTime() ? (object)DBNull.Value : his.TRAN_TIME);

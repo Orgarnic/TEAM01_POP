@@ -82,5 +82,13 @@ namespace Cohesion_Project
 
          return temp;
       }
+      public bool InsertMateriar(LOT_STS_DTO dto, List<LOT_STS_DTO> dto2, List<LOT_MATERIAL_HIS_DTO> materiars)
+      {
+         Flag_DAO dao = new Flag_DAO();
+         bool temp = dao.InsertMateriar(dto, dto2, materiars);
+         dao.Dispose();
+
+         return temp;
+      }
    }
 }

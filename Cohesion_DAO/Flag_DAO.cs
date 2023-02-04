@@ -172,7 +172,8 @@ namespace Cohesion_DAO
                            FROM 
                            LOT_STS L INNER JOIN (SELECT CHILD_PRODUCT_CODE, REQUIRE_QTY, ALTER_PRODUCT_CODE, OPERATION_CODE FROM BOM_MST WHERE PRODUCT_CODE = @PRODUCT_CODE) B ON L.PRODUCT_CODE = B.CHILD_PRODUCT_CODE
                            		     INNER JOIN PRODUCT_MST P ON P.PRODUCT_CODE = B.CHILD_PRODUCT_CODE
-						         WHERE B.OPERATION_CODE = @OPERATION_CODE";
+						         WHERE B.OPERATION_CODE = @OPERATION_CODE
+                           AND L.LOT_QTY > 0 AND L.LOT_DELETE_FLAG IS NULL";
             cmd.Parameters.AddWithValue("@PRODUCT_CODE", prodId);
             cmd.Parameters.AddWithValue("@OPERATION_CODE", operation);
             cmd.CommandText = sql.ToString();
@@ -192,7 +193,6 @@ namespace Cohesion_DAO
          }
          return list;
       }
-
       public List<LOT_STS_DTO> SelectMateriarLot(string lots)
       {
          List<LOT_STS_DTO> list = null;
@@ -451,6 +451,188 @@ namespace Cohesion_DAO
                cmd3.Parameters["@INSPECT_RESULT"].Value = string.IsNullOrWhiteSpace(inspect.INSPECT_RESULT) ? (object)DBNull.Value : inspect.INSPECT_RESULT;
                cmd3.Parameters["@EQUIPMENT_CODE"].Value = string.IsNullOrWhiteSpace(inspect.EQUIPMENT_CODE) ? (object)DBNull.Value : inspect.EQUIPMENT_CODE;
                cmd3.ExecuteNonQuery();
+            }
+
+            trans.Commit();
+            return true;
+         }
+         catch (Exception err)
+         {
+            trans.Rollback();
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return false;
+         }
+         finally
+         {
+            conn.Close();
+         }
+      }
+      public bool InsertMateriar(LOT_STS_DTO dto, List<LOT_STS_DTO> dto2, List<LOT_MATERIAL_HIS_DTO> materiars)
+      {
+         conn.Open();
+         SqlTransaction trans = conn.BeginTransaction();
+         try
+         {
+            string sql = @"UPDATE LOT_STS
+                           SET 
+                           LAST_TRAN_CODE = @LAST_TRAN_CODE,
+                           LAST_TRAN_TIME = @LAST_TRAN_TIME,
+                           LAST_TRAN_USER_ID = @LAST_TRAN_USER_ID,
+                           LAST_TRAN_COMMENT = @LAST_TRAN_COMMENT, 
+                           LAST_HIST_SEQ = @LAST_HIST_SEQ
+                           WHERE 
+                           LOT_ID = @LOT_ID";
+            SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@LOT_ID", dto.LOT_ID);
+            cmd.Parameters.AddWithValue("@LAST_TRAN_CODE", dto.LAST_TRAN_CODE);
+            cmd.Parameters.AddWithValue("@LAST_TRAN_TIME", dto.LAST_TRAN_TIME);
+            cmd.Parameters.AddWithValue("@LAST_TRAN_USER_ID", dto.LAST_TRAN_USER_ID);
+            cmd.Parameters.AddWithValue("@LAST_TRAN_COMMENT", string.IsNullOrWhiteSpace(dto.LAST_TRAN_COMMENT) ? (object)DBNull.Value : dto.LAST_TRAN_COMMENT);
+            cmd.Parameters.AddWithValue("@LAST_HIST_SEQ", dto.LAST_HIST_SEQ);
+
+            cmd.Transaction = trans;
+            cmd.ExecuteNonQuery();
+
+            sql = @"IF (@LOT_QTY = 0)
+                     	BEGIN 
+                     		UPDATE LOT_STS
+                                    SET 
+                                    LOT_QTY = @LOT_QTY,
+                     			      LOT_DELETE_FLAG = @LOT_DELETE_FLAG,
+                     			      LOT_DELETE_CODE = @LOT_DELETE_CODE,
+                     			      LOT_DELETE_TIME = @LOT_DELETE_TIME,
+                                    LAST_TRAN_CODE = @LAST_TRAN_CODE,
+                                    LAST_TRAN_TIME = @LAST_TRAN_TIME,
+                                    LAST_TRAN_USER_ID = @LAST_TRAN_USER_ID,
+                                    LAST_TRAN_COMMENT = @LAST_TRAN_COMMENT, 
+                                    LAST_HIST_SEQ = @LAST_HIST_SEQ
+                                    WHERE 
+                                    LOT_ID = @LOT_ID
+                     	END
+                     ELSE
+                     	BEGIN
+                     			UPDATE LOT_STS
+                                  SET 
+                                  LOT_QTY = @LOT_QTY,
+                                  LAST_TRAN_CODE = @LAST_TRAN_CODE,
+                                  LAST_TRAN_TIME = @LAST_TRAN_TIME,
+                                  LAST_TRAN_USER_ID = @LAST_TRAN_USER_ID,
+                                  LAST_TRAN_COMMENT = @LAST_TRAN_COMMENT, 
+                                  LAST_HIST_SEQ = @LAST_HIST_SEQ
+                                  WHERE 
+                                  LOT_ID = @LOT_ID
+                     	END";
+            SqlCommand cmd2 = new SqlCommand(sql, conn);
+            cmd2.Parameters.Add("@LOT_ID", SqlDbType.VarChar);
+            cmd2.Parameters.Add("@LOT_QTY", SqlDbType.Decimal);
+            cmd2.Parameters.Add("@LOT_DELETE_FLAG", SqlDbType.Char);
+            cmd2.Parameters.Add("@LOT_DELETE_CODE", SqlDbType.VarChar);
+            cmd2.Parameters.Add("@LOT_DELETE_TIME", SqlDbType.DateTime);
+            cmd2.Parameters.Add("@LAST_TRAN_CODE", SqlDbType.VarChar);
+            cmd2.Parameters.Add("@LAST_TRAN_TIME", SqlDbType.DateTime);
+            cmd2.Parameters.Add("@LAST_TRAN_USER_ID", SqlDbType.VarChar);
+            cmd2.Parameters.Add("@LAST_TRAN_COMMENT", SqlDbType.VarChar);
+            cmd2.Parameters.Add("@LAST_HIST_SEQ", SqlDbType.Decimal);
+
+            foreach (LOT_STS_DTO item in dto2)
+            {
+               cmd2.Parameters["@LOT_ID"].Value = item.LOT_ID;
+               cmd2.Parameters["@LOT_QTY"].Value = item.LOT_QTY;
+               cmd2.Parameters["@LOT_DELETE_FLAG"].Value = 'Y';
+               cmd2.Parameters["@LOT_DELETE_CODE"].Value = "EMPTY";
+               cmd2.Parameters["@LOT_DELETE_TIME"].Value = DateTime.Now;
+               cmd2.Parameters["@LAST_TRAN_CODE"].Value = item.LAST_TRAN_CODE;
+               cmd2.Parameters["@LAST_TRAN_TIME"].Value = item.LAST_TRAN_TIME;
+               cmd2.Parameters["@LAST_TRAN_USER_ID"].Value = item.LAST_TRAN_USER_ID;
+               cmd2.Parameters["@LAST_TRAN_COMMENT"].Value = string.IsNullOrWhiteSpace(item.LAST_TRAN_COMMENT) ? (object)DBNull.Value : item.LAST_TRAN_COMMENT;
+               cmd2.Parameters["@LAST_HIST_SEQ"].Value = item.LAST_HIST_SEQ;
+               cmd2.Transaction = trans;
+               cmd2.ExecuteNonQuery();
+            }
+            sql = @"INSERT INTO LOT_HIS
+                    (
+                    LOT_ID, HIST_SEQ, TRAN_TIME, TRAN_CODE, LOT_DESC,
+                    PRODUCT_CODE, OPERATION_CODE, STORE_CODE, LOT_QTY,
+                    CREATE_QTY, OPER_IN_QTY, START_FLAG, START_QTY, 
+                    START_TIME, START_EQUIPMENT_CODE, END_FLAG, END_TIME,
+                    END_EQUIPMENT_CODE, SHIP_FLAG, SHIP_CODE, SHIP_TIME, 
+                    PRODUCTION_TIME, CREATE_TIME, OPER_IN_TIME, WORK_ORDER_ID,
+                    LOT_DELETE_FLAG, LOT_DELETE_CODE, LOT_DELETE_TIME, WORK_DATE,
+                    TRAN_USER_ID, TRAN_COMMENT, OLD_PRODUCT_CODE, OLD_OPERATION_CODE,
+                    OLD_STORE_CODE, OLD_LOT_QTY
+                    ) 
+                    VALUES 
+                    (
+                    @LOT_ID, @HIST_SEQ, @TRAN_TIME, @TRAN_CODE, @LOT_DESC, 
+                    @PRODUCT_CODE, @OPERATION_CODE, @STORE_CODE, @LOT_QTY, 
+                    @CREATE_QTY, @OPER_IN_QTY, @START_FLAG, @START_QTY, 
+                    @START_TIME, @START_EQUIPMENT_CODE, @END_FLAG, @END_TIME, 
+                    @END_EQUIPMENT_CODE, @SHIP_FLAG, @SHIP_CODE, @SHIP_TIME, 
+                    @PRODUCTION_TIME, @CREATE_TIME, @OPER_IN_TIME, @WORK_ORDER_ID,
+                    @LOT_DELETE_FLAG, @LOT_DELETE_CODE, @LOT_DELETE_TIME, @WORK_DATE, 
+                    @TRAN_USER_ID, @TRAN_COMMENT, @OLD_PRODUCT_CODE, @OLD_OPERATION_CODE,
+                    @OLD_STORE_CODE, @OLD_LOT_QTY
+                    )";
+            SqlCommand cmd3 = Helper.LotHisCmd(dto);
+            cmd3.Connection = conn;
+            cmd3.CommandText = sql;
+            cmd3.Transaction = trans;
+            cmd3.ExecuteNonQuery();
+
+            SqlCommand cmd4 = new SqlCommand();
+            cmd4.Connection = conn;
+            cmd4.CommandText = sql;
+            cmd4.Transaction = trans;
+
+            foreach (LOT_STS_DTO item in dto2)
+            {
+               Helper.LotHisCmd(item, cmd4);
+               cmd4.ExecuteNonQuery();
+            }
+            sql = @"INSERT INTO LOT_MATERIAL_HIS
+                    (LOT_ID, HIST_SEQ, MATERIAL_LOT_ID, MATERIAL_LOT_HIST_SEQ, INPUT_QTY,
+                    CHILD_PRODUCT_CODE, MATERIAL_STORE_CODE, TRAN_TIME, WORK_DATE, PRODUCT_CODE,
+                    OPERATION_CODE, EQUIPMENT_CODE, TRAN_USER_ID, TRAN_COMMENT)
+                    VALUES
+                    (@LOT_ID, @HIST_SEQ, @MATERIAL_LOT_ID, @MATERIAL_LOT_HIST_SEQ, @INPUT_QTY,
+                    @CHILD_PRODUCT_CODE, @MATERIAL_STORE_CODE, @TRAN_TIME, @WORK_DATE, @PRODUCT_CODE,
+                    @OPERATION_CODE, @EQUIPMENT_CODE, @TRAN_USER_ID, @TRAN_COMMENT)";
+            SqlCommand cmd5 = new SqlCommand(sql, conn);
+            cmd5.Transaction = trans;
+
+            cmd5.Parameters.Add("@LOT_ID", SqlDbType.VarChar);
+            cmd5.Parameters.Add("@HIST_SEQ", SqlDbType.Decimal);
+            cmd5.Parameters.Add("@MATERIAL_LOT_ID", SqlDbType.VarChar);
+            cmd5.Parameters.Add("@MATERIAL_LOT_HIST_SEQ", SqlDbType.Decimal);
+            cmd5.Parameters.Add("@INPUT_QTY", SqlDbType.VarChar);
+            cmd5.Parameters.Add("@CHILD_PRODUCT_CODE", SqlDbType.VarChar);
+            cmd5.Parameters.Add("@MATERIAL_STORE_CODE", SqlDbType.VarChar);
+            cmd5.Parameters.Add("@TRAN_TIME", SqlDbType.DateTime);
+            cmd5.Parameters.Add("@WORK_DATE", SqlDbType.VarChar);
+            cmd5.Parameters.Add("@PRODUCT_CODE", SqlDbType.VarChar);
+            cmd5.Parameters.Add("@OPERATION_CODE", SqlDbType.VarChar);
+            cmd5.Parameters.Add("@EQUIPMENT_CODE", SqlDbType.VarChar);
+            cmd5.Parameters.Add("@TRAN_USER_ID", SqlDbType.VarChar);
+            cmd5.Parameters.Add("@TRAN_COMMENT", SqlDbType.VarChar);
+
+            foreach (LOT_MATERIAL_HIS_DTO item in materiars)
+            {
+               cmd5.Parameters["@LOT_ID"].Value = item.LOT_ID;
+               cmd5.Parameters["@HIST_SEQ"].Value = item.HIST_SEQ;
+               cmd5.Parameters["@MATERIAL_LOT_ID"].Value = item.MATERIAL_LOT_ID;
+               cmd5.Parameters["@MATERIAL_LOT_HIST_SEQ"].Value = item.MATERIAL_LOT_HIST_SEQ;
+               cmd5.Parameters["@INPUT_QTY"].Value = item.INPUT_QTY;
+               cmd5.Parameters["@CHILD_PRODUCT_CODE"].Value = string.IsNullOrWhiteSpace(item.CHILD_PRODUCT_CODE) ? (object)DBNull.Value : item.CHILD_PRODUCT_CODE;
+               cmd5.Parameters["@MATERIAL_STORE_CODE"].Value = item.MATERIAL_STORE_CODE;
+               cmd5.Parameters["@TRAN_TIME"].Value = item.TRAN_TIME;
+               cmd5.Parameters["@WORK_DATE"].Value = item.WORK_DATE;
+               cmd5.Parameters["@OPERATION_CODE"].Value = item.OPERATION_CODE;
+               cmd5.Parameters["@PRODUCT_CODE"].Value = item.PRODUCT_CODE;
+               cmd5.Parameters["@EQUIPMENT_CODE"].Value = item.EQUIPMENT_CODE;
+               cmd5.Parameters["@TRAN_USER_ID"].Value = item.TRAN_USER_ID;
+               cmd5.Parameters["@TRAN_COMMENT"].Value = item.TRAN_COMMENT;
+               cmd5.ExecuteNonQuery();
             }
 
             trans.Commit();

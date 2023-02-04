@@ -16,9 +16,11 @@ namespace Cohesion_Project
       private List<PRODUCT_OPERATION_REL_DTO> operations = null;
       private List<LOT_STS_DTO> Lots = null;
       private List<LOT_STS_DTO> LotsMaterialr = null;
+      private List<LOT_STS_DTO> SelectedLotsMateriar = null;
       private LOT_STS_DTO Lot = null;
       private Srv_Work srvWork = new Srv_Work();
       private Srv_Flag srvFlag = new Srv_Flag();
+      private bool isPass = false;
 
       public Frm_MateriarFlag()
       {
@@ -44,27 +46,21 @@ namespace Cohesion_Project
       private void DgvInit()
       {
          DgvUtil.DgvInit(dgvMateriar);
-         DgvUtil.AddTextCol(dgvMateriar, "자 품번", "PRODUCT_CODE", width: 200, readOnly: true, frozen: true);
-         DgvUtil.AddTextCol(dgvMateriar, "자 품명", "PRODUCT_NAME", width: 200, readOnly: true, frozen: true);
-         DgvUtil.AddTextCol(dgvMateriar, "단위 수량", "REQUIRE_QTY", width: 200, readOnly: true, frozen: true);
+         DgvUtil.AddCheckBoxCol(dgvMateriar, "선택", "CHECK", width: 50, frozen:true);
+         DgvUtil.AddTextCol(dgvMateriar, "자 품번", "PRODUCT_CODE", width: 180, readOnly: true, frozen: true);
+         DgvUtil.AddTextCol(dgvMateriar, "자 품명", "PRODUCT_NAME", width: 180, readOnly: true, frozen: true);
+         DgvUtil.AddTextCol(dgvMateriar, "단위 수량", "REQUIRE_QTY", width: 120, readOnly: true);
          DgvUtil.AddTextCol(dgvMateriar, "자재 LOT", "LOT_ID", width: 250);
-         DgvUtil.AddTextCol(dgvMateriar, "자재 LOT 수량", "LOT_QTY", width: 200, readOnly: true);
-         DgvUtil.AddTextCol(dgvMateriar, "사용 LOT 수량", "TOTAL", width: 200, readOnly: true);
-         DgvUtil.AddTextCol(dgvMateriar, "자 품번 재고", "LOT_QTY_TOTAL", width: 200, readOnly: true);
-         dgvMateriar.SelectionMode = DataGridViewSelectionMode.CellSelect;
-         dgvMateriar.Font = new Font("맑은 고딕", 12, FontStyle.Bold);
+         DgvUtil.AddTextCol(dgvMateriar, "LOT 수량", "LOT_QTY", width: 130, readOnly: true);
+         dgvMateriar.Font = new Font("맑은 고딕", 10, FontStyle.Bold);
 
          DgvUtil.DgvInit(dgvMateriarInput);
-         DgvUtil.AddTextCol(dgvMateriarInput, "자 품번", "PRODUCT_CODE", width: 200, readOnly: true, frozen: true);
-         DgvUtil.AddTextCol(dgvMateriarInput, "자 품명", "PRODUCT_NAME", width: 200, readOnly: true, frozen: true);
-         DgvUtil.AddTextCol(dgvMateriarInput, "단위 수량", "REQUIRE_QTY", width: 200, readOnly: true, frozen: true);
-         DgvUtil.AddTextCol(dgvMateriarInput, "자재 LOT", "LOT_ID", width: 250, readOnly: true);
-         DgvUtil.AddTextCol(dgvMateriarInput, "자재 LOT 수량", "LOT_QTY", width: 200, readOnly: true);
-         DgvUtil.AddTextCol(dgvMateriarInput, "필요 LOT 수량", "TOTAL", width: 200, readOnly: true);
-         DgvUtil.AddTextCol(dgvMateriarInput, "자 품번 재고", "LOT_QTY_TOTAL", width: 200, readOnly: true);
-         dgvMateriarInput.SelectionMode = DataGridViewSelectionMode.CellSelect;
-         dgvMateriarInput.ColumnHeadersVisible = false;
-         dgvMateriarInput.Font = new Font("맑은 고딕", 12, FontStyle.Bold);
+         DgvUtil.AddTextCol(dgvMateriarInput, "필요 품번", "PRODUCT_CODE", width: 180, readOnly: true, frozen: true);
+         DgvUtil.AddTextCol(dgvMateriarInput, "필요 품명", "PRODUCT_NAME", width: 180, readOnly: true, frozen: true);
+         DgvUtil.AddTextCol(dgvMateriarInput, "선택 수량", "INPUT", width: 130, readOnly: true);
+         DgvUtil.AddTextCol(dgvMateriarInput, "필요 수량", "TOTAL", width: 130, readOnly: true);
+         dgvMateriarInput.Font = new Font("맑은 고딕", 10, FontStyle.Bold);
+         dgvMateriarInput.Enabled = false;
       }
       private void btnOrder_Click(object sender, EventArgs e)
       {
@@ -92,7 +88,8 @@ namespace Cohesion_Project
          {
             CommonUtil.ResetControls(lblOrderStatus, txtProductCode, txtProductName, txtCustomerCode, txtCustomerName, txtOperationCode, txtOperationName, txtTotal, txtLotDesc);
             lblDefectQty.Text = "0"; lblProductQty.Text = "0"; lblOrderQty.Text = "0";
-            dgvMateriar.Rows.Clear();
+            dgvMateriar.DataSource = null;
+            dgvMateriarInput.DataSource = null;
             flwOperation.Controls.Clear();
             return;
          }
@@ -146,12 +143,14 @@ namespace Cohesion_Project
             }
             else
                MboxUtil.MboxError("공정 진행정보를 불러오는데 오류가 발생했습니다.");
+            SelectedLotsMateriar = new List<LOT_STS_DTO>();
             LotsMaterialr = srvFlag.SelectLotMateriars(Lot.PRODUCT_CODE, operation.OPERATION_CODE);
             dgvMateriar.DataSource = null;
             var temp = LotsMaterialr.Distinct();
-            dgvMateriar.Rows.Clear();
-            foreach (var item in temp)
-               Row(item);
+            dgvMateriar.DataSource = LotsMaterialr;
+            dgvMateriarInput.DataSource = (from t in temp select new { PRODUCT_CODE = t.PRODUCT_CODE, PRODUCT_NAME = t.PRODUCT_NAME, REQUIRE_QTY = t.REQUIRE_QTY, 
+                                           TOTAL = Convert.ToInt32(t.REQUIRE_QTY * Convert.ToDecimal(txtTotal.Text)) }).ToList();
+            dgvMateriarInput.ClearSelection();
          }
          else
          {
@@ -159,51 +158,55 @@ namespace Cohesion_Project
             return;
          }
       }
-      private void Row(LOT_STS_DTO item)
-      {
-         DataGridViewRow row = new DataGridViewRow();
-         DataGridViewTextBoxCell cell = new DataGridViewTextBoxCell();
-         cell.Value = item.PRODUCT_CODE;
-         row.Cells.Add(cell);
-         DataGridViewTextBoxCell cell2 = new DataGridViewTextBoxCell();
-         cell2.Value = item.PRODUCT_NAME;
-         row.Cells.Add(cell2);
-         DataGridViewTextBoxCell cell3 = new DataGridViewTextBoxCell();
-         cell3.Value = item.REQUIRE_QTY;
-         row.Cells.Add(cell3);
-         DataGridViewComboBoxCell col04 = new DataGridViewComboBoxCell();
-         List<string> items = new List<string> { "선택" };
-         LotsMaterialr.Where((m) => m.PRODUCT_CODE.Equals(item.PRODUCT_CODE)).Select((m) => m.LOT_ID).ToList().ForEach((l) => items.Add(l));
-         col04.Items.AddRange(items.ToArray());
-         col04.Value = "선택";
-         row.Cells.Add(col04);
-         DataGridViewTextBoxCell cell5 = new DataGridViewTextBoxCell();
-         cell5.Value = 0;
-         row.Cells.Add(cell5);
-         DataGridViewTextBoxCell cell6 = new DataGridViewTextBoxCell();
-         cell6.Value = Convert.ToInt32(item.REQUIRE_QTY * Lot.START_QTY);
-         row.Cells.Add(cell6);
-         DataGridViewTextBoxCell cell7 = new DataGridViewTextBoxCell();
-         cell7.Value = Convert.ToInt32((from meaterial in LotsMaterialr where meaterial.PRODUCT_CODE.Equals(item.PRODUCT_CODE) select meaterial).Sum(m => m.LOT_QTY));
-         row.Cells.Add(cell7);
-         dgvMateriar.Rows.Add(row);
-      }
-      private void dgvMateriar_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+      private void dgvMateriar_CellValueChanged(object sender, DataGridViewCellEventArgs e)
       {
          int row = e.RowIndex;
          int col = e.ColumnIndex;
-         string type = dgvMateriar["LOT_ID", row].Value.ToString();
+         if (row < 0) return;
+         string prodCode = dgvMateriar["PRODUCT_CODE", row].Value.ToString();
+         string lotId = dgvMateriar["LOT_ID", row].Value.ToString();
+         int idx = 0;
+         foreach (DataGridViewRow Row in dgvMateriarInput.Rows)
+         {
+            if (Equals(Row.Cells["PRODUCT_CODE"].Value.ToString(), prodCode))
+               break;
+            idx++;
+         }
+         if (col == 0)
+         {
+            bool check = dgvMateriar["CHECK", row].Value == null ? false : Convert.ToBoolean(dgvMateriar["CHECK", row].Value.ToString());
+            int input = Convert.ToInt32(dgvMateriarInput["INPUT", idx].Value);
+            int total = Convert.ToInt32(dgvMateriarInput["TOTAL", idx].Value);
+            int inputQty = 0;
+            foreach (DataGridViewRow row2 in dgvMateriar.Rows)
+            {
+               if (Convert.ToBoolean(row2.Cells[0].Value))
+               {
+                  inputQty += Convert.ToInt32(row2.Cells["LOT_QTY"].Value);
+               }
+            }
+            if (check)
+            {
+               if (input >= total)
+               {
+                  MboxUtil.MboxWarn("필요 수량 이상 선택할 수 없습니다.");
+                  dgvMateriar["CHECK", row].Value = false;
+                  return;
+               }
+               dgvMateriarInput["INPUT", idx].Value = inputQty >= total ? total : inputQty;
+               SelectedLotsMateriar.Add(LotsMaterialr.Find((m) => m.LOT_ID.Equals(lotId)));
+            }
+            else
+            {
+               dgvMateriarInput["INPUT", idx].Value = inputQty <= 0 ? 0 : inputQty;
+               SelectedLotsMateriar.Remove(LotsMaterialr.Find((m) => m.LOT_ID.Equals(lotId)));
+            }
 
-         if (type.Equals("선택"))
-         {
-            dgvMateriar["LOT_QTY", row].Value = "0";
+            if (inputQty >= total)
+               isPass = true;
+            else
+               isPass = false;
          }
-         else
-         {
-            decimal logQty = LotsMaterialr.Find((m) => m.LOT_ID.Equals(type)).LOT_QTY;
-            dgvMateriar["LOT_QTY", row].Value = Convert.ToInt32(logQty);
-         }
-         
       }
       private void btnStart_Click(object sender, EventArgs e)
       {
@@ -222,29 +225,81 @@ namespace Cohesion_Project
             MboxUtil.MboxWarn("자 품번 LOT가 존재하지 않습니다.");
             return;
          }
+         if (!isPass)
+         {
+            MboxUtil.MboxWarn("자재 필요 수량과 사용 수량이 일치하지 않습니다.");
+            return;
+         }
 
          Lot.LAST_TRAN_CODE = "INPUT";
          Lot.LAST_TRAN_TIME = DateTime.Now;
          Lot.LAST_TRAN_USER_ID = "TEST";
          Lot.LAST_TRAN_COMMENT = txtDesc.Text;
          Lot.LAST_HIST_SEQ += 1;
+
          List<LOT_MATERIAL_HIS_DTO> hisMaterial = new List<LOT_MATERIAL_HIS_DTO>();
-         
-         /*if (!result)
+         var groupMateriar = SelectedLotsMateriar.GroupBy((m) => m.PRODUCT_CODE).Select((m) => new { GroupKey = m.Key, Materiar = m.OrderBy((o) => o.CREATE_TIME)});
+         foreach (var group in groupMateriar)
+         {
+            decimal total = Convert.ToInt32(LotsMaterialr.Find((m) => m.PRODUCT_CODE.Equals(group.GroupKey)).REQUIRE_QTY * Convert.ToDecimal(txtTotal.Text));
+            foreach (var item in group.Materiar)
+            {
+               int idx = LotsMaterialr.FindIndex((m) => m.LOT_ID.Equals(item.LOT_ID));
+               decimal qty = total <= item.LOT_QTY ? total : item.LOT_QTY; 
+               total -= item.LOT_QTY;
+               LotsMaterialr[idx].LOT_QTY = LotsMaterialr[idx].LOT_QTY - qty;
+               LotsMaterialr[idx].LAST_HIST_SEQ = LotsMaterialr[idx].LAST_HIST_SEQ;
+               LotsMaterialr[idx].LAST_TRAN_CODE = "INPUT";
+               LotsMaterialr[idx].LAST_TRAN_TIME = DateTime.Now;
+               LotsMaterialr[idx].LAST_TRAN_COMMENT = "자재 사용";
+               LotsMaterialr[idx].LAST_TRAN_USER_ID = "TEST";
+               LOT_MATERIAL_HIS_DTO dto = new LOT_MATERIAL_HIS_DTO
+               {
+                  LOT_ID = Lot.LOT_ID,
+                  HIST_SEQ = Lot.LAST_HIST_SEQ,
+                  MATERIAL_LOT_ID = item.LOT_ID,
+                  MATERIAL_LOT_HIST_SEQ = item.LAST_HIST_SEQ,
+                  INPUT_QTY = qty.ToString(),
+                  CHILD_PRODUCT_CODE = item.PRODUCT_CODE,
+                  MATERIAL_STORE_CODE = item.STORE_CODE,
+                  TRAN_TIME = item.LAST_TRAN_TIME,
+                  WORK_DATE = DateTime.Now.ToString("yyyyMMdd"),
+                  PRODUCT_CODE = Lot.PRODUCT_CODE,
+                  OPERATION_CODE = Lot.OPERATION_CODE,
+                  EQUIPMENT_CODE = Lot.START_EQUIPMENT_CODE,
+                  TRAN_USER_ID = item.LAST_TRAN_USER_ID,
+                  TRAN_COMMENT = item.LAST_TRAN_COMMENT
+               };
+               hisMaterial.Add(dto);
+               LOT_MATERIAL_HIS_DTO dto2 = new LOT_MATERIAL_HIS_DTO
+               {
+                  LOT_ID = item.LOT_ID,
+                  HIST_SEQ = item.LAST_HIST_SEQ,
+                  MATERIAL_LOT_ID = Lot.LOT_ID,
+                  MATERIAL_LOT_HIST_SEQ = Lot.LAST_HIST_SEQ,
+                  INPUT_QTY = qty.ToString(),
+                  CHILD_PRODUCT_CODE = null,
+                  MATERIAL_STORE_CODE = item.STORE_CODE,
+                  TRAN_TIME = item.LAST_TRAN_TIME,
+                  WORK_DATE = DateTime.Now.ToString("yyyyMMdd"),
+                  PRODUCT_CODE = item.PRODUCT_CODE,
+                  OPERATION_CODE = Lot.OPERATION_CODE,
+                  EQUIPMENT_CODE = Lot.START_EQUIPMENT_CODE,
+                  TRAN_USER_ID = item.LAST_TRAN_USER_ID,
+                  TRAN_COMMENT = item.LAST_TRAN_COMMENT
+               };
+               hisMaterial.Add(dto2);
+            }
+         }
+         bool result = srvFlag.InsertMateriar(Lot, LotsMaterialr, hisMaterial);
+         if (!result)
          {
             MboxUtil.MboxError("오류가 발생했습니다.");
             return;
          }
-         MboxUtil.MboxInfo("검사 데이터가 등록되었습니다.");
-         for (int i = 0; i < dgvMateriar.Rows.Count; i++)
-         {
-            if (dgvMateriar.Rows[i].Cells["INPUT"] is DataGridViewTextBoxCell)
-               dgvMateriar.Rows[i].Cells["INPUT"].Value = "0";
-            else
-               dgvMateriar.Rows[i].Cells["INPUT"].Value = "선택";
-            dgvMateriar.Rows[i].Cells["Checked"].Value = "";
-         }
-         Lots = srvFlag.SelectOrderLotBed(txtOrder.Text);*/
+         MboxUtil.MboxInfo("자재가 사용되었습니다.");
+         cboLotId.SelectedIndex = 0;
+         Lots = srvFlag.SelectOrderLotBed(txtOrder.Text);
       }
    }
 }

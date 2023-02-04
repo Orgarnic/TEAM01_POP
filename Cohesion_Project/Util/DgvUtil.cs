@@ -100,6 +100,7 @@ namespace Cohesion_Project
          col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
          col.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
          col.HeaderText = text;
+         col.Name = property;
          col.DataPropertyName = property;
          col.Width = width;
          col.Frozen = frozen;

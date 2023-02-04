@@ -93,7 +93,7 @@ namespace Cohesion_Project
             LAST_TRAN_TIME = DateTime.Now,
             LAST_TRAN_USER_ID = "TEST",
             LAST_TRAN_COMMENT = txtOrderDesc.Text,
-            LAST_HIST_SEQ = 0
+            LAST_HIST_SEQ = 1
          };
          bool result = srvOrder.CreateLot(dto);
          if (!result)
