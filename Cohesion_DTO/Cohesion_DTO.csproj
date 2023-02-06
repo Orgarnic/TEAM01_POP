@@ -41,10 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BOM_MST_DTO.cs" />
     <Compile Include="CODE_DATA_MST_DTO.cs" />
     <Compile Include="CODE_TABLE_MST_DTO.cs" />
     <Compile Include="EQUIPMENT_MST_DTO.cs" />
     <Compile Include="EQUIPMENT_OPERATION_REL_DTO.cs" />
+    <Compile Include="INSPECT_ITEM_MST_DTO.cs" />
+    <Compile Include="INSPECT_ITEM_OPERATION_REL_DTO.cs" />
     <Compile Include="LOT_DEFECT_HIS_DTO.cs" />
     <Compile Include="LOT_END_HIS_DTO.cs" />
     <Compile Include="LOT_HIS_DTO.cs" />
@@ -55,8 +58,10 @@
     <Compile Include="OPERATION_MST_DTO.cs" />
     <Compile Include="PRODUCT_OPERATION_REL_DTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PURCHASE_ORDER_MST_DTO.cs" />
     <Compile Include="SalesOrder_DTO.cs" />
     <Compile Include="Ship_DTO.cs" />
+    <Compile Include="STORE_MST_DTO.cs" />
     <Compile Include="Util\ComboUtil.cs" />
     <Compile Include="WORK_ORDER_MST_DTO.cs" />
   </ItemGroup>

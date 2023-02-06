@@ -30,8 +30,10 @@ namespace Cohesion_Project
          DialogResult dia = pop.ShowDialog();
          int total = 0;
          if (dia == DialogResult.OK)
+         {
             order = pop.order;
-         operation = srvOrder.SelectOperation(order.PRODUCT_CODE);
+            operation = srvOrder.SelectOperation(order.PRODUCT_CODE);
+         }
          if (operation == null)
          {
             MboxUtil.MboxWarn("해당 제품은 공정이 등록되지 않은 제품입니다.");
@@ -81,9 +83,9 @@ namespace Cohesion_Project
             LOT_DESC = txtLotDesc.Text,
             PRODUCT_CODE = txtProductCode.Text,
             OPERATION_CODE = txtOperationCode.Text,
-            LOT_QTY = Convert.ToInt32(lblProductQty.Text),
+            LOT_QTY = Convert.ToInt32(txtTotalQty.Text),
             CREATE_QTY = Convert.ToInt32(txtTotalQty.Text),
-            OPER_IN_QTY = Convert.ToInt32(lblProductQty.Text),
+            OPER_IN_QTY = Convert.ToInt32(txtTotalQty.Text),
             CREATE_TIME = DateTime.Now,
             OPER_IN_TIME = DateTime.Now,
             WORK_ORDER_ID = txtOrder.Text,
@@ -91,7 +93,7 @@ namespace Cohesion_Project
             LAST_TRAN_TIME = DateTime.Now,
             LAST_TRAN_USER_ID = "TEST",
             LAST_TRAN_COMMENT = txtOrderDesc.Text,
-            LAST_HIST_SEQ = 0
+            LAST_HIST_SEQ = 1
          };
          bool result = srvOrder.CreateLot(dto);
          if (!result)

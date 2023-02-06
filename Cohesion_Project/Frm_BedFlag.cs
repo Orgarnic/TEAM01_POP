@@ -25,23 +25,41 @@ namespace Cohesion_Project
       {
          InitializeComponent();
       }
-
       private void Frm_WORK_ORDER_Load(object sender, EventArgs e)
       {
-         DgvInit();
          operations = srvWork.SelectOperations();
          Beds = srvFlag.SelectBedCodes();
+         DgvInit();
+         ComboBoxBind();
       }
-
+      private void ComboBoxBind()
+      {
+         cboBedReg.Items.Insert(0, "선택");
+         Beds.ForEach((b) => cboBedReg.Items.Add(b.KEY_1));
+         cboBedReg.SelectedIndex = 0;
+      }
+      private void ComboBoxBinding()
+      {
+         txtLotDesc.Text = string.Empty;
+         cboLotId.Items.Clear();
+         cboLotId.Items.Add("선택");
+         if (Lots != null && Lots.Count > 0)
+         {
+            foreach (var Lot in Lots)
+               cboLotId.Items.Add(Lot.LOT_ID);
+         }
+         cboLotId.SelectedIndex = 0;
+      }
       private void DgvInit()
       {
          DgvUtil.DgvInit(dgvDefect);
          DgvUtil.AddTextCol(dgvDefect, "불량 코드", "DEFECT_CODE", width: 250, readOnly: true, frozen: true);
          DgvUtil.AddTextCol(dgvDefect, "불량 명칭", "DEFECT_NAME", width: 250, readOnly: true, frozen: true);
          DgvUtil.AddTextCol(dgvDefect, "입력 수량", "DEFECT_QTY", width: 250, readOnly: true, frozen: true);
-         DgvUtil.AddButtonCol(dgvDefect, "삭제 하기", "Delete", width: 150, cellText:"삭제");
+         DgvUtil.AddButtonCol(dgvDefect, "삭제", "Delete", width: 150, cellText:"삭제");
+         dgvDefect.SelectionMode = DataGridViewSelectionMode.CellSelect;
+         dgvDefect.Font = new Font("맑은 고딕", 12, FontStyle.Bold);
       }
-
       private void btnOrder_Click(object sender, EventArgs e)
       {
          Pop_Purchase pop = new Pop_Purchase();
@@ -50,52 +68,50 @@ namespace Cohesion_Project
          if (dia == DialogResult.OK)
          {
             order = pop.order;
-            txtOrder.Text = order.WORK_ORDER_ID;
-            Lots = srvFlag.SelectOrderLotBed(txtOrder.Text);
-            if (Lots != null && Lots.Count > 0)
+            Lots = null;
+            Lots = srvFlag.SelectOrderLotBed(order.WORK_ORDER_ID);
+
+            if (Lots == null || Lots.Count < 1)
             {
-               cboLotId.Items.Clear();
-               cboLotId.Items.Add("선택");
-               foreach (var Lot in Lots)
-                  cboLotId.Items.Add(Lot.LOT_ID);
-               cboLotId.SelectedIndex = 0;
-            }
-            else
-            {
-               MboxUtil.MboxWarn("선택하신 작업지시 LOT ID가 존재하지 않습니다.");
-               txtOrder.Text = string.Empty;
+               MboxUtil.MboxInfo("해당 작업지시 LOT ID 가 존재하지 않습니다.");
                return;
             }
+            ResetDefectItems();
+            ComboBoxBinding();
+            txtOrder.Text = order.WORK_ORDER_ID;
+            cboLotId.Focus();
          }
       }
       private void cboLotId_SelectedIndexChanged(object sender, EventArgs e)
       {
          if (cboLotId.SelectedIndex < 1)
          {
-            CommonUtil.ResetControls(txtLotDesc, txtOperationCode, txtOperationName, txtProductCode, txtProductName, txtCustomerCode
-               , txtCustomerName, txtTotal, lblOrderStatus, lblOrderQty, lblProductQty, lblProductQty, lblDefectQty, txtOperationName);
+            CommonUtil.ResetControls(txtOperationCode, txtOperationName, txtTotal, txtOperationName, txtLotDesc, lblOrderStatus, txtProductCode, txtProductName, txtCustomerCode, txtCustomerName, txtBedRegTotal, txtLotQty);
+            lblDefectQty.Text = "0"; lblProductQty.Text = "0"; lblOrderQty.Text = "0";
+            ResetDefectItems();
             flwOperation.Controls.Clear();
             return;
          }
          Lot = Lots.Find((l) => l.LOT_ID.Equals(cboLotId.Text));
          if(Lot != null)
          {
-            txtLotDesc.Text = Lot.LOT_DESC;
-            txtOperationCode.Text = Lot.OPERATION_CODE;
-            txtOperationName.Text = Lot.OPERATION_NAME;
-            txtProductCode.Text = Lot.OPERATION_CODE;
+            lblOrderStatus.Text = order.ORDER_STATUS;
+            lblOrderQty.Text = Convert.ToInt32(order.ORDER_QTY).ToString();
+
+            txtProductCode.Text = order.PRODUCT_CODE;
             txtProductName.Text = order.PRODUCT_NAME;
             txtCustomerCode.Text = order.CUSTOMER_CODE;
             txtCustomerName.Text = order.CUSTOMER_NAME;
-            txtTotal.Text = Convert.ToInt32(Lot.LOT_QTY).ToString();
+
+            txtLotDesc.Text = Lot.LOT_DESC;
+            txtOperationCode.Text = Lot.OPERATION_CODE;
+            txtOperationName.Text = Lot.OPERATION_NAME;
+            txtTotal.Text = Convert.ToInt32(Lot.START_QTY).ToString();
             txtLotQty.Text = Convert.ToInt32(Lot.LOT_QTY).ToString();
+            lblProductQty.Text = Convert.ToInt32(Lot.LOT_QTY).ToString();
+            lblDefectQty.Text = Convert.ToInt32(Lot.LOT_DEFECT_QTY).ToString();
 
-            lblOrderStatus.Text = order.ORDER_STATUS;
-            lblOrderQty.Text = Convert.ToInt32(order.ORDER_QTY).ToString();
-            lblProductQty.Text = Convert.ToInt32(order.PRODUCT_QTY).ToString();
-            lblDefectQty.Text = Convert.ToInt32(order.DEFECT_QTY).ToString();
-
-            var list = operations.FindAll((o) => o.PRODUCT_CODE.Equals(Lot.PRODUCT_CODE));
+            var list = operations.FindAll((o) => o.PRODUCT_CODE.Equals(Lot.PRODUCT_CODE)).OrderBy((o) => o.FLOW_SEQ).ToList();
             var operation = operations.Find((o) => o.PRODUCT_CODE.Equals(Lot.PRODUCT_CODE) && o.OPERATION_CODE.Equals(Lot.OPERATION_CODE));
             if (list.Count > 0)
             {
@@ -124,24 +140,28 @@ namespace Cohesion_Project
                   }
                   flwOperation.Controls.Add(label);
                }
+               cboBedReg.Focus();
             }
             else
                MboxUtil.MboxError("공정 진행정보를 불러오는데 오류가 발생했습니다.");
-
-            cboBedReg.Items.Clear();
-            cboBedReg.Text = string.Empty;
-            cboBedReg.Items.Insert(0, "선택");
-            cboBedReg.SelectedIndex = 0;
-            if (srvFlag.BedRegCheck(operation.OPERATION_CODE))
-               Beds.ForEach((b) => cboBedReg.Items.Add(b.KEY_1));
-            else
-               MboxUtil.MboxWarn("현재 공정은 불량입력을 하지 않는 공정입니다.");
          }
          else
          {
-            Lot = null;
             MboxUtil.MboxError("LOT 이력을 불러오는데 오류가 발생했습니다.");
             return;
+         }
+      }
+      private void cboLotId_Leave(object sender, EventArgs e)
+      {
+         if (cboLotId.Items.Count < 1) return;
+         if (cboLotId.Items.Contains(cboLotId.Text))
+         {
+            int idx = cboLotId.Items.IndexOf(cboLotId.Text);
+            cboLotId.SelectedIndex = idx;
+         }
+         else
+         {
+            cboLotId.SelectedIndex = 0;
          }
       }
       private void cboBedReg_SelectedIndexChanged(object sender, EventArgs e)
@@ -153,13 +173,21 @@ namespace Cohesion_Project
          }
          txtBedRegName.Text = Beds.Find((b) => b.KEY_1.Equals(cboBedReg.Text)).DATA_1;
          txtBedQty.Text = "0";
+         txtBedQty.Focus();
       }
-      private void txtBedQty_TextChanged(object sender, EventArgs e) { }
-
       private void txtBedQty_KeyPress(object sender, KeyPressEventArgs e) { if (!char.IsDigit(e.KeyChar) && e.KeyChar != 8) e.Handled = true; }
-
       private void btnBedRegAdd_Click(object sender, EventArgs e)
       {
+         if (string.IsNullOrWhiteSpace(txtOrder.Text))
+         {
+            MboxUtil.MboxWarn("작업 지시서를 선택해주십시오.");
+            return;
+         }
+         if (cboLotId.SelectedIndex < 1)
+         {
+            MboxUtil.MboxWarn("LOT 정보를 선택해주십시오.");
+            return;
+         }
          if (cboBedReg.SelectedIndex < 1)
          {
             MboxUtil.MboxWarn("불량 항목을 입력해 주십시오.");
@@ -186,6 +214,8 @@ namespace Cohesion_Project
                LotDefects.Add(temp);
             else
                LotDefects.Find((d) => d.DEFECT_CODE.Equals(temp.DEFECT_CODE)).DEFECT_QTY += temp.DEFECT_QTY;
+            CommonUtil.ResetControls(txtBedRegName);
+            cboBedReg.SelectedIndex = 0; txtBedQty.Text = "0";
             QtyRange();
          }
       }
@@ -202,7 +232,6 @@ namespace Cohesion_Project
             QtyRange();
          }
       }
-
       private void QtyRange()
       {
          dgvDefect.DataSource = null;
@@ -210,9 +239,17 @@ namespace Cohesion_Project
          int total = 0;
          LotDefects.ForEach((d) => total += Convert.ToInt32(d.DEFECT_QTY));
          txtBedRegTotal.Text = total.ToString();
-         txtLotQty.Text = (Convert.ToInt32(txtTotal.Text) - Convert.ToInt32(txtBedRegTotal.Text)) > 0 ? (Convert.ToInt32(txtTotal.Text) - Convert.ToInt32(txtBedRegTotal.Text)).ToString() : "0";
+         txtLotQty.Text = (Convert.ToInt32(lblProductQty.Text) - Convert.ToInt32(txtBedRegTotal.Text)) > 0 ? (Convert.ToInt32(lblProductQty.Text) - Convert.ToInt32(txtBedRegTotal.Text)).ToString() : "0";
       }
-
+      private void ResetDefectItems()
+      {
+         dgvDefect.DataSource = null;
+         txtBedRegName.Text = string.Empty;
+         cboBedReg.Text = string.Empty;
+         cboBedReg.SelectedIndex = 0;
+         LotDefects = null;
+         txtBedQty.Text = "0";
+      }
       private void btnStart_Click(object sender, EventArgs e)
       {
          if (string.IsNullOrWhiteSpace(txtOrder.Text))
@@ -223,11 +260,6 @@ namespace Cohesion_Project
          if (cboLotId.SelectedIndex < 1)
          {
             MboxUtil.MboxWarn("LOT 정보를 선택해주십시오.");
-            return;
-         }
-         if(LotDefects == null)
-         {
-            MboxUtil.MboxWarn("현재 공정은 불량입력을 하지 않는 공정입니다.");
             return;
          }
          Lot.LOT_QTY = Convert.ToDecimal(txtLotQty.Text);
@@ -247,23 +279,9 @@ namespace Cohesion_Project
 
          lblDefectQty.Text = (Convert.ToInt32(lblDefectQty.Text) + Convert.ToInt32(txtBedRegTotal.Text)).ToString();
          lblProductQty.Text = (Convert.ToInt32(lblProductQty.Text) - Convert.ToInt32(txtBedRegTotal.Text)).ToString();
-
-         dgvDefect.DataSource = null;
-         LotDefects = null;
-         Lots = null;
-         CommonUtil.ResetControls(txtBedRegName, txtBedRegTotal);
-         txtBedQty.Text = "0";
-         cboBedReg.Items.Clear();
-         cboBedReg.Text = string.Empty;
          Lots = srvFlag.SelectOrderLotBed(txtOrder.Text);
-         cboLotId.Items.Clear();
-         cboLotId.Text = string.Empty;
-         if (Lots != null && Lots.Count > 0)
-         {
-            foreach (var Lot in Lots)
-               cboLotId.Items.Add(Lot.LOT_ID);
-            cboLotId.SelectedIndex = 0;
-         }
+         cboLotId.SelectedIndex = 0;
+         ResetDefectItems();
       }
    }
 }

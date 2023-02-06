@@ -14,6 +14,8 @@ namespace Cohesion_DTO
         public static List<char> Answer = new List<char> { 'Y', 'N' };
 
         public static List<char> InspectUnit = new List<char> { 'N', 'C' };
+
+        public static List<char> Store = new List<char> { };
     }
 
     public class ComboStringConverter : StringConverter
@@ -55,5 +57,18 @@ namespace Cohesion_DTO
         {
             return new StandardValuesCollection(ComboUtil.InspectUnit);
         }
+    }
+
+    public class ComboStoreConverter : CharConverter
+    {
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        {
+            return true;
+        }
+
+        public override TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        {
+            return new StandardValuesCollection(ComboUtil.Store);
+        }//STOCK_IN_FLAG
     }
 }

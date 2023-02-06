@@ -35,10 +35,10 @@ namespace Cohesion_Project
       /// <param name="align">셀 정렬 (0 왼쪽, 1 중간, 2오른)</param>
       /// <param name="visible"></param>
       /// <param name="frozen">고정</param>
-      public static void AddTextCol(DataGridView dgv, string text, string property, int width = 100, bool readOnly = false, int align = 1, bool visible = true, bool frozen = false)
+      public static void AddTextCol(DataGridView dgv, string text, string property, int width = 100, bool readOnly = false, int align = 0, bool visible = true, bool frozen = false)
       {
          DataGridViewTextBoxColumn col = new DataGridViewTextBoxColumn();
-         col.Name = text;
+         col.Name = property;
          col.DataPropertyName = property;
          col.HeaderText = text;
          col.Width = width;
@@ -100,6 +100,7 @@ namespace Cohesion_Project
          col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
          col.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
          col.HeaderText = text;
+         col.Name = property;
          col.DataPropertyName = property;
          col.Width = width;
          col.Frozen = frozen;

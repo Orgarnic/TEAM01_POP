@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Linq;
 using System.Windows.Forms;
 using Cohesion_DTO;
 
@@ -22,13 +23,11 @@ namespace Cohesion_Project
       {
          InitializeComponent();
       }
-
       private void Frm_WORK_ORDER_Load(object sender, EventArgs e)
       {
          operations = srvWork.SelectOperations();
          Equipments = srvWork.SelectEquipments();
       }
-
       private void btnOrder_Click(object sender, EventArgs e)
       {
          Pop_Purchase pop = new Pop_Purchase();
@@ -39,21 +38,15 @@ namespace Cohesion_Project
             cboEquipment.Items.Clear();
             cboEquipment.Text = string.Empty;
             order = pop.order;
-            txtOrder.Text = order.WORK_ORDER_ID;
             Lots = null;
-            Lots = srvWork.SelectOrderLot(txtOrder.Text);
+            Lots = srvWork.SelectOrderLot(order.WORK_ORDER_ID);
             if (Lots == null || Lots.Count < 1)
-               if (!MboxUtil.MboxInfo_("해당 작업지시 LOT ID 가 존재하지 않습니다.\n정보를 가져오시겠습니까?")) { txtOrder.Text = string.Empty; return; }
+            {
+               MboxUtil.MboxInfo("해당 작업지시 LOT ID 가 존재하지 않습니다.");
+               return;
+            }
+            txtOrder.Text = order.WORK_ORDER_ID;
             ComboBoxBinding();
-            lblOrderStatus.Text = order.ORDER_STATUS;
-            lblOrderQty.Text = Convert.ToInt32(order.ORDER_QTY).ToString();
-            lblProductQty.Text = Convert.ToInt32(order.PRODUCT_QTY).ToString();
-            lblDefectQty.Text = Convert.ToInt32(order.DEFECT_QTY).ToString();
-
-            txtProductCode.Text = order.PRODUCT_CODE;
-            txtProductName.Text = order.PRODUCT_NAME;
-            txtCustomerCode.Text = order.CUSTOMER_CODE;
-            txtCustomerName.Text = order.CUSTOMER_NAME;
          }
       }
       private void cboLotId_SelectedIndexChanged(object sender, EventArgs e)
@@ -62,20 +55,32 @@ namespace Cohesion_Project
          cboEquipment.Text = string.Empty;
          if (cboLotId.SelectedIndex < 1)
          {
-            CommonUtil.ResetControls(txtOperationCode, txtOperationName, txtTotal, txtOperationName);
+            CommonUtil.ResetControls(txtProductCode, lblOrderStatus, lblOrderQty, txtProductCode, txtProductName, txtCustomerCode, txtCustomerName, txtOperationCode, txtOperationName, txtTotal, txtLotDesc, txtEquipment);
+            lblDefectQty.Text = "0"; lblProductQty.Text = "0";
             flwOperation.Controls.Clear();
             return;
          }
          Lot = Lots.Find((l) => l.LOT_ID.Equals(cboLotId.Text));
          if(Lot != null)
          {
+            lblOrderStatus.Text = order.ORDER_STATUS;
+            lblOrderQty.Text = Convert.ToInt32(order.ORDER_QTY).ToString();
+
+            txtProductCode.Text = order.PRODUCT_CODE;
+            txtProductName.Text = order.PRODUCT_NAME;
+            txtCustomerCode.Text = order.CUSTOMER_CODE;
+            txtCustomerName.Text = order.CUSTOMER_NAME;
+
             txtLotDesc.Text = Lot.LOT_DESC;
             txtOperationCode.Text = Lot.OPERATION_CODE;
             txtOperationName.Text = Lot.OPERATION_NAME;
 
+            lblProductQty.Text = Convert.ToInt32(Lot.LOT_QTY).ToString();
+            lblDefectQty.Text = Convert.ToInt32(Lot.LOT_DEFECT_QTY).ToString();
+
             txtTotal.Text = Convert.ToInt32(Lot.CREATE_QTY).ToString();
 
-            var list = operations.FindAll((o) => o.PRODUCT_CODE.Equals(Lot.PRODUCT_CODE));
+            var list = operations.FindAll((o) => o.PRODUCT_CODE.Equals(Lot.PRODUCT_CODE)).OrderBy((o) => o.FLOW_SEQ).ToList();
             var operation = operations.Find((o) => o.PRODUCT_CODE.Equals(Lot.PRODUCT_CODE) && o.OPERATION_CODE.Equals(Lot.OPERATION_CODE));
             if (list.Count > 0) 
             {
@@ -116,6 +121,7 @@ namespace Cohesion_Project
                   cboEquipment.Items.Add(item.EQUIPMENT_CODE);
                cboEquipment.SelectedIndex = 0;
             }
+            cboEquipment.Focus();
          }
          else
          {
@@ -124,14 +130,15 @@ namespace Cohesion_Project
             return;
          }
       }
-
       private void cboEquipment_SelectedIndexChanged(object sender, EventArgs e)
       {
          if (cboEquipment.SelectedIndex < 1)
+         {
+            txtEquipment.Text = string.Empty;
             return;
+         }
          txtEquipment.Text = (Equipments.Find((q) => q.EQUIPMENT_CODE.Equals(cboEquipment.Text))).EQUIPMENT_NAME;
       }
-
       private void btnStart_Click(object sender, EventArgs e)
       {
          if (string.IsNullOrWhiteSpace(txtOrder.Text))
@@ -144,7 +151,7 @@ namespace Cohesion_Project
             MboxUtil.MboxWarn("LOT 정보를 선택해주십시오.");
             return;
          }
-         Lot.LOT_QTY = Convert.ToInt32(txtTotal.Text);
+         Lot.LOT_QTY = Convert.ToInt32(lblProductQty.Text);
          Lot.START_FLAG = 'Y';
          Lot.START_QTY = Convert.ToInt32(txtTotal.Text);
          Lot.START_TIME = DateTime.Now;
@@ -164,12 +171,9 @@ namespace Cohesion_Project
          MboxUtil.MboxInfo("작업이 시작되었습니다.");
          Lots = null;
          Lots = srvWork.SelectOrderLot(txtOrder.Text);
-         if (Lots == null || Lots.Count < 1)
-            if (MboxUtil.MboxInfo_("해당 작업지시 LOT ID 가 존재하지 않습니다.\n다른 작업지시서를 선택하시겠습니까 ?")) { btnOrder.PerformClick(); return; }
          ComboBoxBinding();
-         txtLotDesc.Text = string.Empty;
+         cboLotId.SelectedIndex = 0;
       }
-
       private void ComboBoxBinding()
       {
          txtLotDesc.Text = string.Empty;
