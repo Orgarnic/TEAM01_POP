@@ -16,5 +16,11 @@ namespace Cohesion_Project
       {
          InitializeComponent();
       }
+        private void DataGridViewBinding()
+        {
+            DgvUtil.DgvInit(dgv_LOT_List);
+            DgvUtil.AddTextCol(dgv_LOT_List, "LOT ID", "LOT_ID", readOnly: true, align: 0);
+
+        }
    }
 }
