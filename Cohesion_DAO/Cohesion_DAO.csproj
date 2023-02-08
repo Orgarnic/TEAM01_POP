@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Flag_DAO.cs" />
+    <Compile Include="LookUp_DAO.cs" />
     <Compile Include="Order_DAO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Purchase_DAO.cs" />

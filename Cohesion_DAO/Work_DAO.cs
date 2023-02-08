@@ -454,25 +454,22 @@ namespace Cohesion_DAO
                cmd5.Transaction = trans;
                cmd5.ExecuteNonQuery();
 
-               /*sql = @"UPDATE WORK_ORDER_MST
+               sql = @"UPDATE WORK_ORDER_MST
                        SET 
-                       ORDER_STATUS = 'CLOSE',
-                       PRODUCT_QTY = @PRODUCT_QTY,
-                       WORK_CLOSE_TIME = @WORK_CLOSE_TIME,
-                       WORK_CLOSE_USER_ID = @WORK_CLOSE_USER_ID,
+                       PRODUCT_QTY = PRODUCT_QTY + @PRODUCT_QTY,
+                       DEFECT_QTY = DEFECT_QTY + @DEFECT_QTY,
                        UPDATE_TIME = @UPDATE_TIME,
                        UPDATE_USER_ID = @UPDATE_USER_ID
                        WHERE 
                        WORK_ORDER_ID = @WORK_ORDER_ID";
                SqlCommand cmd6 = new SqlCommand(sql, conn);
                cmd6.Parameters.AddWithValue("@PRODUCT_QTY", dto.LOT_QTY);
-               cmd6.Parameters.AddWithValue("@WORK_CLOSE_TIME", DateTime.Now);
-               cmd6.Parameters.AddWithValue("@WORK_CLOSE_USER_ID", dto.LAST_TRAN_USER_ID);
+               cmd6.Parameters.AddWithValue("@DEFECT_QTY", dto.LOT_DEFECT_QTY);
                cmd6.Parameters.AddWithValue("@UPDATE_TIME", DateTime.Now);
                cmd6.Parameters.AddWithValue("@UPDATE_USER_ID", dto.LAST_TRAN_USER_ID);
                cmd6.Parameters.AddWithValue("@WORK_ORDER_ID", dto.WORK_ORDER_ID);
                cmd6.Transaction = trans;
-               cmd6.ExecuteNonQuery();*/
+               cmd6.ExecuteNonQuery();
             }
 
             trans.Commit();

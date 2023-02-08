@@ -54,6 +54,7 @@
     <Compile Include="LOT_INSPECT_HIS_DTO.cs" />
     <Compile Include="LOT_MATERIAL_HIS_DTO.cs" />
     <Compile Include="LOT_STS_DTO.cs" />
+    <Compile Include="LOT_STS_PPG_DTO.cs" />
     <Compile Include="OPERATION_MST_DTO.cs" />
     <Compile Include="PRODUCT_OPERATION_REL_DTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
