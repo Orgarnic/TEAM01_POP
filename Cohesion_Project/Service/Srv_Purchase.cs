@@ -27,5 +27,14 @@ namespace Cohesion_Project
 
             return list;
         }
+
+        public bool UpdatePurchaseData(List<PURCHASE_ORDER_MST_DTO> dto)
+        {
+            Purchase_DAO db = new Purchase_DAO();
+            bool result = db.UpdatePurchaseData(dto);
+            db.Dispose();
+
+            return result;
+        }
     }
 }
