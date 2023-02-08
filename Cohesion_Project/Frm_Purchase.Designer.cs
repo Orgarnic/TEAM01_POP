@@ -36,13 +36,13 @@ namespace Cohesion_Project
             this.panel4 = new System.Windows.Forms.Panel();
             this.txtOrderQty = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
-            this.txtDesc = new System.Windows.Forms.TextBox();
             this.txtProductName = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.cboPurchaseID = new System.Windows.Forms.ComboBox();
             this.dgvPurchaseList = new System.Windows.Forms.DataGridView();
+            this.label14 = new System.Windows.Forms.Label();
+            this.txtDesc = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -185,7 +185,7 @@ namespace Cohesion_Project
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtOrderQty.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtOrderQty.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtOrderQty.Location = new System.Drawing.Point(23, 315);
+            this.txtOrderQty.Location = new System.Drawing.Point(23, 156);
             this.txtOrderQty.Name = "txtOrderQty";
             this.txtOrderQty.ReadOnly = true;
             this.txtOrderQty.Size = new System.Drawing.Size(289, 29);
@@ -199,25 +199,12 @@ namespace Cohesion_Project
             this.label18.BackColor = System.Drawing.Color.Transparent;
             this.label18.Font = new System.Drawing.Font("나눔고딕", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label18.ForeColor = System.Drawing.Color.Black;
-            this.label18.Location = new System.Drawing.Point(19, 282);
+            this.label18.Location = new System.Drawing.Point(19, 123);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(138, 29);
             this.label18.TabIndex = 26;
             this.label18.Text = "◾ 총 수량";
             this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // txtDesc
-            // 
-            this.txtDesc.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDesc.Enabled = false;
-            this.txtDesc.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDesc.Location = new System.Drawing.Point(23, 76);
-            this.txtDesc.Multiline = true;
-            this.txtDesc.Name = "txtDesc";
-            this.txtDesc.Size = new System.Drawing.Size(289, 129);
-            this.txtDesc.TabIndex = 24;
             // 
             // txtProductName
             // 
@@ -225,25 +212,11 @@ namespace Cohesion_Project
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtProductName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtProductName.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtProductName.Location = new System.Drawing.Point(23, 240);
+            this.txtProductName.Location = new System.Drawing.Point(23, 81);
             this.txtProductName.Name = "txtProductName";
             this.txtProductName.ReadOnly = true;
             this.txtProductName.Size = new System.Drawing.Size(289, 29);
             this.txtProductName.TabIndex = 25;
-            // 
-            // label14
-            // 
-            this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label14.BackColor = System.Drawing.Color.Transparent;
-            this.label14.Font = new System.Drawing.Font("나눔고딕", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.ForeColor = System.Drawing.Color.Black;
-            this.label14.Location = new System.Drawing.Point(19, 43);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(138, 30);
-            this.label14.TabIndex = 22;
-            this.label14.Text = "◾ 자재 설명";
-            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label17
             // 
@@ -252,7 +225,7 @@ namespace Cohesion_Project
             this.label17.BackColor = System.Drawing.Color.Transparent;
             this.label17.Font = new System.Drawing.Font("나눔고딕", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label17.ForeColor = System.Drawing.Color.Black;
-            this.label17.Location = new System.Drawing.Point(19, 207);
+            this.label17.Location = new System.Drawing.Point(19, 48);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(138, 30);
             this.label17.TabIndex = 23;
@@ -292,6 +265,33 @@ namespace Cohesion_Project
             this.dgvPurchaseList.TabIndex = 4;
             this.dgvPurchaseList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPurchaseList_CellClick);
             // 
+            // label14
+            // 
+            this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label14.BackColor = System.Drawing.Color.Transparent;
+            this.label14.Font = new System.Drawing.Font("나눔고딕", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.ForeColor = System.Drawing.Color.Black;
+            this.label14.Location = new System.Drawing.Point(19, 523);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(138, 30);
+            this.label14.TabIndex = 22;
+            this.label14.Text = "◾ 입고 자재 코드";
+            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // txtDesc
+            // 
+            this.txtDesc.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDesc.Enabled = false;
+            this.txtDesc.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtDesc.Location = new System.Drawing.Point(23, 556);
+            this.txtDesc.Multiline = true;
+            this.txtDesc.Name = "txtDesc";
+            this.txtDesc.Size = new System.Drawing.Size(289, 129);
+            this.txtDesc.TabIndex = 24;
+            // 
             // Frm_Purchase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -323,13 +323,13 @@ namespace Cohesion_Project
       private System.Windows.Forms.Button button3;
       private System.Windows.Forms.Panel panel4;
       protected System.Windows.Forms.Label label15;
-      protected System.Windows.Forms.TextBox txtDesc;
       protected System.Windows.Forms.TextBox txtProductName;
-      protected System.Windows.Forms.Label label14;
       protected System.Windows.Forms.Label label17;
       protected System.Windows.Forms.TextBox txtOrderQty;
       protected System.Windows.Forms.Label label18;
         private System.Windows.Forms.ComboBox cboPurchaseID;
         private System.Windows.Forms.DataGridView dgvPurchaseList;
+        protected System.Windows.Forms.TextBox txtDesc;
+        protected System.Windows.Forms.Label label14;
     }
 }

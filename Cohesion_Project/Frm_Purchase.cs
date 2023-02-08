@@ -96,26 +96,6 @@ namespace Cohesion_Project
             }
         }
 
-        private List<PURCHASE_ORDER_MST_DTO> CreatePurchaseLot(PURCHASE_ORDER_MST_DTO dto)
-        {
-            List<PURCHASE_ORDER_MST_DTO> list = new List<PURCHASE_ORDER_MST_DTO>();
-            string id, prod;
-            string flag;
-            for (int i = dgvPurchaseList.Rows.Count - 1; i >= 0; i--)
-            {
-                id = (string)dgvPurchaseList.Rows[i].Cells["PURCHASE_ORDER_ID"].Value;
-                flag = dgvPurchaseList.Rows[i].Cells["STOCK_IN_FLAG"].Value.ToString();
-                prod = (string)dgvPurchaseList.Rows[i].Cells["MATERIAL_CODE"].Value;
-                if (id == null && flag != "N" && prod == null) continue;
-                else
-                {
-                    purchaseDTO = (PURCHASE_ORDER_MST_DTO)dgvPurchaseList.Rows[dgvPurchaseList.CurrentRow.Index].DataBoundItem;
-                    list.Add(purchaseDTO);
-                }
-            }
-            return list;
-        }
-
         private void dgvPurchaseList_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
