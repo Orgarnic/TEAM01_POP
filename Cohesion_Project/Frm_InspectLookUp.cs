@@ -32,7 +32,7 @@ namespace Cohesion_Project
         {
             DgvUtil.DgvInit(dgvInspectList);
             DgvUtil.AddTextCol(dgvInspectList, "자재 코드", "LOT_ID", width: 190, readOnly: true, 0, frozen: true);
-            DgvUtil.AddTextCol(dgvInspectList, "순번", "HIST_SEQ", width: 80, readOnly: true, 2, frozen: true);
+            DgvUtil.AddTextCol(dgvInspectList, "순번", "HIST_SEQ", width: 70, readOnly: true, 2, frozen: true);
             DgvUtil.AddTextCol(dgvInspectList, "검사 항목명", "INSPECT_ITEM_NAME", width: 180, readOnly: true, 1);
             DgvUtil.AddTextCol(dgvInspectList, "스펙 하한값", "SPEC_LSL", width: 120, readOnly: true, 2);
             DgvUtil.AddTextCol(dgvInspectList, "스펙 타겟값", "SPEC_TARGET", width: 120, readOnly: true, 2);
@@ -46,7 +46,7 @@ namespace Cohesion_Project
             DgvUtil.AddTextCol(dgvInspectList, "창고명", "STORE_CODE", width: 100, readOnly: true, 0);
             DgvUtil.AddTextCol(dgvInspectList, "설비명", "EQUIPMENT_CODE", width: 80, readOnly: true, 0);
             DgvUtil.AddTextCol(dgvInspectList, "처리 사용자", "TRAN_USER_ID", width: 120, readOnly: true, 0);
-            DgvUtil.AddTextCol(dgvInspectList, "처리 주석", "TRAN_COMMENT", width: 100, readOnly: true);
+            DgvUtil.AddTextCol(dgvInspectList, "처리 주석", "TRAN_COMMENT", width: 100, readOnly: true, 0);
             dgvInspectList.Font = new Font("맑은 고딕", 10, FontStyle.Bold);
         }
 
