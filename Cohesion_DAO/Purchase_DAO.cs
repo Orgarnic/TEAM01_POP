@@ -104,6 +104,11 @@ namespace Cohesion_DAO
                     cmd.Parameters["@STOCK_IN_FLAG"].Value = dto[i].STOCK_IN_FLAG.ToString();
                     cmd.Parameters["@MATERIAL_CODE"].Value = dto[i].MATERIAL_CODE;
                     cmd.Parameters["@LOT_QTY"].Value = dto[i].ORDER_QTY;
+                    cmd.Parameters["@LAST_TRAN_CODE"].Value = "CREATE";
+                    cmd.Parameters["@LAST_TRAN_USER_ID"].Value = "유기현"; // 로그인창 생성시 작성 필요.
+                    cmd.Parameters["@LAST_TRAN_TIME"].Value = DBNull.Value;
+                    cmd.Parameters["@LAST_HIST_SEQ"].Value = 1;
+                    // LAST_TRAN_CODE, LAST_TRAN_USER_ID, LAST_TRAN_TIME, LAST_HIST_SEQ
 
                     int iRowAffect = cmd.ExecuteNonQuery();
                     string sss = $"'{dto[i].PURCHASE_ORDER_ID}', '{dto[i].VENDOR_CODE}', '{dto[i].MATERIAL_CODE}', '{dto[i].STOCK_IN_FLAG.ToString()}', {dto[i].ORDER_QTY}";
