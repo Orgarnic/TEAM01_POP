@@ -18,5 +18,14 @@ namespace Cohesion_Project.Service
 
             return list;
         }
+
+        public List<LOT_INSPECT_HIS_DTO> GetLOTInspectID()
+        {
+            Inspect_DAO db = new Inspect_DAO();
+            List<LOT_INSPECT_HIS_DTO> list = db.GetLOTInspectID();
+            db.Dispose();
+
+            return list;
+        }
     }
 }

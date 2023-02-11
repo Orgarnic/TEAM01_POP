@@ -54,5 +54,30 @@ namespace Cohesion_DAO
                 conn.Close();
             }
         }
+
+        public List<LOT_INSPECT_HIS_DTO> GetLOTInspectID()
+        {
+            try
+            {
+                string sql = @"select LOT_ID from LOT_INSPECT_HIS group by LOT_ID";
+
+                SqlCommand cmd = new SqlCommand(sql, conn);
+
+                conn.Open();
+                List<LOT_INSPECT_HIS_DTO> list = Helper.DataReaderMapToList<LOT_INSPECT_HIS_DTO>(cmd.ExecuteReader());
+
+                return list;
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine(err.Message);
+                Debug.WriteLine(err.StackTrace);
+                return null;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
     }
 }
