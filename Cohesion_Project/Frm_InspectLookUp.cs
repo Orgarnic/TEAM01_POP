@@ -57,5 +57,10 @@ namespace Cohesion_Project
             dgvInspectList.DataSource = null;
             dgvInspectList.DataSource = inspect;
         }
+
+        private void Btn_Close_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
