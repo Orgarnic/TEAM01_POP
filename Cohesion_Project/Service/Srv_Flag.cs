@@ -26,6 +26,15 @@ namespace Cohesion_Project
 
          return list;
       }
+      public List<LOT_STS_DTO> SelectOrderLotMateriar(string orderId)
+      {
+         Flag_DAO dao = new Flag_DAO();
+         List<LOT_STS_DTO> list = dao.SelectOrderLotMateriar(orderId);
+         dao.Dispose();
+
+         return list;
+      }
+
       public List<CODE_DATA_MST_DTO> SelectBedCodes()
       {
          Flag_DAO dao = new Flag_DAO();
@@ -46,6 +55,14 @@ namespace Cohesion_Project
       {
          Flag_DAO dao = new Flag_DAO();
          List<LOT_STS_DTO> list = dao.SelectLotMateriars(prodId, operation);
+         dao.Dispose();
+
+         return list;
+      }
+      public List<BOM_MST_DTO> SelectInputMateriars(string prodId, string operation)
+      {
+         Flag_DAO dao = new Flag_DAO();
+         List<BOM_MST_DTO> list = dao.SelectInputMateriars(prodId, operation);
          dao.Dispose();
 
          return list;

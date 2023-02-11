@@ -154,11 +154,11 @@ namespace Cohesion_Project
          Lot.LOT_QTY = Convert.ToInt32(lblProductQty.Text);
          Lot.START_FLAG = 'Y';
          Lot.START_QTY = Convert.ToInt32(txtTotal.Text);
-         Lot.START_TIME = DateTime.Now;
+         Lot.START_TIME = order.CREATE_TIME;
          Lot.START_EQUIPMENT_CODE = cboEquipment.SelectedIndex < 1 ? "" : cboEquipment.Text;
          Lot.LAST_TRAN_CODE = "START";
-         Lot.LAST_TRAN_TIME = DateTime.Now;
-         Lot.LAST_TRAN_USER_ID = "TEST";
+         Lot.LAST_TRAN_TIME = order.CREATE_TIME;
+         Lot.LAST_TRAN_USER_ID = "유기현";
          Lot.LAST_TRAN_COMMENT = txtDesc.Text;
          Lot.LAST_HIST_SEQ += 1;
 

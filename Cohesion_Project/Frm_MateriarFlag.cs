@@ -20,7 +20,6 @@ namespace Cohesion_Project
       private LOT_STS_DTO Lot = null;
       private Srv_Work srvWork = new Srv_Work();
       private Srv_Flag srvFlag = new Srv_Flag();
-      private bool isPass = false;
 
       public Frm_MateriarFlag()
       {
@@ -71,7 +70,7 @@ namespace Cohesion_Project
          {
             order = pop.order;
             Lots = null;
-            Lots = srvFlag.SelectOrderLotInspect(order.WORK_ORDER_ID);
+            Lots = srvFlag.SelectOrderLotMateriar(order.WORK_ORDER_ID);
 
             if (Lots == null || Lots.Count < 1)
             {
@@ -146,10 +145,10 @@ namespace Cohesion_Project
             SelectedLotsMateriar = new List<LOT_STS_DTO>();
             LotsMaterialr = srvFlag.SelectLotMateriars(Lot.PRODUCT_CODE, operation.OPERATION_CODE);
             dgvMateriar.DataSource = null;
-            var temp = LotsMaterialr.Distinct();
             dgvMateriar.DataSource = LotsMaterialr;
-            dgvMateriarInput.DataSource = (from t in temp select new { PRODUCT_CODE = t.PRODUCT_CODE, PRODUCT_NAME = t.PRODUCT_NAME, REQUIRE_QTY = t.REQUIRE_QTY, 
-                                           TOTAL = Convert.ToInt32(t.REQUIRE_QTY * Convert.ToDecimal(txtTotal.Text)) }).ToList();
+            var temp = srvFlag.SelectInputMateriars(Lot.PRODUCT_CODE, operation.OPERATION_CODE);
+            dgvMateriarInput.DataSource = (from t in temp select new { PRODUCT_CODE = t.CHILD_PRODUCT_CODE, PRODUCT_NAME = t.PRODUCT_NAME, REQUIRE_QTY = t.REQUIRE_QTY, 
+                                           TOTAL = Convert.ToInt32((t.REQUIRE_QTY == null ? 0 : t.REQUIRE_QTY) * Convert.ToDecimal(txtTotal.Text)) }).ToList();
             dgvMateriarInput.ClearSelection();
          }
          else
@@ -201,11 +200,6 @@ namespace Cohesion_Project
                dgvMateriarInput["INPUT", idx].Value = inputQty <= 0 ? 0 : inputQty;
                SelectedLotsMateriar.Remove(LotsMaterialr.Find((m) => m.LOT_ID.Equals(lotId)));
             }
-
-            if (inputQty >= total)
-               isPass = true;
-            else
-               isPass = false;
          }
       }
       private void btnStart_Click(object sender, EventArgs e)
@@ -225,19 +219,25 @@ namespace Cohesion_Project
             MboxUtil.MboxWarn("자 품번 LOT가 존재하지 않습니다.");
             return;
          }
-         if (!isPass)
+         foreach (DataGridViewRow row in dgvMateriarInput.Rows)
          {
-            MboxUtil.MboxWarn("자재 필요 수량과 사용 수량이 일치하지 않습니다.");
-            return;
+            if (Convert.ToInt32(row.Cells["INPUT"].Value) == Convert.ToInt32(row.Cells["TOTAL"].Value))
+               continue;
+            else
+            {
+               MboxUtil.MboxWarn("자재 필요 수량과 사용 수량이 일치하지 않습니다.");
+               return;
+            }
          }
 
          Lot.LAST_TRAN_CODE = "INPUT";
-         Lot.LAST_TRAN_TIME = DateTime.Now;
-         Lot.LAST_TRAN_USER_ID = "TEST";
+         Lot.LAST_TRAN_TIME = order.CREATE_TIME;
+         Lot.LAST_TRAN_USER_ID = "유기현";
          Lot.LAST_TRAN_COMMENT = txtDesc.Text;
          Lot.LAST_HIST_SEQ += 1;
 
          List<LOT_MATERIAL_HIS_DTO> hisMaterial = new List<LOT_MATERIAL_HIS_DTO>();
+         List<LOT_STS_DTO> marterialLot = new List<LOT_STS_DTO>();
          var groupMateriar = SelectedLotsMateriar.GroupBy((m) => m.PRODUCT_CODE).Select((m) => new { GroupKey = m.Key, Materiar = m.OrderBy((o) => o.CREATE_TIME)});
          foreach (var group in groupMateriar)
          {
@@ -250,9 +250,10 @@ namespace Cohesion_Project
                LotsMaterialr[idx].LOT_QTY = LotsMaterialr[idx].LOT_QTY - qty;
                LotsMaterialr[idx].LAST_HIST_SEQ = LotsMaterialr[idx].LAST_HIST_SEQ + 1;
                LotsMaterialr[idx].LAST_TRAN_CODE = "INPUT";
-               LotsMaterialr[idx].LAST_TRAN_TIME = DateTime.Now;
+               LotsMaterialr[idx].LAST_TRAN_TIME = order.CREATE_TIME;
                LotsMaterialr[idx].LAST_TRAN_COMMENT = "자재 사용";
-               LotsMaterialr[idx].LAST_TRAN_USER_ID = "TEST";
+               LotsMaterialr[idx].LAST_TRAN_USER_ID = "유기현";
+               marterialLot.Add(LotsMaterialr[idx]);
                LOT_MATERIAL_HIS_DTO dto = new LOT_MATERIAL_HIS_DTO
                {
                   LOT_ID = Lot.LOT_ID,
@@ -263,7 +264,7 @@ namespace Cohesion_Project
                   CHILD_PRODUCT_CODE = item.PRODUCT_CODE,
                   MATERIAL_STORE_CODE = item.STORE_CODE,
                   TRAN_TIME = item.LAST_TRAN_TIME,
-                  WORK_DATE = DateTime.Now.ToString("yyyyMMdd"),
+                  WORK_DATE = order.CREATE_TIME.ToString("yyyyMMdd"),
                   PRODUCT_CODE = Lot.PRODUCT_CODE,
                   OPERATION_CODE = Lot.OPERATION_CODE,
                   EQUIPMENT_CODE = Lot.START_EQUIPMENT_CODE,
@@ -281,7 +282,7 @@ namespace Cohesion_Project
                   CHILD_PRODUCT_CODE = null,
                   MATERIAL_STORE_CODE = item.STORE_CODE,
                   TRAN_TIME = item.LAST_TRAN_TIME,
-                  WORK_DATE = DateTime.Now.ToString("yyyyMMdd"),
+                  WORK_DATE = order.CREATE_TIME.ToString("yyyyMMdd"),
                   PRODUCT_CODE = item.PRODUCT_CODE,
                   OPERATION_CODE = Lot.OPERATION_CODE,
                   EQUIPMENT_CODE = Lot.START_EQUIPMENT_CODE,
@@ -291,7 +292,7 @@ namespace Cohesion_Project
                hisMaterial.Add(dto2);
             }
          }
-         bool result = srvFlag.InsertMateriar(Lot, LotsMaterialr, hisMaterial);
+         bool result = srvFlag.InsertMateriar(Lot, marterialLot, hisMaterial);
          if (!result)
          {
             MboxUtil.MboxError("오류가 발생했습니다.");

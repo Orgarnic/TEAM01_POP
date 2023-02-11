@@ -105,6 +105,48 @@ namespace Cohesion_DAO
          }
          return list;
       }
+      public List<LOT_STS_DTO> SelectOrderLotMateriar(string orderId)
+      {
+         List<LOT_STS_DTO> list = null;
+         try
+         {
+            SqlCommand cmd = new SqlCommand();
+            string sql = @"SELECT 
+                           LOT_ID, LOT_DESC, L.PRODUCT_CODE, L.OPERATION_CODE, O.OPERATION_NAME OPERATION_NAME, STORE_CODE, LOT_QTY, CREATE_QTY,
+						   		 CASE WHEN (SELECT SUM(DEFECT_QTY) FROM LOT_DEFECT_HIS WHERE LOT_ID = L.LOT_ID) IS NULL THEN 0 
+						         ELSE (SELECT SUM(DEFECT_QTY) FROM LOT_DEFECT_HIS WHERE LOT_ID = L.LOT_ID) END LOT_DEFECT_QTY,
+                           OPER_IN_QTY, START_FLAG, START_QTY, START_TIME, START_EQUIPMENT_CODE, END_FLAG,
+                           END_TIME, END_EQUIPMENT_CODE, SHIP_FLAG, SHIP_CODE, SHIP_TIME, PRODUCTION_TIME,
+                           L.CREATE_TIME, OPER_IN_TIME, L.WORK_ORDER_ID, LOT_DELETE_FLAG, LOT_DELETE_CODE, LOT_DELETE_TIME,
+                           LAST_TRAN_CODE, LAST_TRAN_TIME, LAST_TRAN_USER_ID, LAST_TRAN_COMMENT, LAST_HIST_SEQ
+                           FROM 
+                           LOT_STS L INNER JOIN PRODUCT_OPERATION_REL P ON L.PRODUCT_CODE = P.PRODUCT_CODE AND L.OPERATION_CODE = P.OPERATION_CODE
+                           			 INNER JOIN OPERATION_MST O ON L.OPERATION_CODE = O.OPERATION_CODE
+									          INNER JOIN WORK_ORDER_MST W ON W.WORK_ORDER_ID = L.WORK_ORDER_ID
+                           WHERE 
+                           LAST_TRAN_CODE in ('START', 'DEFECT', 'INSPECT', 'INPUT') 
+						         AND LOT_DELETE_FLAG IS NULL
+						         AND W.ORDER_STATUS <> 'CLOSE'
+                           AND L.WORK_ORDER_ID = @WORK_ORDER_ID
+                           AND O.CHECK_MATERIAL_FLAG = 'Y'";
+            cmd.Parameters.AddWithValue("@WORK_ORDER_ID", orderId);
+            cmd.CommandText = sql.ToString();
+            cmd.Connection = conn;
+            conn.Open();
+            list = Helper.DataReaderMapToList<LOT_STS_DTO>(cmd.ExecuteReader());
+         }
+         catch (Exception err)
+         {
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return null;
+         }
+         finally
+         {
+            conn.Close();
+         }
+         return list;
+      }
       public List<CODE_DATA_MST_DTO> SelectBedCodes()
       {
          List<CODE_DATA_MST_DTO> list = null;
@@ -174,7 +216,7 @@ namespace Cohesion_DAO
                            FROM 
                            LOT_STS L INNER JOIN (SELECT CHILD_PRODUCT_CODE, REQUIRE_QTY, ALTER_PRODUCT_CODE, OPERATION_CODE FROM BOM_MST WHERE PRODUCT_CODE = @PRODUCT_CODE) B ON L.PRODUCT_CODE = B.CHILD_PRODUCT_CODE
                            		     INNER JOIN PRODUCT_MST P ON P.PRODUCT_CODE = B.CHILD_PRODUCT_CODE
-						         WHERE B.OPERATION_CODE = @OPERATION_CODE
+						         WHERE B.OPERATION_CODE = @OPERATION_CODE AND LAST_TRAN_CODE IN ('MOVE', 'INPUT', 'CREATE') AND STORE_CODE IS NOT NULL
                            AND L.LOT_QTY > 0 AND L.LOT_DELETE_FLAG IS NULL";
             cmd.Parameters.AddWithValue("@PRODUCT_CODE", prodId);
             cmd.Parameters.AddWithValue("@OPERATION_CODE", operation);
@@ -182,6 +224,40 @@ namespace Cohesion_DAO
             cmd.Connection = conn;
             conn.Open();
             list = Helper.DataReaderMapToList<LOT_STS_DTO>(cmd.ExecuteReader());
+         }
+         catch (Exception err)
+         {
+            Debug.WriteLine(err.StackTrace);
+            Debug.WriteLine(err.Message);
+            return null;
+         }
+         finally
+         {
+            conn.Close();
+         }
+         return list;
+      }
+
+      public List<BOM_MST_DTO> SelectInputMateriars(string prodId, string operation)
+      {
+         List<BOM_MST_DTO> list = null;
+         try
+         {
+            SqlCommand cmd = new SqlCommand();
+            string sql = @"SELECT 
+                           B.PRODUCT_CODE,
+                           P.PRODUCT_NAME,
+                           CHILD_PRODUCT_CODE,
+                           REQUIRE_QTY,
+                           ALTER_PRODUCT_CODE
+                           FROM BOM_MST B INNER JOIN PRODUCT_MST P ON B.CHILD_PRODUCT_CODE = P.PRODUCT_CODE
+                           WHERE B.PRODUCT_CODE = @PRODUCT_CODE AND B.OPERATION_CODE = @OPERATION_CODE";
+            cmd.Parameters.AddWithValue("@PRODUCT_CODE", prodId);
+            cmd.Parameters.AddWithValue("@OPERATION_CODE", operation);
+            cmd.CommandText = sql.ToString();
+            cmd.Connection = conn;
+            conn.Open();
+            list = Helper.DataReaderMapToList<BOM_MST_DTO>(cmd.ExecuteReader());
          }
          catch (Exception err)
          {
@@ -328,7 +404,7 @@ namespace Cohesion_DAO
             cmd3.Parameters.Add(new SqlParameter("@DEFECT_CODE", SqlDbType.VarChar));
             cmd3.Parameters.Add(new SqlParameter("@DEFECT_QTY", SqlDbType.Decimal));
             cmd3.Parameters.AddWithValue("@TRAN_TIME", dto.LAST_TRAN_TIME);
-            cmd3.Parameters.AddWithValue("@WORK_DATE", DateTime.Now.ToString("yyyyMMdd"));
+            cmd3.Parameters.AddWithValue("@WORK_DATE", dto.LAST_TRAN_TIME.ToString("yyyyMMdd")); // 변경
             cmd3.Parameters.AddWithValue("@PRODUCT_CODE", string.IsNullOrWhiteSpace(dto.PRODUCT_CODE) ? (object)DBNull.Value : dto.PRODUCT_CODE);
             cmd3.Parameters.AddWithValue("@OPERATION_CODE", string.IsNullOrWhiteSpace(dto.OPERATION_CODE) ? (object)DBNull.Value : dto.OPERATION_CODE);
             cmd3.Parameters.AddWithValue("@STORE_CODE", string.IsNullOrWhiteSpace(dto.STORE_CODE) ? (object)DBNull.Value : dto.STORE_CODE);
@@ -434,7 +510,7 @@ namespace Cohesion_DAO
             cmd3.Parameters.Add(new SqlParameter("@INSPECT_VALUE", SqlDbType.VarChar));
             cmd3.Parameters.Add(new SqlParameter("@INSPECT_RESULT", SqlDbType.VarChar));
             cmd3.Parameters.AddWithValue("@TRAN_TIME", dto.LAST_TRAN_TIME);
-            cmd3.Parameters.AddWithValue("@WORK_DATE", DateTime.Now.ToString("yyyyMMdd"));
+            cmd3.Parameters.AddWithValue("@WORK_DATE", dto.LAST_TRAN_TIME.ToString("yyyyMMdd"));
             cmd3.Parameters.AddWithValue("@PRODUCT_CODE", string.IsNullOrWhiteSpace(dto.PRODUCT_CODE) ? (object)DBNull.Value : dto.PRODUCT_CODE);
             cmd3.Parameters.AddWithValue("@OPERATION_CODE", string.IsNullOrWhiteSpace(dto.OPERATION_CODE) ? (object)DBNull.Value : dto.OPERATION_CODE);
             cmd3.Parameters.AddWithValue("@STORE_CODE", string.IsNullOrWhiteSpace(dto.STORE_CODE) ? (object)DBNull.Value : dto.STORE_CODE);
@@ -543,7 +619,7 @@ namespace Cohesion_DAO
                cmd2.Parameters["@LOT_QTY"].Value = item.LOT_QTY;
                cmd2.Parameters["@LOT_DELETE_FLAG"].Value = 'Y';
                cmd2.Parameters["@LOT_DELETE_CODE"].Value = "EMPTY";
-               cmd2.Parameters["@LOT_DELETE_TIME"].Value = DateTime.Now;
+               cmd2.Parameters["@LOT_DELETE_TIME"].Value = dto.LAST_TRAN_TIME;
                cmd2.Parameters["@LAST_TRAN_CODE"].Value = item.LAST_TRAN_CODE;
                cmd2.Parameters["@LAST_TRAN_TIME"].Value = item.LAST_TRAN_TIME;
                cmd2.Parameters["@LAST_TRAN_USER_ID"].Value = item.LAST_TRAN_USER_ID;
