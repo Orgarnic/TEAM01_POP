@@ -27,5 +27,23 @@ namespace Cohesion_Project.Service
 
             return list;
         }
+
+        public List<LOT_INSPECT_HIS_DTO> GetLotInspectHisInfo(string id)
+        {
+            Inspect_DAO db = new Inspect_DAO();
+            List<LOT_INSPECT_HIS_DTO> list = db.GetLotInspectHisInfo(id);
+            db.Dispose();
+
+            return list;
+        }
+
+        public List<INSPECT_ITEM_MST_DTO> GetInspectInfo()
+        {
+            Inspect_DAO db = new Inspect_DAO();
+            List<INSPECT_ITEM_MST_DTO> list = db.GetInspectInfo();
+            db.Dispose();
+
+            return list;
+        }
     }
 }
