@@ -14,7 +14,7 @@ namespace Cohesion_DTO
         public string CUSTOMER_NAME { get; set; }
         public string PRODUCT_CODE { get; set; }
         public string PRODUCT_NAME { get; set; }
-        public string ORDER_QTY { get; set; }
+        public decimal ORDER_QTY { get; set; }
         public string CONFIRM_FLAG { get; set; }
         public string SHIP_FLAG { get; set; }
     }
