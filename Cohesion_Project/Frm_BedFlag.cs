@@ -264,8 +264,8 @@ namespace Cohesion_Project
          }
          Lot.LOT_QTY = Convert.ToDecimal(txtLotQty.Text);
          Lot.LAST_TRAN_CODE = "DEFECT";
-         Lot.LAST_TRAN_TIME = DateTime.Now;
-         Lot.LAST_TRAN_USER_ID = "TEST";
+         Lot.LAST_TRAN_TIME = order.CREATE_TIME;
+         Lot.LAST_TRAN_USER_ID = "유기현";
          Lot.LAST_TRAN_COMMENT = txtDesc.Text;
          Lot.LAST_HIST_SEQ += 1;
 

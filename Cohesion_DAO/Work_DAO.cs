@@ -387,8 +387,8 @@ namespace Cohesion_DAO
             {
                dto.LAST_HIST_SEQ += 1;
                dto.LAST_TRAN_CODE = "MOVE";
-               dto.PRODUCTION_TIME = DateTime.Now;
-               dto.OPER_IN_TIME = DateTime.Now;
+               dto.PRODUCTION_TIME = dto.LAST_TRAN_TIME; //변경
+               dto.OPER_IN_TIME = dto.LAST_TRAN_TIME; //변경
                dto.LAST_TRAN_COMMENT = "생산 제품 이동";
                sql = @"DECLARE @TYPE VARCHAR(30)
                        SET @TYPE = (SELECT PRODUCT_TYPE FROM PRODUCT_MST WHERE PRODUCT_CODE = @PRODUCT_CODE);
@@ -414,10 +414,10 @@ namespace Cohesion_DAO
                SqlCommand cmd4 = new SqlCommand(sql, conn);
                cmd4.Transaction = trans;
                cmd4.Parameters.AddWithValue("@PRODUCT_CODE", dto.PRODUCT_CODE);
-               cmd4.Parameters.AddWithValue("@PRODUCTION_TIME", DateTime.Now);
-               cmd4.Parameters.AddWithValue("@OPER_IN_TIME", DateTime.Now);
+               cmd4.Parameters.AddWithValue("@PRODUCTION_TIME", dto.LAST_TRAN_TIME); //변경
+               cmd4.Parameters.AddWithValue("@OPER_IN_TIME", dto.LAST_TRAN_TIME); //변경
                cmd4.Parameters.AddWithValue("@LOT_ID", dto.LOT_ID);
-               cmd4.Parameters.AddWithValue("@LAST_TRAN_TIME", DateTime.Now);
+               cmd4.Parameters.AddWithValue("@LAST_TRAN_TIME", dto.LAST_TRAN_TIME); //변경
                cmd4.Parameters.AddWithValue("@LAST_TRAN_CODE", "MOVE");
                cmd4.Parameters.AddWithValue("@LAST_TRAN_USER_ID", dto.LAST_TRAN_USER_ID);
                cmd4.Parameters.AddWithValue("@LAST_TRAN_COMMENT", "생산 제품 이동");
@@ -465,7 +465,7 @@ namespace Cohesion_DAO
                SqlCommand cmd6 = new SqlCommand(sql, conn);
                cmd6.Parameters.AddWithValue("@PRODUCT_QTY", dto.LOT_QTY);
                cmd6.Parameters.AddWithValue("@DEFECT_QTY", dto.LOT_DEFECT_QTY);
-               cmd6.Parameters.AddWithValue("@UPDATE_TIME", DateTime.Now);
+               cmd6.Parameters.AddWithValue("@UPDATE_TIME", dto.LAST_TRAN_TIME);
                cmd6.Parameters.AddWithValue("@UPDATE_USER_ID", dto.LAST_TRAN_USER_ID);
                cmd6.Parameters.AddWithValue("@WORK_ORDER_ID", dto.WORK_ORDER_ID);
                cmd6.Transaction = trans;

@@ -42,6 +42,7 @@ namespace Cohesion_Project
             lblDesc.Visible = false;
             return;
          }
+
          txtLotId.Text = srvOrder.SPGetLot(order.WORK_ORDER_ID, out total);
          lblDesc.Text = "생성된 LOT에 주석을 적어주세요.";
          lblDesc.Visible = true;
@@ -58,6 +59,8 @@ namespace Cohesion_Project
          lblDefectQty.Text = Convert.ToInt32(order.DEFECT_QTY).ToString();
          txtProductCode.Text = order.PRODUCT_CODE;
          txtProductName.Text = order.PRODUCT_NAME;
+         // 변경 
+         txtTotalQty.Text = (Convert.ToInt32(order.ORDER_QTY)).ToString();
          txtTotal.Text = total.ToString();
       }
       private void txtTotalQty_KeyPress(object sender, KeyPressEventArgs e)
@@ -86,12 +89,12 @@ namespace Cohesion_Project
             LOT_QTY = Convert.ToInt32(txtTotalQty.Text),
             CREATE_QTY = Convert.ToInt32(txtTotalQty.Text),
             OPER_IN_QTY = Convert.ToInt32(txtTotalQty.Text),
-            CREATE_TIME = DateTime.Now,
-            OPER_IN_TIME = DateTime.Now,
+            CREATE_TIME = order.CREATE_TIME,
+            OPER_IN_TIME = order.CREATE_TIME,
             WORK_ORDER_ID = txtOrder.Text,
             LAST_TRAN_CODE = "CREATE",
-            LAST_TRAN_TIME = DateTime.Now,
-            LAST_TRAN_USER_ID = "TEST",
+            LAST_TRAN_TIME = order.CREATE_TIME,
+            LAST_TRAN_USER_ID = "유기현",
             LAST_TRAN_COMMENT = txtOrderDesc.Text,
             LAST_HIST_SEQ = 1
          };

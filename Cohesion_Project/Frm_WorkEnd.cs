@@ -223,12 +223,12 @@ namespace Cohesion_Project
          Lot.OPERATION_CODE = operCode;
          Lot.OPER_IN_QTY = Convert.ToDecimal(lblProductQty.Text);
          Lot.END_FLAG = 'Y';
-         Lot.END_TIME = DateTime.Now;
+         Lot.END_TIME = order.CREATE_TIME;
          Lot.END_EQUIPMENT_CODE = cboEquipment.Text;
-         Lot.OPER_IN_TIME = DateTime.Now;
+         Lot.OPER_IN_TIME = order.CREATE_TIME;
          Lot.LAST_TRAN_CODE = "END";
-         Lot.LAST_TRAN_TIME = DateTime.Now;
-         Lot.LAST_TRAN_USER_ID = "TEST";
+         Lot.LAST_TRAN_TIME = order.CREATE_TIME;
+         Lot.LAST_TRAN_USER_ID = "유기현";
          Lot.LAST_TRAN_COMMENT = txtDesc.Text;
          Lot.LAST_HIST_SEQ += 1;
          LOT_END_HIS_DTO end = new LOT_END_HIS_DTO
@@ -236,7 +236,7 @@ namespace Cohesion_Project
             LOT_ID = Lot.LOT_ID,
             HIST_SEQ = Lot.LAST_HIST_SEQ,
             TRAN_TIME = Lot.LAST_TRAN_TIME,
-            WORK_DATE = DateTime.Now.ToString("yyyyMMdd"),
+            WORK_DATE = order.CREATE_TIME.ToString("yyyyMMdd"),
             PRODUCT_CODE = Lot.PRODUCT_CODE,
             OPERATION_CODE = txtOperationCode.Text,
             EQUIPMENT_CODE = Lot.END_EQUIPMENT_CODE,

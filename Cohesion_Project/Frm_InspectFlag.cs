@@ -257,8 +257,8 @@ namespace Cohesion_Project
             }
          }
          Lot.LAST_TRAN_CODE = "INSPECT";
-         Lot.LAST_TRAN_TIME = DateTime.Now;
-         Lot.LAST_TRAN_USER_ID = "TEST";
+         Lot.LAST_TRAN_TIME = order.CREATE_TIME;
+         Lot.LAST_TRAN_USER_ID = "유기현";
          Lot.LAST_TRAN_COMMENT = txtDesc.Text;
          Lot.LAST_HIST_SEQ += 1;
          List<LOT_INSPECT_HIS_DTO> hisInspects = new List<LOT_INSPECT_HIS_DTO>();

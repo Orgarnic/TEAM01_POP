@@ -173,6 +173,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Service\Srv_Flag.cs" />
+    <Compile Include="Service\Srv_Inspect.cs" />
     <Compile Include="Service\Srv_LookUp.cs" />
     <Compile Include="Service\Srv_Order.cs" />
     <Compile Include="Service\Srv_Purchase.cs" />

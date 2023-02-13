@@ -29,6 +29,7 @@ namespace Cohesion_Project
       /// </summary>
       private void InitializeComponent()
       {
+         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frm_Main));
          this.Flp_Side = new System.Windows.Forms.FlowLayoutPanel();
          this.panel5 = new System.Windows.Forms.Panel();
          this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -507,7 +508,7 @@ namespace Cohesion_Project
          // 
          // pictureBox1
          // 
-         this.pictureBox1.Image = global::Cohesion_Project.Properties.Resources.blockchain;
+         this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
          this.pictureBox1.Location = new System.Drawing.Point(-1, -1);
          this.pictureBox1.Name = "pictureBox1";
          this.pictureBox1.Size = new System.Drawing.Size(100, 55);
