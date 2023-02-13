@@ -45,15 +45,15 @@ namespace Cohesion_Project
         {
 
             DgvUtil.DgvInit(dataGridView1);
-            DgvUtil.AddTextCol(dataGridView1, "설비 코드", "EQUIPMENT_CODE", width: 200);
-            DgvUtil.AddTextCol(dataGridView1, "비가동 일자", "DT_DATE", width: 180, readOnly: true);
-            DgvUtil.AddTextCol(dataGridView1, "비가동 시작 시간", "DT_START_TIME", width: 180, readOnly: true);
-            DgvUtil.AddTextCol(dataGridView1, "비가동 종료 시간", "DT_END_TIME", width: 180, readOnly: true);
-            DgvUtil.AddTextCol(dataGridView1, "비가동 시간(분)", "DT_TIME", width: 250);
+            DgvUtil.AddTextCol(dataGridView1, "설비 코드", "EQUIPMENT_CODE", width: 200, align:0);
+            DgvUtil.AddTextCol(dataGridView1, "비가동 일자", "DT_DATE", width: 180, readOnly: true, align:1);
+            DgvUtil.AddTextCol(dataGridView1, "비가동 시작 시간", "DT_START_TIME", width: 200, readOnly: true);
+            DgvUtil.AddTextCol(dataGridView1, "비가동 종료 시간", "DT_END_TIME", width: 200, readOnly: true);
+            DgvUtil.AddTextCol(dataGridView1, "비가동 시간(분)", "DT_TIME", width: 150, align: 2);
             DgvUtil.AddTextCol(dataGridView1, "비가동 코드", "DT_CODE", width: 130, readOnly: true);
-            DgvUtil.AddTextCol(dataGridView1, "비가동 주석", "DT_COMMENT", width: 130, readOnly: true);
-            DgvUtil.AddTextCol(dataGridView1, "비가동 등록자", "DT_USER_ID", width: 130, readOnly: true);
-            DgvUtil.AddTextCol(dataGridView1, "조치 내역", "ACTION_COMMENT", width: 130, readOnly: true);
+            DgvUtil.AddTextCol(dataGridView1, "비가동 주석", "DT_COMMENT", width: 200, readOnly: true);
+            DgvUtil.AddTextCol(dataGridView1, "비가동 등록자", "DT_USER_ID", width: 130, readOnly: true, align: 1);
+            DgvUtil.AddTextCol(dataGridView1, "조치 내역", "ACTION_COMMENT", width: 200, readOnly: true);
        //     DgvUtil.AddTextCol(dataGridView1, "확인 시간", "CONFIRM_TIME", width: 130, readOnly: true);
           // DgvUtil.AddTextCol(dataGridView1, "확인자", "CONFIRM_USER_ID", width: 130, readOnly: true);
             dataGridView1.Font = new Font("맑은 고딕", 10, FontStyle.Bold);
