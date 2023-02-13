@@ -106,7 +106,7 @@ namespace Cohesion_Project
                 dto.DT_END_TIME = dateTimePicker2.Value;
                 dto.ACTION_COMMENT = textBox8.Text;
                 dto.DT_USER_ID = "김민식";
-                dto.DT_DATE = DateTime.Now.ToString("yyyyMMdd");
+                dto.DT_DATE = DateTime.Now.ToString("yyyyMMdd"); 
                 //  dto.CONFIRM_TIME =  null;
                 //  dto.CONFIRM_USER_ID = "김민식";
 
