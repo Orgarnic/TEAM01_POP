@@ -46,6 +46,7 @@
     <Compile Include="CODE_TABLE_MST_DTO.cs" />
     <Compile Include="EQUIPMENT_MST_DTO.cs" />
     <Compile Include="EQUIPMENT_OPERATION_REL_DTO.cs" />
+    <Compile Include="EQUIP_DOWN_DTO.cs" />
     <Compile Include="INSPECT_ITEM_MST_DTO.cs" />
     <Compile Include="INSPECT_ITEM_OPERATION_REL_DTO.cs" />
     <Compile Include="LOT_DEFECT_HIS_DTO.cs" />
