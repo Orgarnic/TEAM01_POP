@@ -28,10 +28,10 @@ namespace Cohesion_Project.Service
             return list;
         }
 
-        public List<LOT_INSPECT_HIS_DTO> GetLotInspectHisInfo(string id)
+        public List<LOT_INSPECT_HIS_DTO> GetLotInspectHisInfo(string id = "", string inspect = "", string isvalue = "")
         {
             Inspect_DAO db = new Inspect_DAO();
-            List<LOT_INSPECT_HIS_DTO> list = db.GetLotInspectHisInfo(id);
+            List<LOT_INSPECT_HIS_DTO> list = db.GetLotInspectHisInfo(id, inspect, isvalue);
             db.Dispose();
 
             return list;

@@ -74,40 +74,20 @@ namespace Cohesion_Project
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            string lotid, inspectName, value;
             if(string.IsNullOrWhiteSpace(cboCategory.Text) && string.IsNullOrWhiteSpace(cboInspectList.Text) && string.IsNullOrWhiteSpace(txtSearch.Text))
             {
                 MboxUtil.MboxWarn("검색조건을 입력해주세요.");
                 return;
             }
-            else if(string.IsNullOrWhiteSpace(cboCategory.Text) && string.IsNullOrWhiteSpace(cboInspectList.Text) && !string.IsNullOrWhiteSpace(txtSearch.Text))
-            {
-                var list = srv.GetInspectHisAllList();
-                list = list.FindAll((i)=>i.INSPECT_VALUE.Equals(txtSearch.Text));
-                dgvInspectList.DataSource = null;
-                dgvInspectList.DataSource = list;
-                return;
-            }
-            else if (string.IsNullOrWhiteSpace(cboCategory.Text) && !string.IsNullOrWhiteSpace(cboInspectList.Text) && string.IsNullOrWhiteSpace(txtSearch.Text))
-            {
-                var list = srv.GetInspectHisAllList();
-                list = list.FindAll((i) => i.INSPECT_ITEM_NAME.Equals(cboInspectList.Text));
-                dgvInspectList.DataSource = null;
-                dgvInspectList.DataSource = list;
-                return;
-            }
             int row = 0;
-            row = dgvInspectList.SelectedRows[0].Index;
-            string id = dgvInspectList["LOT_ID", row].Value.ToString();
-            if(cboCategory.SelectedItem.ToString().Equals(id))
-            {
-                inspect = srv.GetLotInspectHisInfo(id);
-            }
-            else
-            {
-                MboxUtil.MboxWarn("해당 LOT의 검사이력이 존재하지 않습니다.\n검사 후, 조회가 가능합니다.");
-                inspect = srv.GetInspectHisAllList();
-                return;
-            }
+            row = dgvInspectList.Rows[0].Index;
+            lotid = dgvInspectList["LOT_ID", row].Value.ToString();
+            inspectName = dgvInspectList["INSPECT_ITEM_NAME", row].Value.ToString();
+            value = dgvInspectList["INSPECT_VALUE", row].Value.ToString();
+            
+            inspect = srv.GetLotInspectHisInfo(cboCategory.Text, cboInspectList.Text, txtSearch.Text);
+            
             dgvInspectList.DataSource = inspect;
         }
 

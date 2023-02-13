@@ -55,18 +55,30 @@ namespace Cohesion_DAO
             }
         }
 
-        public List<LOT_INSPECT_HIS_DTO> GetLotInspectHisInfo(string id)
+        public List<LOT_INSPECT_HIS_DTO> GetLotInspectHisInfo(string id = null, string inspect = null, string isvalue = null)
         {
+            StringBuilder sb = new StringBuilder();
             try
             {
-                string sql = @"select LOT_ID, HIST_SEQ, INSPECT_ITEM_NAME, SPEC_LSL, SPEC_TARGET, SPEC_USL, INSPECT_VALUE, INSPECT_RESULT, TRAN_TIME, WORK_DATE, p.PRODUCT_NAME PRODUCT_CODE, o.OPERATION_NAME OPERATION_CODE, STORE_CODE , e.EQUIPMENT_NAME EQUIPMENT_CODE, TRAN_USER_ID, TRAN_COMMENT
+                string sql = @"select LOT_ID, HIST_SEQ, INSPECT_ITEM_NAME, SPEC_LSL, SPEC_TARGET, SPEC_USL, INSPECT_VALUE, INSPECT_RESULT, TRAN_TIME, WORK_DATE, p.PRODUCT_NAME PRODUCT_CODE, o.OPERATION_NAME OPERATION_CODE, e.EQUIPMENT_NAME EQUIPMENT_CODE, TRAN_USER_ID, TRAN_COMMENT
                                from LOT_INSPECT_HIS ih inner join PRODUCT_MST p on ih.PRODUCT_CODE = p.PRODUCT_CODE
 						                               inner join OPERATION_MST o on ih.OPERATION_CODE = o.OPERATION_CODE
 						                               inner join EQUIPMENT_MST e on ih.EQUIPMENT_CODE = e.EQUIPMENT_CODE
-                               where LOT_ID = @LOT_ID";
+                               where 1 = 1";
 
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@LOT_ID", id);
+                sb.Append(sql);
+                SqlCommand cmd = new SqlCommand();
+
+                if(!string.IsNullOrWhiteSpace(id))
+                    sb.Append($" and LOT_ID = '" + id + "'");
+                if (!string.IsNullOrWhiteSpace(inspect))
+                    sb.Append($" and INSPECT_ITEM_NAME = '" + inspect + "'");
+                if (!string.IsNullOrWhiteSpace(isvalue))
+                    sb.Append($" and INSPECT_VALUE = '" + isvalue + "'");
+
+                cmd.CommandText = sb.ToString();
+                cmd.Connection = conn;
+
 
                 conn.Open();
                 List<LOT_INSPECT_HIS_DTO> list = Helper.DataReaderMapToList<LOT_INSPECT_HIS_DTO>(cmd.ExecuteReader());
