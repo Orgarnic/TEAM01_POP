@@ -359,7 +359,7 @@ namespace Cohesion_Project
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.button3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.button3.Image = global::Cohesion_Project.Properties.Resources.Search;
-            this.button3.Location = new System.Drawing.Point(764, 50);
+            this.button3.Location = new System.Drawing.Point(765, 50);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(55, 27);
             this.button3.TabIndex = 64;
