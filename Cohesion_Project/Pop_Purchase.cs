@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Cohesion_DTO;
+using System.Linq;
 
 namespace Cohesion_Project
 {
@@ -23,7 +24,7 @@ namespace Cohesion_Project
       {
          DgvInit();
          orders = srv_Order.SelectOrderList();
-         dgvOrder.DataSource = orders;
+         dgvOrder.DataSource = orders.OrderBy((o) => o.ORDER_DATE).ToList();
       }
       private void DgvInit()
       {
@@ -42,7 +43,7 @@ namespace Cohesion_Project
       private void btnSearch_Click(object sender, EventArgs e)
       {
          var list = orders.FindAll((o) => o.WORK_ORDER_ID.Contains(txtSearch.Text.ToUpper()));
-         dgvOrder.DataSource = list;
+         dgvOrder.DataSource = list.OrderBy((o) => o.ORDER_DATE).ToList();
       }
       private void Btn_Close_Click(object sender, EventArgs e)
       {
