@@ -45,7 +45,7 @@ namespace Cohesion_Project
         {
 
             DgvUtil.DgvInit(dataGridView1);
-            DgvUtil.AddTextCol(dataGridView1, "설비 코드", "EQUIPMENT_CODE", width: 80);
+            DgvUtil.AddTextCol(dataGridView1, "설비 코드", "EQUIPMENT_CODE", width: 200);
             DgvUtil.AddTextCol(dataGridView1, "비가동 일자", "DT_DATE", width: 180, readOnly: true);
             DgvUtil.AddTextCol(dataGridView1, "비가동 시작 시간", "DT_START_TIME", width: 180, readOnly: true);
             DgvUtil.AddTextCol(dataGridView1, "비가동 종료 시간", "DT_END_TIME", width: 180, readOnly: true);
