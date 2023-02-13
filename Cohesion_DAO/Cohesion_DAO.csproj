@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common_DAO.cs" />
     <Compile Include="Flag_DAO.cs" />
     <Compile Include="Inspect_DAO.cs" />
     <Compile Include="LookUp_DAO.cs" />

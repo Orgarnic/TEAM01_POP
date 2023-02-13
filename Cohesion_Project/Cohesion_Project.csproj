@@ -172,6 +172,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Service\Srv_CommonData.cs" />
     <Compile Include="Service\Srv_Flag.cs" />
     <Compile Include="Service\Srv_Inspect.cs" />
     <Compile Include="Service\Srv_LookUp.cs" />
@@ -185,6 +186,7 @@
     <Compile Include="Uc\Cc_TabControl.Designer.cs">
       <DependentUpon>Cc_TabControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Util\ComboUtil.cs" />
     <Compile Include="Util\CommonUtil.cs" />
     <Compile Include="Util\DgvUtil.cs" />
     <Compile Include="Util\LoggingUtility.cs" />
