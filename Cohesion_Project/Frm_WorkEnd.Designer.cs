@@ -253,7 +253,7 @@ namespace Cohesion_Project
          this.btnStart.Name = "btnStart";
          this.btnStart.Size = new System.Drawing.Size(150, 40);
          this.btnStart.TabIndex = 35;
-         this.btnStart.Text = "시작";
+         this.btnStart.Text = "완료";
          this.btnStart.UseVisualStyleBackColor = false;
          this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
          // 

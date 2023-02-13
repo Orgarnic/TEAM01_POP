@@ -210,6 +210,7 @@ namespace Cohesion_Project
             {
                dgvInspect["Checked", row].Value = "OK";
                dgvInspect["Checked", row].Style.ForeColor = Color.YellowGreen;
+               dgvInspect.Rows[row].DefaultCellStyle.BackColor = Color.White;
             }
             else
             {
@@ -225,6 +226,7 @@ namespace Cohesion_Project
             {
                dgvInspect["Checked", row].Value = "OK";
                dgvInspect["Checked", row].Style.ForeColor = Color.YellowGreen;
+               dgvInspect.Rows[row].DefaultCellStyle.BackColor = Color.White;
             }
             else if (input.Equals("불량"))
             {
