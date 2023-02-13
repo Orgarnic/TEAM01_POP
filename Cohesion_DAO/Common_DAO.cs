@@ -44,7 +44,6 @@ namespace Cohesion_DAO
                 conn.Close();
                 return list;
             }
-
             catch (Exception err)
             {
                 Debug.WriteLine(err.Message);
