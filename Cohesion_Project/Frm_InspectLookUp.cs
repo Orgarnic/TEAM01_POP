@@ -87,7 +87,11 @@ namespace Cohesion_Project
             value = dgvInspectList["INSPECT_VALUE", row].Value.ToString();
             
             inspect = srv.GetLotInspectHisInfo(cboCategory.Text, cboInspectList.Text, txtSearch.Text);
-            
+            if(inspect.Count < 1)
+            {
+                MboxUtil.MboxWarn("해당하는 검색내역이 존재하지 않습니다.");
+                return;
+            }
             dgvInspectList.DataSource = inspect;
         }
 

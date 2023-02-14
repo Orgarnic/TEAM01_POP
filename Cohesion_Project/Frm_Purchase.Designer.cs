@@ -33,20 +33,11 @@ namespace Cohesion_Project
             this.label9 = new System.Windows.Forms.Label();
             this.Btn_Purchase = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.txtOrderQty = new System.Windows.Forms.TextBox();
-            this.label18 = new System.Windows.Forms.Label();
-            this.txtDesc = new System.Windows.Forms.TextBox();
-            this.txtProductName = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
             this.cboPurchaseID = new System.Windows.Forms.ComboBox();
             this.dgvPurchaseList = new System.Windows.Forms.DataGridView();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
-            this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPurchaseList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -77,7 +68,7 @@ namespace Cohesion_Project
             // 
             this.panel3.Controls.Add(this.dgvPurchaseList);
             this.panel3.Location = new System.Drawing.Point(12, 116);
-            this.panel3.Size = new System.Drawing.Size(1105, 709);
+            this.panel3.Size = new System.Drawing.Size(1454, 709);
             this.panel3.Controls.SetChildIndex(this.label3, 0);
             this.panel3.Controls.SetChildIndex(this.dgvPurchaseList, 0);
             // 
@@ -91,7 +82,6 @@ namespace Cohesion_Project
             // 
             // label3
             // 
-            this.label3.Size = new System.Drawing.Size(1103, 30);
             this.label3.Text = "구매 납품서 입고 목록";
             // 
             // Btn_Close
@@ -161,119 +151,6 @@ namespace Cohesion_Project
             this.button3.UseVisualStyleBackColor = false;
             this.button3.Visible = false;
             // 
-            // panel4
-            // 
-            this.panel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel4.BackColor = System.Drawing.Color.White;
-            this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel4.Controls.Add(this.txtOrderQty);
-            this.panel4.Controls.Add(this.label18);
-            this.panel4.Controls.Add(this.txtDesc);
-            this.panel4.Controls.Add(this.txtProductName);
-            this.panel4.Controls.Add(this.label14);
-            this.panel4.Controls.Add(this.label17);
-            this.panel4.Controls.Add(this.label15);
-            this.panel4.Location = new System.Drawing.Point(1128, 116);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(336, 709);
-            this.panel4.TabIndex = 30;
-            // 
-            // txtOrderQty
-            // 
-            this.txtOrderQty.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtOrderQty.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtOrderQty.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtOrderQty.Location = new System.Drawing.Point(23, 156);
-            this.txtOrderQty.Name = "txtOrderQty";
-            this.txtOrderQty.ReadOnly = true;
-            this.txtOrderQty.Size = new System.Drawing.Size(289, 29);
-            this.txtOrderQty.TabIndex = 27;
-            this.txtOrderQty.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // label18
-            // 
-            this.label18.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label18.BackColor = System.Drawing.Color.Transparent;
-            this.label18.Font = new System.Drawing.Font("나눔고딕", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label18.ForeColor = System.Drawing.Color.Black;
-            this.label18.Location = new System.Drawing.Point(19, 123);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(138, 29);
-            this.label18.TabIndex = 26;
-            this.label18.Text = "◾ 총 수량";
-            this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // txtDesc
-            // 
-            this.txtDesc.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDesc.Enabled = false;
-            this.txtDesc.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDesc.Location = new System.Drawing.Point(23, 556);
-            this.txtDesc.Multiline = true;
-            this.txtDesc.Name = "txtDesc";
-            this.txtDesc.Size = new System.Drawing.Size(289, 129);
-            this.txtDesc.TabIndex = 24;
-            this.txtDesc.Visible = false;
-            // 
-            // txtProductName
-            // 
-            this.txtProductName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtProductName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtProductName.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtProductName.Location = new System.Drawing.Point(23, 81);
-            this.txtProductName.Name = "txtProductName";
-            this.txtProductName.ReadOnly = true;
-            this.txtProductName.Size = new System.Drawing.Size(289, 29);
-            this.txtProductName.TabIndex = 25;
-            // 
-            // label14
-            // 
-            this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label14.BackColor = System.Drawing.Color.Transparent;
-            this.label14.Font = new System.Drawing.Font("나눔고딕", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.ForeColor = System.Drawing.Color.Black;
-            this.label14.Location = new System.Drawing.Point(19, 523);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(138, 30);
-            this.label14.TabIndex = 22;
-            this.label14.Text = "◾ 입고 자재 코드";
-            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label14.Visible = false;
-            // 
-            // label17
-            // 
-            this.label17.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label17.BackColor = System.Drawing.Color.Transparent;
-            this.label17.Font = new System.Drawing.Font("나눔고딕", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label17.ForeColor = System.Drawing.Color.Black;
-            this.label17.Location = new System.Drawing.Point(19, 48);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(138, 30);
-            this.label17.TabIndex = 23;
-            this.label17.Text = "◾ 자재명";
-            this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label15
-            // 
-            this.label15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(56)))), ((int)(((byte)(67)))));
-            this.label15.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label15.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.ForeColor = System.Drawing.Color.White;
-            this.label15.Location = new System.Drawing.Point(0, 0);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(334, 30);
-            this.label15.TabIndex = 2;
-            this.label15.Text = "입고 정보";
-            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // cboPurchaseID
             // 
             this.cboPurchaseID.Font = new System.Drawing.Font("나눔고딕", 14.25F);
@@ -290,7 +167,7 @@ namespace Cohesion_Project
             this.dgvPurchaseList.Location = new System.Drawing.Point(0, 30);
             this.dgvPurchaseList.Name = "dgvPurchaseList";
             this.dgvPurchaseList.RowTemplate.Height = 23;
-            this.dgvPurchaseList.Size = new System.Drawing.Size(1103, 677);
+            this.dgvPurchaseList.Size = new System.Drawing.Size(1452, 677);
             this.dgvPurchaseList.TabIndex = 4;
             this.dgvPurchaseList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPurchaseList_CellClick);
             // 
@@ -298,21 +175,12 @@ namespace Cohesion_Project
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.ClientSize = new System.Drawing.Size(1478, 878);
-            this.Controls.Add(this.panel4);
             this.Name = "Frm_Purchase";
             this.Text = "구매 입고";
             this.Load += new System.EventHandler(this.Frm_Purchase_Load);
-            this.Controls.SetChildIndex(this.panel2, 0);
-            this.Controls.SetChildIndex(this.panel1, 0);
-            this.Controls.SetChildIndex(this.panel3, 0);
-            this.Controls.SetChildIndex(this.Btn_Close, 0);
-            this.Controls.SetChildIndex(this.button1, 0);
-            this.Controls.SetChildIndex(this.panel4, 0);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
-            this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPurchaseList)).EndInit();
             this.ResumeLayout(false);
 
@@ -323,15 +191,7 @@ namespace Cohesion_Project
       protected System.Windows.Forms.Label label9;
       private System.Windows.Forms.Button Btn_Purchase;
       private System.Windows.Forms.Button button3;
-      private System.Windows.Forms.Panel panel4;
-      protected System.Windows.Forms.Label label15;
-      protected System.Windows.Forms.TextBox txtProductName;
-      protected System.Windows.Forms.Label label17;
-      protected System.Windows.Forms.TextBox txtOrderQty;
-      protected System.Windows.Forms.Label label18;
         private System.Windows.Forms.ComboBox cboPurchaseID;
         private System.Windows.Forms.DataGridView dgvPurchaseList;
-        protected System.Windows.Forms.TextBox txtDesc;
-        protected System.Windows.Forms.Label label14;
     }
 }

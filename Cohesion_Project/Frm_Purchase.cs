@@ -73,18 +73,13 @@ namespace Cohesion_Project
                 }
                 else
                 {
-                    // 입하 여부에 따라서 자재를 입고시킨다.
-                    //if (flag != "N") return;
-                    //int allQty = Convert.ToInt32(orderQty);
-                    //string product = txtProductName.Text;
-                    //if (!MboxUtil.MboxInfo_($"해당 자재를 입고시키시겠습니까?\n\n입고 물품 : {product}\n입고 수량 : {allQty} ea")) return;
-                    //else
                     purchaseDTO = (PURCHASE_ORDER_MST_DTO)dgvPurchaseList.Rows[i].DataBoundItem;
                     inProd.Add(purchaseDTO);
                     num++;
                 }
             }
             if (purchase == null) return;
+            if (!MboxUtil.MboxInfo_($"총{inProd.Count}개의 자재를 입고시키시겠습니까?")) return;
             bool result = srv.UpdatePurchaseData(inProd);
             if (!result) MboxUtil.MboxWarn("입고 도중 오류가 발생했습니다.\n다시 시도해주세요.");
             else
@@ -92,7 +87,6 @@ namespace Cohesion_Project
                 MboxUtil.MboxInfo("자재가 입고되었습니다.");
                 dgvPurchaseList.DataSource = null;
                 dgvPurchaseList.DataSource = srv.GetAllPurchaseList();
-                txtDesc.Enabled = false;
             }
         }
 
@@ -103,8 +97,6 @@ namespace Cohesion_Project
             purchaseDTO = (PURCHASE_ORDER_MST_DTO)dgvPurchaseList.Rows[dgvPurchaseList.CurrentRow.Index].DataBoundItem;
             orderQty = (int)Math.Round(Convert.ToDecimal(dgvPurchaseList["ORDER_QTY", dgvPurchaseList.CurrentRow.Index].Value), 0);
             string Qty = string.Format("{0:#,0}", orderQty);
-            txtOrderQty.Text = Qty + " EA";
-            txtProductName.Text = dgvPurchaseList["PRODUCT_NAME", dgvPurchaseList.CurrentRow.Index].Value.ToString();
         }
     }
 }
