@@ -905,7 +905,7 @@ namespace Cohesion_Project
          this.Controls.Add(this.panel2);
          this.Controls.Add(this.panel1);
          this.Name = "Frm_WorkEnd";
-         this.Text = "작업 시작";
+         this.Text = "작업 완료";
          this.Load += new System.EventHandler(this.Frm_WORK_ORDER_Load);
          this.tableLayoutPanel1.ResumeLayout(false);
          this.panel3.ResumeLayout(false);

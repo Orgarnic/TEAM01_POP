@@ -117,7 +117,7 @@ namespace Cohesion_Project
         {
             srvList = srvLookUp.SelectLOT_STS_List();
             dgv_LOT_List.DataSource = null;
-            dgv_LOT_List.DataSource = srvList;
+            dgv_LOT_List.DataSource = srvList.OrderByDescending((o) => o.LAST_TRAN_TIME).ToList();
         }
 
         private void Btn_Close_Click(object sender, EventArgs e)
@@ -201,7 +201,7 @@ namespace Cohesion_Project
                         LAST_TRAN_USER_ID        = i.LAST_TRAN_USER_ID	  ,
                         LAST_TRAN_COMMENT        = i.LAST_TRAN_COMMENT	  ,
                         LAST_HIST_SEQ            = i.LAST_HIST_SEQ
-                    }).ToList();
+                    }).OrderByDescending((o) => o.LAST_TRAN_TIME).ToList();
                 }
             }
         }

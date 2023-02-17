@@ -24,7 +24,7 @@ namespace Cohesion_Project
       {
          DgvInit();
          orders = srv_Order.SelectOrderList();
-         dgvOrder.DataSource = orders.OrderBy((o) => o.ORDER_DATE).ToList();
+         dgvOrder.DataSource = orders.OrderByDescending((o) => o.ORDER_DATE).ToList();
       }
       private void DgvInit()
       {
@@ -43,7 +43,7 @@ namespace Cohesion_Project
       private void btnSearch_Click(object sender, EventArgs e)
       {
          var list = orders.FindAll((o) => o.WORK_ORDER_ID.Contains(txtSearch.Text.ToUpper()));
-         dgvOrder.DataSource = list.OrderBy((o) => o.ORDER_DATE).ToList();
+         dgvOrder.DataSource = list.OrderByDescending((o) => o.ORDER_DATE).ToList();
       }
       private void Btn_Close_Click(object sender, EventArgs e)
       {
