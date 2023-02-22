@@ -35,14 +35,14 @@ namespace Cohesion_Project
             this.dgvInspectList = new System.Windows.Forms.DataGridView();
             this.label2 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.cboInspectList = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cboCategory = new System.Windows.Forms.ComboBox();
             this.btnSearch = new System.Windows.Forms.Button();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.cboInspectList = new System.Windows.Forms.ComboBox();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvInspectList)).BeginInit();
             this.panel5.SuspendLayout();
@@ -138,21 +138,50 @@ namespace Cohesion_Project
             this.panel5.Size = new System.Drawing.Size(1452, 96);
             this.panel5.TabIndex = 56;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label4.Location = new System.Drawing.Point(533, 52);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(88, 19);
+            this.label4.TabIndex = 64;
+            this.label4.Text = "◾ 검사 항목";
+            // 
+            // cboInspectList
+            // 
+            this.cboInspectList.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.cboInspectList.FormattingEnabled = true;
+            this.cboInspectList.Location = new System.Drawing.Point(650, 49);
+            this.cboInspectList.Name = "cboInspectList";
+            this.cboInspectList.Size = new System.Drawing.Size(387, 29);
+            this.cboInspectList.TabIndex = 63;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label3.Location = new System.Drawing.Point(1060, 52);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(88, 19);
+            this.label3.TabIndex = 62;
+            this.label3.Text = "◾ 검사 스펙";
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label1.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label1.Location = new System.Drawing.Point(25, 52);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(87, 21);
+            this.label1.Size = new System.Drawing.Size(88, 19);
             this.label1.TabIndex = 61;
-            this.label1.Text = "검색 조건";
+            this.label1.Text = "◾ 검색 조건";
             // 
             // cboCategory
             // 
             this.cboCategory.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.cboCategory.FormattingEnabled = true;
-            this.cboCategory.Location = new System.Drawing.Point(131, 49);
+            this.cboCategory.Location = new System.Drawing.Point(140, 49);
             this.cboCategory.Name = "cboCategory";
             this.cboCategory.Size = new System.Drawing.Size(369, 29);
             this.cboCategory.TabIndex = 60;
@@ -181,7 +210,7 @@ namespace Cohesion_Project
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtSearch.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.txtSearch.Location = new System.Drawing.Point(1172, 49);
+            this.txtSearch.Location = new System.Drawing.Point(1176, 49);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(158, 29);
             this.txtSearch.TabIndex = 58;
@@ -198,35 +227,6 @@ namespace Cohesion_Project
             this.label14.TabIndex = 0;
             this.label14.Text = "검사 목록 검색";
             this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label3.Location = new System.Drawing.Point(1061, 52);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(87, 21);
-            this.label3.TabIndex = 62;
-            this.label3.Text = "검사 스펙";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("나눔고딕 ExtraBold", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label4.Location = new System.Drawing.Point(533, 52);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(87, 21);
-            this.label4.TabIndex = 64;
-            this.label4.Text = "검사 항목";
-            // 
-            // cboInspectList
-            // 
-            this.cboInspectList.Font = new System.Drawing.Font("나눔고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.cboInspectList.FormattingEnabled = true;
-            this.cboInspectList.Location = new System.Drawing.Point(650, 49);
-            this.cboInspectList.Name = "cboInspectList";
-            this.cboInspectList.Size = new System.Drawing.Size(369, 29);
-            this.cboInspectList.TabIndex = 63;
             // 
             // Frm_NonOperLookUp
             // 
