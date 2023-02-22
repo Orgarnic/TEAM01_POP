@@ -51,7 +51,7 @@ namespace Cohesion_DAO
                            	          END_FLAG, END_TIME, END_EQUIPMENT_CODE, SHIP_FLAG, SHIP_CODE, SHIP_TIME, PRODUCTION_TIME, 
                            	          LH.CREATE_TIME, OPER_IN_TIME, WORK_ORDER_ID, LOT_DELETE_FLAG, LOT_DELETE_CODE, LOT_DELETE_TIME, 
                            	          WORK_DATE, TRAN_USER_ID, TRAN_COMMENT, OLD_PRODUCT_CODE, OLD_OPERATION_CODE, OLD_STORE_CODE, OLD_LOT_QTY
-                               FROM LOT_HIS LH INNER JOIN OPERATION_MST OM ON LH.OPERATION_CODE = OM.OPERATION_CODE
+                               FROM LOT_HIS LH LEFT JOIN OPERATION_MST OM ON LH.OPERATION_CODE = OM.OPERATION_CODE
                                WHERE LOT_ID = @lotID ";
 
                 SqlCommand cmd = new SqlCommand(sql, conn);

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Cohesion_DTO;
+using System.Linq;
 using Cohesion_Project.Service;
 
 namespace Cohesion_Project
@@ -44,7 +45,7 @@ namespace Cohesion_Project
 
 
             srcList = sv.SelectOrderListToShip();
-            dgvOrderList.DataSource = srcList;
+            dgvOrderList.DataSource = srcList.OrderByDescending((o) => o.ORDER_DATE).ToList();
             dgvOrderList.CellDoubleClick += DgvOrderList_CellDoubleClick;
             dgvOrderList.CellFormatting += DgvOrderList_CellFormatting;
         }
@@ -74,7 +75,7 @@ namespace Cohesion_Project
             var list = dgvOrderList.DataSource as List<SalesOrder_DTO>;
             if (string.IsNullOrWhiteSpace(searchText))
             {
-                dgvOrderList.DataSource = srcList;
+                dgvOrderList.DataSource = srcList.OrderByDescending((o) => o.ORDER_DATE).ToList();
                 return;
             }
             //고객사명으로 조회, 주문 제품 코드, 주문서 코드
